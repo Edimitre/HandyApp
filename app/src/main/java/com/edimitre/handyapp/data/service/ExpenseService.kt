@@ -74,6 +74,11 @@ class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao)
         return expenseDao.getNrOfExpensesByDescription(description)
     }
 
+    fun getNrOfExpensesByShopName(shopName:String):LiveData<Int>?{
+
+        return expenseDao.getNrOfExpensesByShopName(shopName)
+    }
+
     // ALL
     fun getAllExpensesByYear(year: Int): PagingSource<Int, Expense>? {
         return expenseDao.getAllExpensesByYearPaged(year)
@@ -94,6 +99,11 @@ class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao)
     fun getAllExpensesByDescription(desc: String): PagingSource<Int, Expense>? {
 
         return expenseDao.getAllExpensesByDescriptionLiveData(desc)
+    }
+
+    fun getAllExpensesByShopName(shopName: String): PagingSource<Int, Expense>? {
+
+        return expenseDao.getAllExpensesByShopName(shopName)
     }
 
 

@@ -61,6 +61,11 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
         return expenseService.getValueOfExpensesByDescription(name)
     }
 
+    // VALUE BY SHOP NAME
+    fun getValueOfExpensesByShopName(shopName:String):LiveData<Int>?{
+
+        return expenseService.getValueOfExpensesByShopName(shopName)
+    }
 
 
     fun getNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int):LiveData<Int>?{
@@ -83,6 +88,10 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
         return expenseService.getNrOfExpensesByDescription(description)
     }
 
+    fun getNrOfExpensesByShopName(shopName:String):LiveData<Int>?{
+
+        return expenseService.getNrOfExpensesByShopName(shopName)
+    }
 
 
 
@@ -154,4 +163,19 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
             .cachedIn(viewModelScope)
     }
 
+    //  BY SHOPNAME
+    fun getAllExpensesByShopName(shopName: String): Flow<PagingData<Expense>> {
+
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                maxSize = 100,
+                enablePlaceholders = false,
+                initialLoadSize = 20
+            ),
+            pagingSourceFactory = { expenseService.getAllExpensesByShopName(shopName)!! })
+            .flow
+            .cachedIn(viewModelScope)
+    }
 }

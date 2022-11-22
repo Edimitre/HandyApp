@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/name_of_shop_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name of shop"
+        android:textColor="?attr/colorOnSecondary"
+        android:textSize="25sp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/value_spent_on_shop_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_of_shop_text"
+        android:layout_centerHorizontal="true"
+        android:text="Total value spent 23489"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/nr_of_expenses_spent_on_shop_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total nr of expenses 212"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/value_spent_on_shop_text"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shop_expenses_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/nr_of_expenses_spent_on_shop_text"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_marginTop="8dp">
+
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+</RelativeLayout>

@@ -95,18 +95,21 @@ interface ShopExpenseDao {
     @Query("SELECT * FROM expense_table where year =:year and month =:month ORDER BY spentValue DESC LIMIT 1")
     fun getBiggestExpenseByYearAndMonth(year: Int, month: Int): LiveData<Expense>?
 
-    // BY NAME
+    // BY DESCRIPTION
     @Query("select * from expense_table where description LIKE '%' || :desc || '%'")
     fun getAllExpensesByDescriptionLiveData(desc: String): PagingSource<Int, Expense>?
 
     @Query("SELECT SUM(spentValue) FROM expense_table WHERE description LIKE '%' || :name || '%'")
     fun getValueOfExpensesByDescription(name: String?): LiveData<Int>?
 
-    @Query("SELECT SUM(spentValue) FROM expense_table WHERE shop_name LIKE '%' || :name || '%'")
+    @Query("SELECT SUM(spentValue) FROM expense_table WHERE shop_name = :name")
     fun getValueOfExpensesByShopName(name: String?): LiveData<Int>?
 
     @Query("SELECT COUNT(*) FROM expense_table WHERE description LIKE '%' || :description || '%'")
     fun getNrOfExpensesByDescription(description:String): LiveData<Int>?
+
+    @Query("SELECT COUNT(*) FROM expense_table WHERE shop_name = :shopName")
+    fun getNrOfExpensesByShopName(shopName:String): LiveData<Int>?
 
     @Query("SELECT * FROM expense_table")
     fun getAllExpensesForBackup(): List<Expense>
@@ -129,8 +132,8 @@ interface ShopExpenseDao {
         date: Int
     ): PagingSource<Int, Expense>?
 
-    @Query("select * from expense_table where shop_name LIKE '%' || :name || '%'")
-    fun getAllExpensesByName(name: String): PagingSource<Int, Expense>?
+    @Query("select * from expense_table where shop_name = :name")
+    fun getAllExpensesByShopName(name: String): PagingSource<Int, Expense>?
 
     @Query("select * from expense_table WHERE year = :year and month = :month and date = :date and shop_name LIKE '%' || :name || '%'")
     fun getAllExpensesByNameToday(

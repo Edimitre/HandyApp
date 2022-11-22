@@ -12,7 +12,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.ExpenseAdapter
@@ -21,6 +23,7 @@ import com.edimitre.handyapp.data.model.Shop
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.ExpenseViewModel
 import com.edimitre.handyapp.databinding.FragmentExpensesBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -35,6 +38,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
 
     private lateinit var binding: FragmentExpensesBinding
 
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +61,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
         setCheckBoxListener()
         initToolbar()
         showCloseButton(false)
+        enableTouchFunctions()
     }
 
     private fun initViewModel() {
@@ -226,6 +231,74 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
                 }
             }
         }
+    }
+
+    private fun enableTouchFunctions() {
+        itemTouchHelper =
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                    val expense = myAdapter.getExpenseByPos(viewHolder.absoluteAdapterPosition)
+
+                    openDeleteDialog(expense!!,viewHolder.absoluteAdapterPosition)
+
+
+                }
+            })
+
+        itemTouchHelper.attachToRecyclerView(binding.expensesRecyclerView)
+    }
+
+    private fun openDeleteDialog(expense: Expense, pos: Int) {
+
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+        dialog.setTitle(HandyAppEnvironment.TITLE)
+        dialog.setMessage(
+            "Are you sure you want to delete ${expense.spentValue} \n" +
+                    "this action can't be undone"
+
+        )
+        dialog.setPositiveButton("Delete") { _, _ ->
+
+
+            expenseViewModel.deleteExpense(expense)
+            myAdapter.notifyItemChanged(pos)
+            setSpentValueByYearMonthDate(
+                TimeUtils().getCurrentYear(),
+                TimeUtils().getCurrentMonth(),
+                TimeUtils().getCurrentDate()
+            )
+
+
+        }
+
+        dialog.setNegativeButton("Close") { _, _ ->
+
+
+        }
+
+
+        dialog.setOnDismissListener {
+
+            myAdapter.notifyItemChanged(pos)
+            setSpentValueByYearMonthDate(
+                TimeUtils().getCurrentYear(),
+                TimeUtils().getCurrentMonth(),
+                TimeUtils().getCurrentDate()
+            )
+        }
+
+
+        dialog.show()
     }
 
     private fun showCloseButton(show: Boolean) {

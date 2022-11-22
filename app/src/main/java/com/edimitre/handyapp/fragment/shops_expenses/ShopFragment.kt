@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.ShopAdapter
@@ -17,6 +19,7 @@ import com.edimitre.handyapp.data.model.Shop
 import com.edimitre.handyapp.data.view_model.ShopsViewModel
 
 import com.edimitre.handyapp.databinding.FragmentShopBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,6 +33,7 @@ class ShopFragment : Fragment(),ShopAdapter.OnShopClickListener {
 
     private lateinit var binding: FragmentShopBinding
 
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
 
     override fun onCreateView(
@@ -52,6 +56,7 @@ class ShopFragment : Fragment(),ShopAdapter.OnShopClickListener {
         setToolbarItems()
         initAdapterAndRecyclerView()
         observeShops()
+        enableTouchFunctions()
     }
 
     private fun initViewModel() {
@@ -103,6 +108,64 @@ class ShopFragment : Fragment(),ShopAdapter.OnShopClickListener {
         closeSearchButton.isVisible = false
     }
 
+    private fun enableTouchFunctions() {
+        itemTouchHelper =
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                    val shop = myAdapter.getSelectedItem(viewHolder.absoluteAdapterPosition)
+
+                    openDeleteDialog(shop!!,viewHolder.absoluteAdapterPosition)
+
+
+                }
+            })
+
+        itemTouchHelper.attachToRecyclerView(binding.shopsRecyclerView)
+    }
+
+    private fun openDeleteDialog(shop: Shop, pos: Int) {
+
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+        dialog.setTitle(HandyAppEnvironment.TITLE)
+        dialog.setMessage(
+            "are you sure you want to delete ${shop.shop_name} \n" +
+                    "this action can't be undone"
+
+        )
+        dialog.setPositiveButton("Delete") { _, _ ->
+
+
+            shopsViewModel.deleteShop(shop)
+            myAdapter.notifyItemChanged(pos)
+
+
+        }
+
+        dialog.setNegativeButton("Close") { _, _ ->
+
+
+        }
+
+
+        dialog.setOnDismissListener {
+
+            myAdapter.notifyItemChanged(pos)
+        }
+
+
+        dialog.show()
+    }
+
     private fun showPagedShopsByName(query: String) {
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -116,13 +179,19 @@ class ShopFragment : Fragment(),ShopAdapter.OnShopClickListener {
         viewLifecycleOwner.lifecycleScope.launch {
             shopsViewModel.getAllShopsPaged().collectLatest {
                 myAdapter.submitData(it)
-                Log.e(HandyAppEnvironment.TAG, "observeShops: ", )
+
             }
         }
     }
 
     override fun onShopClicked(shop: Shop) {
-        Log.e(HandyAppEnvironment.TAG, "onShopClicked: $shop")
+        val shopDetails = ShopDetailsFragment()
+        val mBundle = Bundle()
+        mBundle.putSerializable("shop", shop)
+
+        shopDetails.arguments = mBundle
+        shopDetails.show(parentFragmentManager, "shop details fragment")
+
     }
 
 }
