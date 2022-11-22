@@ -55,7 +55,7 @@
             />
 
         <TextView
-            android:id="@+id/date_text"
+            android:id="@+id/spent_value_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="spent value"
@@ -65,7 +65,16 @@
             android:textSize="17sp"
             android:layout_marginStart="8dp"/>
 
-
+        <TextView
+            android:id="@+id/nr_of_expenses_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="nr of expenses"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/this_year_check_box"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

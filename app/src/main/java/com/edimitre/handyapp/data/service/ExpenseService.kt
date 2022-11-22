@@ -11,42 +11,7 @@ import javax.inject.Inject
 
 class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao) {
 
-    //TODAY
-    var todayExpenses = expenseDao.getAllExpensesByYearMonthAndDateLiveData(
-        TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth(), TimeUtils().getCurrentDate()
-    )
 
-    var valueSpentToday = expenseDao.getValueOfExpensesByYearMonthDate(
-        TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth(), TimeUtils().getCurrentDate()
-    )
-
-    var nrOfExpensesToday = expenseDao.getNrOfExpensesByYearMonthDate(
-        TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth(), TimeUtils().getCurrentDate()
-    )
-
-
-    // THIS MONTH
-    var thisMonthExpenses = expenseDao.getAllExpensesByYearAndMonthLiveData(
-        TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth()
-    )
-
-    var valueSpentThisMonth = expenseDao.getValueOfExpensesByYearAndMonth(
-        TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth()
-    )
-
-    var nrOfExpensesThisMonth = expenseDao.getNrOfExpensesByYearMonth(
-        TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth()
-    )
-
-    //THIS YEAR
-    var thisYearExpenses = expenseDao.getAllExpensesByYearLiveData(TimeUtils().getCurrentYear())
-
-
-    var nrOfExpensesThisYear = expenseDao.getNrOfExpensesByYear(TimeUtils().getCurrentYear())
-
-    var biggestExpenseThisMonth = expenseDao.getBiggestExpenseByYearAndMonth(
-        TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth()
-    )
 
 
     suspend fun saveExpense(expense: Expense) {
@@ -59,6 +24,8 @@ class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao)
         return expenseDao.deleteExpense(expense)
     }
 
+
+    // VALUE
     fun getValueOfExpenseByYearMonthDate(year: Int, month: Int, date: Int): LiveData<Int>? {
         return expenseDao.getValueOfExpensesByYearMonthDate(year, month, date)
     }
@@ -75,6 +42,39 @@ class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao)
         )
     }
 
+    fun getValueOfExpensesByDescription(name: String): LiveData<Int>? {
+
+        return expenseDao.getValueOfExpensesByDescription(name)
+    }
+
+    fun getValueOfExpensesByShopName(name: String): LiveData<Int>? {
+
+        return expenseDao.getValueOfExpensesByShopName(name)
+    }
+
+
+    // NUMBER
+    fun getNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int):LiveData<Int>?{
+
+        return expenseDao.getNrOfExpensesByYearMonthDate(year, month, date)
+    }
+
+    fun getNrOfExpensesByYearMonth(year: Int, month: Int):LiveData<Int>?{
+
+        return expenseDao.getNrOfExpensesByYearMonth(year, month)
+    }
+
+    fun getNrOfExpensesByYear(year: Int):LiveData<Int>?{
+
+        return expenseDao.getNrOfExpensesByYear(year)
+    }
+
+    fun getNrOfExpensesByDescription(description:String):LiveData<Int>?{
+
+        return expenseDao.getNrOfExpensesByDescription(description)
+    }
+
+    // ALL
     fun getAllExpensesByYear(year: Int): PagingSource<Int, Expense>? {
         return expenseDao.getAllExpensesByYearPaged(year)
     }
@@ -91,41 +91,11 @@ class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao)
         return expenseDao.getAllExpensesByYearMonthAndDatePaged(year, month, date)
     }
 
-
     fun getAllExpensesByDescription(desc: String): PagingSource<Int, Expense>? {
 
         return expenseDao.getAllExpensesByDescriptionLiveData(desc)
     }
 
-    fun getAllExpensesByNameToday(name: String): PagingSource<Int, Expense>? {
-
-        return expenseDao.getAllExpensesByNameToday(
-            TimeUtils().getCurrentYear(),
-            TimeUtils().getCurrentMonth(), TimeUtils().getCurrentDate(), name
-        )
-    }
-
-    fun getAllExpensesByNameThisMonth(name: String): PagingSource<Int, Expense>? {
-
-        return expenseDao.getAllExpensesByNameThisMonth(
-            TimeUtils().getCurrentYear(),
-            TimeUtils().getCurrentMonth(), name
-        )
-    }
-
-    fun getAllExpensesByNameThisYear(name: String): PagingSource<Int, Expense>? {
-
-        return expenseDao.getAllExpensesByNameThisYear(TimeUtils().getCurrentYear(), name)
-    }
 
 
-    fun getValueOfExpensesByName(name: String): LiveData<Int>? {
-
-        return expenseDao.getValueOfExpensesByDescription(name)
-    }
-
-    fun getValueOfExpensesByShopName(name: String): LiveData<Int>? {
-
-        return expenseDao.getValueOfExpensesByShopName(name)
-    }
 }

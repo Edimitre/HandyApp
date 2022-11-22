@@ -105,6 +105,9 @@ interface ShopExpenseDao {
     @Query("SELECT SUM(spentValue) FROM expense_table WHERE shop_name LIKE '%' || :name || '%'")
     fun getValueOfExpensesByShopName(name: String?): LiveData<Int>?
 
+    @Query("SELECT COUNT(*) FROM expense_table WHERE description LIKE '%' || :description || '%'")
+    fun getNrOfExpensesByDescription(description:String): LiveData<Int>?
+
     @Query("SELECT * FROM expense_table")
     fun getAllExpensesForBackup(): List<Expense>
 

@@ -37,28 +37,60 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
     }
 
 
+    // VALUE BY YEAR MONTH DATE
     fun getValueOfExpensesByYearMonthDate(year: Int, month: Int, date: Int): LiveData<Int>? {
 
         return expenseService.getValueOfExpenseByYearMonthDate(year, month, date)
     }
 
+    // VALUE BY YEAR MONTH
     fun getValueOfExpensesbyYearMonth(year: Int, month: Int): LiveData<Int>? {
 
         return expenseService.getValueOfExpenseByYearMonth(year, month)
     }
 
+    // VALUE BY YEAR
     fun getValueOfExpensesbyYear(year: Int): LiveData<Int>? {
 
         return expenseService.getValueOfExpensesByYear(year)
     }
 
-    fun getValueOfExpensesByName(name: String): LiveData<Int>? {
+    // VALUE BY DESCRIPTION
+    fun getValueOfExpensesByDescription(name: String): LiveData<Int>? {
 
-        return expenseService.getValueOfExpensesByName(name)
+        return expenseService.getValueOfExpensesByDescription(name)
     }
 
 
-    // BY YEAR
+
+    fun getNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int):LiveData<Int>?{
+
+        return expenseService.getNrOfExpensesByYearMonthDate(year, month, date)
+    }
+
+    fun getNrOfExpensesByYearMonth(year: Int, month: Int):LiveData<Int>?{
+
+        return expenseService.getNrOfExpensesByYearMonth(year, month)
+    }
+
+    fun getNrOfExpensesByYear(year: Int):LiveData<Int>?{
+
+        return expenseService.getNrOfExpensesByYear(year)
+    }
+
+    fun getNrOfExpensesByDescription(description:String):LiveData<Int>?{
+
+        return expenseService.getNrOfExpensesByDescription(description)
+    }
+
+
+
+
+
+
+
+
+    //  BY YEAR
     fun getAllExpensesByYearPaginated(year: Int): Flow<PagingData<Expense>> {
 
 
@@ -74,7 +106,7 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
             .cachedIn(viewModelScope)
     }
 
-    // BY MONTH
+    // ALL BY MONTH
     fun getAllExpensesByYearAndMonth(year: Int, month: Int): Flow<PagingData<Expense>> {
         return Pager(
             config = PagingConfig(
@@ -88,7 +120,7 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
             .cachedIn(viewModelScope)
     }
 
-    // BY DATE
+    // ALL BY DATE
     fun getAllExpensesBYYearMonthDate(year: Int, month: Int, date: Int): Flow<PagingData<Expense>> {
         return Pager(
             config = PagingConfig(
@@ -108,7 +140,7 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
             .cachedIn(viewModelScope)
     }
 
-
+    // ALL BY DESCRIPTION
     fun getAllExpensesByDescription(desc: String): Flow<PagingData<Expense>> {
         return Pager(
             config = PagingConfig(

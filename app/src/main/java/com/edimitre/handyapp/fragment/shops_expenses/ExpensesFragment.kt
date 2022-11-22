@@ -322,9 +322,6 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val dateDialog = DatePickerDialog(requireContext())
 
-//            val timeNow = System.currentTimeMillis() - 1000
-//            dateDialog.datePicker.minDate = timeNow
-
             dateDialog.setOnDateSetListener { _, y, m, d ->
 
                 showBySelectedDate(y, m, d)
@@ -339,41 +336,71 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
 
         expenseViewModel.getValueOfExpensesByYearMonthDate(year, month, date)!!
             .observe(viewLifecycleOwner) {
-                binding.dateText.text = "Spent value : $it"
+                binding.spentValueText.text = "Spent value : $it"
             }
+
+        setNrOfExpensesByYearMonthDate(year, month, date)
+    }
+    private fun setNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int){
+
+        expenseViewModel.getNrOfExpensesByYearMonthDate(year, month, date)!!.observe(viewLifecycleOwner){
+            binding.nrOfExpensesText.text = "nr of expenses $it"
+        }
 
     }
 
     private fun setSpentValueByYearMonth(year: Int, month: Int) {
 
         expenseViewModel.getValueOfExpensesbyYearMonth(year, month)!!.observe(viewLifecycleOwner) {
-            binding.dateText.text = "Spent value : $it"
+            binding.spentValueText.text = "Spent value : $it"
+        }
+
+        setNrOfExpensesByYearMonth(year, month)
+    }
+    private fun setNrOfExpensesByYearMonth(year: Int, month: Int){
+
+        expenseViewModel.getNrOfExpensesByYearMonth(year, month)!!.observe(viewLifecycleOwner){
+            binding.nrOfExpensesText.text = "nr of expenses $it"
         }
 
     }
 
+
     private fun setSpentValueByYear(currentYear: Int) {
 
         expenseViewModel.getValueOfExpensesbyYear(currentYear)!!.observe(viewLifecycleOwner) {
-            binding.dateText.text = "Spent value : $it"
+            binding.spentValueText.text = "Spent value : $it"
+        }
+
+        setNrOfExpensesByYear(currentYear)
+    }
+    private fun setNrOfExpensesByYear(year: Int){
+
+        expenseViewModel.getNrOfExpensesByYear(year)!!.observe(viewLifecycleOwner){
+            binding.nrOfExpensesText.text = "nr of expenses $it"
         }
 
     }
 
     private fun setSpentValueByDescription(description: String) {
 
-        expenseViewModel.getValueOfExpensesByName(description)!!.observe(viewLifecycleOwner) {
-            binding.dateText.text = "Spent value : $it"
+        expenseViewModel.getValueOfExpensesByDescription(description)!!.observe(viewLifecycleOwner) {
+            binding.spentValueText.text = "Spent value : $it"
+        }
+
+        setNrOfExpensesByDescription(description)
+    }
+    private fun setNrOfExpensesByDescription(description:String){
+
+        expenseViewModel.getNrOfExpensesByDescription(description)!!.observe(viewLifecycleOwner){
+            binding.nrOfExpensesText.text = "nr of expenses $it"
         }
 
     }
 
-
     override fun onExpenseClick(expense: Expense) {
         Log.e(HandyAppEnvironment.TAG, "onExpenseClick:${expense.shop.shop_name} ")
     }
-
-
 
 
 }
