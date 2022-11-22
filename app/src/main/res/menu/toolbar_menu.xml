@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/btn_calendar_pick"
+        android:icon="@drawable/ic_calendar"
+        android:title="PickDate"
+        app:showAsAction="ifRoom"/>
+
+
+
+    <item
+        android:id="@+id/btn_search_db"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/btn_close_date_search"
+        android:icon="@drawable/ic_close"
+        android:title="Close"
+        app:showAsAction="ifRoom"/>
+
+
+
+
+</menu>

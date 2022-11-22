@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.shops_expenses.ExpensesFragment"
+    android:padding="8dp">
+
+
+    <!--TOOLBAR-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:elevation="12dp"
+        android:background="?attr/colorPrimaryVariant"
+        android:minHeight="?attr/actionBarSize">
+
+
+    </com.google.android.material.appbar.MaterialToolbar>
+    <!--TOOLBAR END-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/checkbox_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
+
+        <CheckBox
+            android:id="@+id/today_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="today"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <CheckBox
+            android:id="@+id/this_month_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="this month"
+            app:layout_constraintStart_toEndOf="@+id/today_check_box"
+            app:layout_constraintEnd_toStartOf="@+id/this_year_check_box"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <CheckBox
+            android:id="@+id/this_year_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="this year"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="spent value"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/today_check_box"
+            app:layout_constraintStart_toStartOf="@+id/today_check_box"
+            android:textSize="17sp"
+            android:layout_marginStart="8dp"/>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/expenses_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/checkbox_layout"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="?attr/actionBarSize"/>
+
+
+
+</RelativeLayout>
