@@ -59,51 +59,51 @@ class ShopsExpensesActivity : AppCompatActivity(), SelectShopForm.ShopSelectedLi
 
         setButtonListeners()
 
-        setInitialData()
+//        setInitialData()
     }
-
-    private fun setInitialData() {
-        shopsViewModel.testShop!!.observe(this) {
-            when (it) {
-                null -> {
-                    Log.e(HandyAppEnvironment.TAG, "initial data empty : inserting ..")
-                    for (i in 0..100) {
-
-                        val year = TimeUtils().getCurrentYear()
-                        var month = TimeUtils().getCurrentMonth()
-                        var date = TimeUtils().getCurrentDate()
-                        if (i > 30) {
-                            month -= 1
-                        } else if (i > 60) {
-                            date -= 1
-                        } else if (i > 80) {
-                            date -= 2
-                        }
-
-                        val shop = Shop(i.toLong(), "name $i")
-                        val expense = Expense(
-                            i.toLong(), "desc $i",
-                            year,
-                            month,
-                            date,
-                            TimeUtils().getCurrentHour(),
-                            TimeUtils().getCurrentMinute(),
-                            234.0,
-                            shop,
-                        )
-                        shopsViewModel.saveShop(shop)
-                        expenseViewModel.saveExpense(expense)
-                    }
-                }
-                else -> {
-                    Log.e(HandyAppEnvironment.TAG, "initial data exist : passing ..")
-
-                }
-            }
-        }
-
-
-    }
+//
+//    private fun setInitialData() {
+//        shopsViewModel.testShop!!.observe(this) {
+//            when (it) {
+//                null -> {
+//                    Log.e(HandyAppEnvironment.TAG, "initial data empty : inserting ..")
+//                    for (i in 0..100) {
+//
+//                        val year = TimeUtils().getCurrentYear()
+//                        var month = TimeUtils().getCurrentMonth()
+//                        var date = TimeUtils().getCurrentDate()
+//                        if (i > 30) {
+//                            month -= 1
+//                        } else if (i > 60) {
+//                            date -= 1
+//                        } else if (i > 80) {
+//                            date -= 2
+//                        }
+//
+//                        val shop = Shop(i.toLong(), "name $i")
+//                        val expense = Expense(
+//                            i.toLong(), "desc $i",
+//                            year,
+//                            month,
+//                            date,
+//                            TimeUtils().getCurrentHour(),
+//                            TimeUtils().getCurrentMinute(),
+//                            234.0,
+//                            shop,
+//                        )
+//                        shopsViewModel.saveShop(shop)
+//                        expenseViewModel.saveExpense(expense)
+//                    }
+//                }
+//                else -> {
+//                    Log.e(HandyAppEnvironment.TAG, "initial data exist : passing ..")
+//
+//                }
+//            }
+//        }
+//
+//
+//    }
 
     private fun initFragmentTabs() {
         // get adapter

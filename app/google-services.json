@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "173219188865",
+    "project_id": "handyapp-e0859",
+    "storage_bucket": "handyapp-e0859.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173219188865:android:4dbedad6627b59d94e3d80",
+        "android_client_info": {
+          "package_name": "com.edimitre.handyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173219188865-840jco8ci03mv0lp2g8scbmc8enme0lj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfPliiFxnQG7-KzZb9xFmnGDFsFRRbK3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173219188865-840jco8ci03mv0lp2g8scbmc8enme0lj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

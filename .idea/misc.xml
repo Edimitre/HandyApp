@@ -6,14 +6,23 @@
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/drawable/ic_check.xml" value="0.1895" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/drawable/ic_close.xml" value="0.108" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/activity_expense.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/activity_login_sign_up.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/activity_login_sign_up2.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/activity_reminder_notes.xml" value="0.264" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/add_expense_form.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/add_expense_values_form.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/add_reminder_form.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/enter_from_right.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/fragment_expenses.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/fragment_log_in.xml" value="0.24010416666666667" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/fragment_notes.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/fragment_shop.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/fragment_shop_details.xml" value="0.2" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/fragment_sign_up.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/item_expense.xml" value="0.264" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/item_note.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/item_reminder.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/item_shop.xml" value="0.1" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/layout/select_shop_form.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/EdiMitre/AndroidStudioProjects/HandyApp/app/src/main/res/menu/toolbar_menu.xml" value="0.25416666666666665" />
