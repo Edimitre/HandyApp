@@ -6,12 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.edimitre.handyapp.R
-import com.edimitre.handyapp.data.model.AuthModel
-import com.edimitre.handyapp.data.model.Shop
-import com.edimitre.handyapp.databinding.AddReminderFormBinding
 import com.edimitre.handyapp.databinding.FragmentSignUpBinding
-import com.edimitre.handyapp.fragment.shops_expenses.SelectShopForm
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -54,13 +49,15 @@ class SignUpFragment : Fragment() {
                 inputsAreOk() -> {
                     val email = binding.inputEmail.text.trim().toString()
                     val password = binding.inputPassword.text.trim().toString()
-
-                    val auth = AuthModel(email,password)
-                    listener.addAuthModel(auth)
+                    listener.executeAuthentication(email, password)
                 }
             }
 
 
+        }
+
+        binding.alreadyUser.setOnClickListener {
+            listener.switchLoginFragment()
         }
     }
 
@@ -101,7 +98,8 @@ class SignUpFragment : Fragment() {
 
 
     interface AuthListener {
-        fun addAuthModel(authModel: AuthModel)
+        fun executeAuthentication(email:String, password:String)
+        fun switchLoginFragment()
     }
 
     override fun onAttach(context: Context) {
@@ -112,6 +110,10 @@ class SignUpFragment : Fragment() {
         }
         super.onAttach(context)
     }
+
+
+
+
 
 
 }

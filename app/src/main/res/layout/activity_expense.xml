@@ -57,6 +57,7 @@
             android:contentDescription="TODO"
             app:layout_anchor="@id/bottomAppBar"
             app:srcCompat="@drawable/ic_plus"
+            android:backgroundTint="?attr/colorPrimary"
             tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
 

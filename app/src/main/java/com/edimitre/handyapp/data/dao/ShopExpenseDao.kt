@@ -27,6 +27,9 @@ interface ShopExpenseDao {
     @Query("SELECT * FROM shop_table")
     fun getAllShops(): PagingSource<Int, Shop>?
 
+    @Query("SELECT * FROM shop_table")
+    fun getAllShopsForBackUp(): List<Shop>?
+
     @Query("SELECT * FROM shop_table WHERE shop_name LIKE '%' || :name || '%'")
     fun getByNamePaged(name: String): PagingSource<Int, Shop>?
 

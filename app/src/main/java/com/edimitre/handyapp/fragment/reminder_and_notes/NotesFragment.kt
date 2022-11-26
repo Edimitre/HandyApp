@@ -86,20 +86,15 @@ class NotesFragment : Fragment() {
         binding.nToolbar.inflateMenu(R.menu.toolbar_menu)
 
 
-//        val btnBackUp = binding.nToolbar.menu.findItem(R.id.btn_back_up_db)
-//        btnBackUp.isVisible = false
-//
-//        val btnImport = binding.nToolbar.menu.findItem(R.id.btn_import_db)
-//        btnImport.isVisible = false
-//
-//        val btnLogOut = binding.nToolbar.menu.findItem(R.id.btn_log_out)
-//        btnLogOut.isVisible = false
-//
+
         val btnPickDate = binding.nToolbar.menu.findItem(R.id.btn_calendar_pick)
         btnPickDate.isVisible = false
 
         val btnCloseSearch = binding.nToolbar.menu.findItem(R.id.btn_close_date_search)
         btnCloseSearch.isVisible = false
+
+        val settingButton = binding.nToolbar.menu.findItem(R.id.btn_settings)
+        settingButton.isVisible = false
 
         val search = binding.nToolbar.menu.findItem(R.id.btn_search_db)
 

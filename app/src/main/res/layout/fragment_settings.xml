@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.settings.SettingsFragment"
+    android:padding="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cs_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimaryVariant"
+            android:layout_marginTop="8dp"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="save settings"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/btn_save_settings"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/back_up_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="16dp"
+            android:layout_below="@id/cs_layout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="auto_backup"
+                android:textSize="20sp"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp"
+                android:padding="8dp"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/back_up_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/black_theme_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/back_up_row"
+            app:cardCornerRadius="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="dark_theme"
+                android:textSize="20sp"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp"
+                android:padding="8dp"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/dark_theme_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>

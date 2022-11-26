@@ -10,12 +10,13 @@
 
     <!--TOOLBAR-->
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        android:elevation="12dp"
         android:background="?attr/colorPrimaryVariant"
+        android:elevation="12dp"
         android:minHeight="?attr/actionBarSize">
+
     </com.google.android.material.appbar.MaterialToolbar>
     <!--TOOLBAR END-->
 

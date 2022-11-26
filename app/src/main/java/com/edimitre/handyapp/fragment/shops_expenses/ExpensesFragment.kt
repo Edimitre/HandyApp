@@ -140,6 +140,10 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
         binding.toolbar.inflateMenu(R.menu.toolbar_menu)
 
 
+
+        val settingButton = binding.toolbar.menu.findItem(R.id.btn_settings)
+        settingButton.isVisible = false
+
         val searchButton = binding.toolbar.menu.findItem(R.id.btn_search_db)
 
         val searchView = searchButton.actionView as SearchView

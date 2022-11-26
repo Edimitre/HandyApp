@@ -103,9 +103,10 @@ class ShopFragment : Fragment(),ShopAdapter.OnShopClickListener {
 
         val calendarButton = binding.toolbar.menu.findItem(R.id.btn_calendar_pick)
         val closeSearchButton = binding.toolbar.menu.findItem(R.id.btn_close_date_search)
-
+        val settingButton = binding.toolbar.menu.findItem(R.id.btn_settings)
         calendarButton.isVisible = false
         closeSearchButton.isVisible = false
+        settingButton.isVisible = false
     }
 
     private fun enableTouchFunctions() {

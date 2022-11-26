@@ -13,16 +13,25 @@ import android.graphics.Color
 import android.os.Build
 
 import androidx.core.app.NotificationCompat
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.R
+import com.edimitre.handyapp.data.worker.FirebaseDBWorker
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
-
-
+import javax.inject.Inject
 
 
 class SystemService(private val context: Context) {
+
+
+    @Inject
+    lateinit var auth: FirebaseAuth
 
 
 
@@ -116,6 +125,23 @@ class SystemService(private val context: Context) {
 
     }
 
+    fun startBackupWorker() {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+
+        val backUpwork = OneTimeWorkRequest.Builder(FirebaseDBWorker::class.java)
+            .setConstraints(constraints)
+            .addTag("back_up_work")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(backUpwork)
+
+    }
 
     private fun addOneDayToTimeInMillis(millis: Long): Long {
 
@@ -125,5 +151,6 @@ class SystemService(private val context: Context) {
 
         return cal.timeInMillis
     }
+
 
 }

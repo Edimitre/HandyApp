@@ -1,10 +1,11 @@
 package com.edimitre.handyapp
 
 import android.app.Application
+import com.edimitre.handyapp.data.dao.AuthDao
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
+import com.edimitre.handyapp.data.dao.SettingsDao
 import com.edimitre.handyapp.data.dao.ShopExpenseDao
 import com.edimitre.handyapp.data.room_database.HandyDb
-import com.edimitre.handyapp.data.service.SignUpLoginService
 import com.edimitre.handyapp.data.util.SystemService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -45,32 +46,41 @@ object HandyAppModule {
 
     @Singleton
     @Provides
-    fun getSystemService(context: Application): SystemService {
+    fun provideAuthDao(db:HandyDb):AuthDao{
+
+        return db.getAuthDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSettingsDao(db:HandyDb):SettingsDao{
+
+        return db.getSettingsDao()
+    }
+    @Singleton
+    @Provides
+    fun provideSystemService(context: Application): SystemService {
         return SystemService(context)
     }
 
-    @Singleton
-    @Provides
-    fun getSignUpLoginService(auth: FirebaseAuth):SignUpLoginService{
 
-        return SignUpLoginService(auth);
-    }
+
 
     @Singleton
     @Provides
-    fun getFirebase(): Firebase {
+    fun provideFirebaseProvider(): Firebase {
         return Firebase
     }
 
     @Singleton
     @Provides
-    fun getFirebaseAuthentication(): FirebaseAuth {
+    fun provideFirebaseAuthentication(): FirebaseAuth {
         return Firebase.auth
     }
 
     @Singleton
     @Provides
-    fun getFirebaseDatabase(): FirebaseFirestore {
+    fun provideFirebaseDatabase(): FirebaseFirestore {
 
         return FirebaseFirestore.getInstance()
 

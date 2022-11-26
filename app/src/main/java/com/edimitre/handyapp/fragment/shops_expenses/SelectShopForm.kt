@@ -62,6 +62,8 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
 
 
 
+        val settingButton = binding!!.myToolbar.menu.findItem(R.id.btn_settings)
+        settingButton.isVisible = false
 
         val search = binding!!.myToolbar.menu.findItem(R.id.btn_search_db)
 
@@ -73,6 +75,7 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
 
         val btnCloseSearch = binding!!.myToolbar.menu.findItem(R.id.btn_close_date_search)
         btnCloseSearch.isVisible = false
+
 
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
