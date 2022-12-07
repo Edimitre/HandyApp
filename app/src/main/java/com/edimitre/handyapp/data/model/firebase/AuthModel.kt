@@ -6,24 +6,34 @@ import java.io.Serializable
 
 
 @Entity(tableName = "auth_table")
-data class AuthModel (
+data class AuthModel(
 
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    var id:Int,
+
     var uid: String,
 
-    var email:String,
+    var email: String,
 
-    var password:String,
+    var password: String,
 
-    var isSignedIn:Boolean
+    var isSignedIn: Boolean,
 
-    ): Serializable {
+    var isBackupEnabled: Boolean,
 
-    constructor(): this(
+    var isDarkThemeEnabled: Boolean
+
+) : Serializable {
+
+    constructor() : this(
+        0,
         "",
         "",
         "",
-        true)
+        true,
+        false,
+        false
+    )
 
 
 }

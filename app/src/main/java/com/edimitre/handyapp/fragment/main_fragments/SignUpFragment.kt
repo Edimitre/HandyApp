@@ -1,11 +1,13 @@
-package com.edimitre.handyapp.fragment.login_signup
+package com.edimitre.handyapp.fragment.main_fragments
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +19,9 @@ class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignUpBinding
 
 
-    private lateinit var listener: AuthListener
+
+
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,29 +41,41 @@ class SignUpFragment : Fragment() {
 
     private fun initFragment(){
 
-
         setListeners()
+
+        observeData()
     }
 
     private fun setListeners(){
         binding.btnSignUp.setOnClickListener {
-
-
             when{
                 inputsAreOk() -> {
                     val email = binding.inputEmail.text.trim().toString()
                     val password = binding.inputPassword.text.trim().toString()
-                    listener.executeAuthentication(email, password)
+                    mainViewModel.signUpUser(email, password)
                 }
             }
-
-
         }
 
         binding.alreadyUser.setOnClickListener {
-            listener.switchLoginFragment()
+            mainViewModel.selectFragment(LogInFragment())
         }
     }
+
+    private fun observeData(){
+
+
+        activity?.let {
+            mainViewModel.isDoingWork.observe(it, Observer { doingWork ->
+                when{
+                    doingWork -> {
+
+                    }
+                }
+            })
+        }
+    }
+
 
 
     private fun inputsAreOk():Boolean{
@@ -95,22 +111,6 @@ class SignUpFragment : Fragment() {
         }
 
     }
-
-
-    interface AuthListener {
-        fun executeAuthentication(email:String, password:String)
-        fun switchLoginFragment()
-    }
-
-    override fun onAttach(context: Context) {
-        listener = try {
-            context as AuthListener
-        } catch (e: ClassCastException) {
-            throw ClassCastException(context.toString() + "add listener")
-        }
-        super.onAttach(context)
-    }
-
 
 
 

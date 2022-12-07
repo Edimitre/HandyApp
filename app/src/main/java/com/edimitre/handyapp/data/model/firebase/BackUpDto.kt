@@ -5,6 +5,7 @@ import com.edimitre.handyapp.data.model.Note
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.model.Shop
 import java.io.Serializable
+import kotlin.collections.ArrayList
 
 data class BackUpDto(
 
@@ -16,8 +17,9 @@ data class BackUpDto(
 
     var reminderList:List<Reminder>,
 
-    var notesList:List<Note>
+    var notesList:List<Note>,
 
+    var backUpDate: Long
 ) : Serializable {
 
     constructor():this(
@@ -26,7 +28,7 @@ data class BackUpDto(
         ArrayList(),
         ArrayList(),
         ArrayList(),
-
+        0
     )
 
 }

@@ -11,17 +11,16 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-
 import androidx.core.app.NotificationCompat
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.R
-import com.edimitre.handyapp.data.worker.FirebaseDBWorker
+import com.edimitre.handyapp.activity.MainActivity
+import com.edimitre.handyapp.data.worker.BackUpDBWorker
+import com.edimitre.handyapp.data.worker.ImportDBWorker
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import javax.inject.Inject
@@ -32,8 +31,6 @@ class SystemService(private val context: Context) {
 
     @Inject
     lateinit var auth: FirebaseAuth
-
-
 
 
     fun createNotificationChannel() {
@@ -119,7 +116,10 @@ class SystemService(private val context: Context) {
 
             val notificationManager =
                 context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
-            notificationManager!!.notify(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, mBuilder.build())
+            notificationManager!!.notify(
+                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                mBuilder.build()
+            )
 
         }
 
@@ -132,7 +132,7 @@ class SystemService(private val context: Context) {
             .build()
 
 
-        val backUpwork = OneTimeWorkRequest.Builder(FirebaseDBWorker::class.java)
+        val backUpwork = OneTimeWorkRequest.Builder(BackUpDBWorker::class.java)
             .setConstraints(constraints)
             .addTag("back_up_work")
             .build()
@@ -140,6 +140,29 @@ class SystemService(private val context: Context) {
 
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(backUpwork)
+
+    }
+
+    fun removeBackupWorker() {
+
+        WorkManager.getInstance(context).cancelAllWorkByTag("back_up_work")
+
+    }
+
+    fun startImportWorker(){
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+
+        val importWork = OneTimeWorkRequest.Builder(ImportDBWorker::class.java)
+            .setConstraints(constraints)
+            .addTag("import_work")
+            .build()
+        val workManager = WorkManager.getInstance(context)
+
+        workManager.enqueue(importWork)
 
     }
 

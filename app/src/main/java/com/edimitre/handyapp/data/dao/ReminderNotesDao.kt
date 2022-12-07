@@ -33,7 +33,7 @@ interface ReminderNotesDao {
     fun getFirstReminderLiveData(): LiveData<Reminder?>
 
     @Query("SELECT * FROM reminder_table")
-    fun getAllRemindersForBackUp(): List<Reminder>?
+    suspend fun getAllRemindersForBackUp(): List<Reminder>?
 
 
 
@@ -61,7 +61,7 @@ interface ReminderNotesDao {
     fun getAllNotesLiveData(): LiveData<List<Note>>?
 
     @Query("SELECT * FROM note_table")
-    fun getAllNotesForBackUp(): List<Note>?
+    suspend fun getAllNotesForBackUp(): List<Note>?
 
 
     @Query("SELECT * FROM note_table")

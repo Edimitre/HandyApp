@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.settings.SettingsFragment"
+    tools:context=".fragment.main_fragments.SettingsFragment"
     android:padding="8dp">
 
     <RelativeLayout
@@ -16,27 +16,50 @@
             android:id="@+id/cs_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimaryVariant"
             android:layout_marginTop="8dp"
+            android:background="?attr/colorPrimaryVariant"
             android:padding="8dp">
 
             <TextView
+                android:id="@+id/log_out_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="8dp"
+
+                android:text="logout"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:text="save settings"
-                android:textSize="20sp"/>
+                app:layout_constraintEnd_toStartOf="@+id/btn_logout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/login_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="login/signup"
+                android:textSize="20sp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_login"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/btn_save_settings"
+                android:id="@+id/btn_login"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_save"
+                android:src="@drawable/ic_login"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_logout"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_logout"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,6 +116,28 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/import_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/black_theme_row"
+            app:cardCornerRadius="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="import db"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+
+                android:padding="8dp"/>
+
 
 
         </androidx.cardview.widget.CardView>

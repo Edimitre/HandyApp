@@ -1,14 +1,14 @@
-package com.edimitre.handyapp.fragment.login_signup
+package com.edimitre.handyapp.fragment.main_fragments
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.edimitre.handyapp.R
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentLogInBinding
-import com.edimitre.handyapp.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,8 +16,7 @@ class LogInFragment : Fragment() {
 
     private lateinit var binding: FragmentLogInBinding
 
-
-    private lateinit var listener: LoginListener
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,25 +33,25 @@ class LogInFragment : Fragment() {
 
     private fun initFragment(){
 
-
         setListeners()
+
+        observeData()
     }
 
     private fun setListeners(){
         binding.btnLogin.setOnClickListener {
 
-
             when{
                 inputsAreOk() -> {
                     val email = binding.inputLoginEmail.text.trim().toString()
                     val password = binding.inputLoginPassword.text.trim().toString()
-                    listener.executeLogin(email, password)
+                    mainViewModel.doLogin(email, password)
                 }
             }
         }
 
         binding.signUpText.setOnClickListener {
-            listener.switchSignUpFragment()
+           mainViewModel.selectFragment(SignUpFragment())
         }
     }
 
@@ -79,19 +78,19 @@ class LogInFragment : Fragment() {
 
     }
 
+    private fun observeData(){
 
+        activity?.let {
+            mainViewModel.isDoingWork.observe(it, Observer { doingWork ->
+                when{
+                    doingWork -> {
 
-    interface LoginListener {
-        fun executeLogin(email:String, password:String)
-        fun switchSignUpFragment()
-    }
-
-    override fun onAttach(context: Context) {
-        listener = try {
-            context as LoginListener
-        } catch (e: ClassCastException) {
-            throw ClassCastException(context.toString() + "add listener")
+                    }
+                }
+            })
         }
-        super.onAttach(context)
     }
+
+
+
 }

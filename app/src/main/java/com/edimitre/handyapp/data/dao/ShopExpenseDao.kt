@@ -28,7 +28,7 @@ interface ShopExpenseDao {
     fun getAllShops(): PagingSource<Int, Shop>?
 
     @Query("SELECT * FROM shop_table")
-    fun getAllShopsForBackUp(): List<Shop>?
+    suspend fun getAllShopsForBackUp(): List<Shop>?
 
     @Query("SELECT * FROM shop_table WHERE shop_name LIKE '%' || :name || '%'")
     fun getByNamePaged(name: String): PagingSource<Int, Shop>?
@@ -115,7 +115,7 @@ interface ShopExpenseDao {
     fun getNrOfExpensesByShopName(shopName:String): LiveData<Int>?
 
     @Query("SELECT * FROM expense_table")
-    fun getAllExpensesForBackup(): List<Expense>
+    suspend fun getAllExpensesForBackup(): List<Expense>
 
 
     // PAGED

@@ -1,30 +1,48 @@
 package com.edimitre.handyapp.activity
 
 
-import android.content.Intent
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.work.*
+import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
-import com.edimitre.handyapp.data.model.Settings
-import com.edimitre.handyapp.data.view_model.SettingsViewModel
+import com.edimitre.handyapp.data.model.firebase.AuthModel
+import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.view_model.MainViewModel
+import com.edimitre.handyapp.data.worker.ImportDBWorker
 import com.edimitre.handyapp.databinding.ActivityMainBinding
-import com.edimitre.handyapp.fragment.settings.SettingsFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.edimitre.handyapp.fragment.main_fragments.NavigationFragment
+import com.edimitre.handyapp.fragment.main_fragments.SettingsFragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SettingsFragment.ThemeChangeListener {
+class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
 
     @Inject
     lateinit var auth: FirebaseAuth
 
-    private lateinit var settingsViewModel: SettingsViewModel
+    @Inject
+    lateinit var systemService: SystemService
+
+    private var backUpDb = Firebase.firestore
+
+    private val mainViewModel: MainViewModel by viewModels()
 
     lateinit var binding: ActivityMainBinding
 
@@ -34,16 +52,55 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ThemeChangeListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initViewModel()
-        checkInitialSettings()
+
+        setInitialSettings()
+
         initToolBar()
-        setListeners()
-        observeUserSettings()
+
+        observeActiveFragment()
+
+        observeTheme()
     }
 
-    private fun initViewModel() {
+    private fun setInitialSettings() {
 
-        settingsViewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
+        val hasConnection = hasConnection(this)
+
+        lifecycleScope.launch {
+            var auth = mainViewModel.getAuthModel()
+            when (auth) {
+                null -> {
+                    Log.e(TAG, "creating initial settings ")
+                    auth = AuthModel(
+                        0,
+                        "",
+                        "",
+                        "",
+                        false,
+                        isBackupEnabled = false,
+                        isDarkThemeEnabled = false
+                    )
+                    mainViewModel.saveAuth(auth)
+                    mainViewModel.selectDarkTheme(false)
+                    mainViewModel.selectBackupEnabled(false)
+                    mainViewModel.setHasConnection(hasConnection)
+                }else -> {
+                    mainViewModel.setHasConnection(hasConnection)
+                    mainViewModel.selectBackupEnabled(auth.isBackupEnabled).let {
+                        when (auth.isBackupEnabled){
+                            true -> {
+                                systemService.startBackupWorker()
+                            }false -> {
+
+                            }
+                        }
+                    }
+                    mainViewModel.selectDarkTheme(auth.isDarkThemeEnabled)
+
+                }
+            }
+        }
+
     }
 
     private fun initToolBar() {
@@ -51,6 +108,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ThemeChangeListener {
 
         setToolbarItems()
 
+        setListeners()
     }
 
     private fun setToolbarItems() {
@@ -64,36 +122,31 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ThemeChangeListener {
         searchButton.isVisible = false
     }
 
-    private fun checkInitialSettings() {
+    private fun observeActiveFragment() {
 
-        settingsViewModel.userSettings.observe(this) {
+        mainViewModel.selectFragment(NavigationFragment())
 
-            if (it == null) {
-                settingsViewModel.saveSettings(
-                    Settings(
-                        0,
-                        isBackupEnabled = false,
-                        isDarkThemeEnabled = false
-                    )
-                )
-                println("initial settings saved")
-            }
+        mainViewModel.fragmentSelected.observe(this) {
+            loadFragment(it)
         }
+    }
 
+    private fun observeTheme() {
+
+        mainViewModel.isDarkSelected.observe(this) {
+            when (it) {
+                true -> {
+                    changeTheme("Dark")
+                }
+                false -> {
+                    changeTheme("Light")
+                }
+            }
+
+        }
     }
 
     private fun setListeners() {
-
-        binding.expensesCard.setOnClickListener {
-
-            navigateToExpensesPage()
-        }
-
-        binding.remindersAndNotesCard.setOnClickListener {
-            navigateToRemindersPage()
-        }
-
-
 
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -109,72 +162,18 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ThemeChangeListener {
         }
     }
 
-    private fun isLoggedIn(): Boolean {
-
-
-        return auth.currentUser != null
-    }
-
     private fun openSettingsDialog() {
         val settingsDialog = SettingsFragment()
-        settingsDialog.show(supportFragmentManager, "settings dialog")
+        settingsDialog.show(supportFragmentManager, "settings_dialog")
     }
 
-    private fun navigateToExpensesPage() {
-        startActivity(Intent(this@MainActivity, ShopsExpensesActivity::class.java))
-    }
-
-    private fun navigateToRemindersPage() {
-        startActivity(Intent(this@MainActivity, ReminderNotesActivity::class.java))
-    }
-
-    override fun setBackupEnabled(enabled: Boolean) {
-        if (!isLoggedIn()){
-            openSignUpDialog()
-        }
-    }
-
-    private fun openSignUpDialog(){
-
-        val dialog = MaterialAlertDialogBuilder(this,)
-
-        dialog.setTitle("This feature require to be registered !")
-        dialog.setMessage(
-            "Do you want to signup/login ?"
-        )
-        dialog.setPositiveButton("Yes") { _, _ ->
-
-            navigateToSignUpPage()
-        }
-
-        dialog.setNegativeButton("No") { _, _ ->
-
-        }
-        dialog.show()
-
-    }
-
-    override fun saveSettings(settings: Settings) {
-
-        when {
-            isLoggedIn() -> {
-                settingsViewModel.saveSettings(settings)
-            }
-            else -> {
-                settings.isBackupEnabled = false
-                settingsViewModel.saveSettings(settings)
-            }
-        }
-
-        Toast.makeText(this, "Settings saved ", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun changeTheme(theme: String) {
-
-
+    private fun changeTheme(theme: String) {
         when (theme) {
             "Dark" -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            "Light" -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
             else -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
@@ -182,23 +181,83 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ThemeChangeListener {
         }
     }
 
-    private fun navigateToSignUpPage() {
-        startActivity(Intent(this@MainActivity, LoginSignUpActivity::class.java))
-
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.frag_container, fragment)
+        transaction.disallowAddToBackStack()
+        transaction.commit()
     }
 
-    private fun observeUserSettings() {
-        settingsViewModel.userSettings.observe(this) {
-
-            when {
-                it!!.isDarkThemeEnabled -> {
-                    changeTheme("Dark")
-                }
-                else -> {
-                    changeTheme("Light")
-                }
+    private fun hasConnection(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            } else {
+                TODO("VERSION.SDK_INT < M")
+            }
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+//                Log.e(HandyAppEnvironment.TAG, "Has cellular connection")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+//                Log.e(HandyAppEnvironment.TAG, "Has wifi connection")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+//                Log.e(HandyAppEnvironment.TAG, "Has ethernet connection")
+                return true
             }
         }
+        return false
     }
+
+    override fun importDb() {
+        getBackUpData()
+    }
+
+    private fun getBackUpData(){
+
+        lifecycleScope.launch {
+            val authModel = mainViewModel.getAuthModel()
+            val reference = backUpDb.collection("handy_app").document(authModel!!.uid)
+            reference.get()
+                .addOnSuccessListener { refDoc ->
+                    when {
+                        refDoc.data.isNullOrEmpty() -> {
+                            systemService.notify(
+                                HandyAppEnvironment.TITLE,
+                                "there are no data to import "
+                            )
+                        }
+                        else -> {
+                            val response = refDoc.data.toString()
+                            startImportWorker(response)
+                        }
+                    }
+                }
+        }
+
+    }
+
+    private fun startImportWorker(importData:String){
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val data:Data = Data.Builder().putString("backup_data", importData).build()
+
+        val importWork = OneTimeWorkRequest.Builder(ImportDBWorker::class.java)
+            .setConstraints(constraints)
+            .setInputData(data)
+            .addTag("import_work")
+            .build()
+        val workManager = WorkManager.getInstance(this@MainActivity)
+
+        workManager.enqueue(importWork)
+    }
+
+
+
 
 }

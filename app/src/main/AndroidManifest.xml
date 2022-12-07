@@ -36,11 +36,6 @@
 
 
         <activity
-            android:name=".activity.LoginSignUpActivity"
-            android:exported="false"/>
-
-
-        <activity
             android:name=".activity.ReminderNotesActivity"
             android:exported="false" />
         <activity

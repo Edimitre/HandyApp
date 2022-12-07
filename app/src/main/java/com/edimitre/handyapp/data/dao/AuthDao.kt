@@ -19,14 +19,14 @@ interface AuthDao {
     fun deleteOnThread(authModel: AuthModel)
 
     @Query("SELECT * FROM auth_table LIMIT 1")
-    fun getMainUserLiveData(): LiveData<AuthModel>?
+    fun getAuthModelLiveData(): LiveData<AuthModel>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveMainUserOnThread(authModel: AuthModel)
+    fun saveAuthModelOnThread(authModel: AuthModel)
 
     @Query("SELECT * FROM auth_table LIMIT 1")
-    fun getMainUserForBackup(): AuthModel?
+    fun getAuthModelForBackup(): AuthModel?
 
-    @Query("SELECT * FROM auth_table LIMIT 1")
-    suspend fun getMainUserOnCoroutine(): AuthModel?
+    @Query("SELECT * FROM auth_table where id = '1' LIMIT 1")
+    suspend fun getAuthModelOnCoroutine(): AuthModel?
 }

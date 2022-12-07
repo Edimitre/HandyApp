@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.login_signup.LogInFragment">
+    tools:context=".fragment.main_fragments.LogInFragment">
 
 
     <TextView
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Login"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="?attr/actionBarSize"
         android:textSize="30sp"
         style="@style/TextAppearance.Material3.BodyLarge"
         android:textStyle="bold"/>

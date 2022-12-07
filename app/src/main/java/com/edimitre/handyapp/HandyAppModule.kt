@@ -3,7 +3,6 @@ package com.edimitre.handyapp
 import android.app.Application
 import com.edimitre.handyapp.data.dao.AuthDao
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
-import com.edimitre.handyapp.data.dao.SettingsDao
 import com.edimitre.handyapp.data.dao.ShopExpenseDao
 import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.util.SystemService
@@ -51,12 +50,7 @@ object HandyAppModule {
         return db.getAuthDao()
     }
 
-    @Singleton
-    @Provides
-    fun provideSettingsDao(db:HandyDb):SettingsDao{
 
-        return db.getSettingsDao()
-    }
     @Singleton
     @Provides
     fun provideSystemService(context: Application): SystemService {
