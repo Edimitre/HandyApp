@@ -7,7 +7,6 @@ import android.content.Intent
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
 import com.edimitre.handyapp.data.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,13 +24,12 @@ class BootReceiver : BroadcastReceiver() {
 
         systemService.cancelAllAlarms()
 
-        Thread{
+        Thread {
             activateFirstReminder()
         }.start()
     }
 
     private fun activateFirstReminder() {
-
 
 
         val reminder: Reminder? = reminderDao.getFirstReminderOnThread()

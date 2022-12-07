@@ -5,13 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import com.edimitre.handyapp.data.dao.ShopExpenseDao
 import com.edimitre.handyapp.data.model.Expense
-import com.edimitre.handyapp.data.util.TimeUtils
-
 import javax.inject.Inject
 
 class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao) {
-
-
 
 
     suspend fun saveExpense(expense: Expense) {
@@ -54,27 +50,27 @@ class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao)
 
 
     // NUMBER
-    fun getNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int):LiveData<Int>?{
+    fun getNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int): LiveData<Int>? {
 
         return expenseDao.getNrOfExpensesByYearMonthDate(year, month, date)
     }
 
-    fun getNrOfExpensesByYearMonth(year: Int, month: Int):LiveData<Int>?{
+    fun getNrOfExpensesByYearMonth(year: Int, month: Int): LiveData<Int>? {
 
         return expenseDao.getNrOfExpensesByYearMonth(year, month)
     }
 
-    fun getNrOfExpensesByYear(year: Int):LiveData<Int>?{
+    fun getNrOfExpensesByYear(year: Int): LiveData<Int>? {
 
         return expenseDao.getNrOfExpensesByYear(year)
     }
 
-    fun getNrOfExpensesByDescription(description:String):LiveData<Int>?{
+    fun getNrOfExpensesByDescription(description: String): LiveData<Int>? {
 
         return expenseDao.getNrOfExpensesByDescription(description)
     }
 
-    fun getNrOfExpensesByShopName(shopName:String):LiveData<Int>?{
+    fun getNrOfExpensesByShopName(shopName: String): LiveData<Int>? {
 
         return expenseDao.getNrOfExpensesByShopName(shopName)
     }
@@ -105,7 +101,6 @@ class ExpenseService @Inject constructor(private val expenseDao: ShopExpenseDao)
 
         return expenseDao.getAllExpensesByShopName(shopName)
     }
-
 
 
 }

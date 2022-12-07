@@ -1,11 +1,9 @@
 package com.edimitre.handyapp.data.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.util.SystemService
@@ -17,7 +15,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 
 class BackUpDBWorker(context: Context, params: WorkerParameters) :
@@ -69,7 +66,13 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
                         backUpDto.notesList = notesList!!
 
-                        backUpDto.backUpDate = TimeUtils().getTimeInMilliSeconds(TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth(), TimeUtils().getCurrentDate(),TimeUtils().getCurrentHour(),TimeUtils().getCurrentMinute())
+                        backUpDto.backUpDate = TimeUtils().getTimeInMilliSeconds(
+                            TimeUtils().getCurrentYear(),
+                            TimeUtils().getCurrentMonth(),
+                            TimeUtils().getCurrentDate(),
+                            TimeUtils().getCurrentHour(),
+                            TimeUtils().getCurrentMinute()
+                        )
 
                         val backup = getMapFromDto(backUpDto)
 

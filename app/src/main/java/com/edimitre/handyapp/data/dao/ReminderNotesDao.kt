@@ -36,12 +36,6 @@ interface ReminderNotesDao {
     suspend fun getAllRemindersForBackUp(): List<Reminder>?
 
 
-
-
-
-
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveNoteOnThread(note: Note)
 

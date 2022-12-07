@@ -19,7 +19,6 @@ import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.ExpenseAdapter
 import com.edimitre.handyapp.data.model.Expense
-import com.edimitre.handyapp.data.model.Shop
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.ExpenseViewModel
 import com.edimitre.handyapp.databinding.FragmentExpensesBinding
@@ -27,10 +26,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 @AndroidEntryPoint
-class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
+class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
 
     private lateinit var myAdapter: ExpenseAdapter
 
@@ -138,7 +136,6 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
     private fun initToolbar() {
 
         binding.toolbar.inflateMenu(R.menu.toolbar_menu)
-
 
 
         val settingButton = binding.toolbar.menu.findItem(R.id.btn_settings)
@@ -252,7 +249,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
 
                     val expense = myAdapter.getExpenseByPos(viewHolder.absoluteAdapterPosition)
 
-                    openDeleteDialog(expense!!,viewHolder.absoluteAdapterPosition)
+                    openDeleteDialog(expense!!, viewHolder.absoluteAdapterPosition)
 
 
                 }
@@ -337,9 +334,11 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
             }
         }
 
-        setSpentValueByYearMonthDate(TimeUtils().getCurrentYear(),
+        setSpentValueByYearMonthDate(
+            TimeUtils().getCurrentYear(),
             TimeUtils().getCurrentMonth(),
-            TimeUtils().getCurrentDate())
+            TimeUtils().getCurrentDate()
+        )
     }
 
     private fun showThisYearExpenses() {
@@ -418,11 +417,13 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
 
         setNrOfExpensesByYearMonthDate(year, month, date)
     }
-    private fun setNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int){
 
-        expenseViewModel.getNrOfExpensesByYearMonthDate(year, month, date)!!.observe(viewLifecycleOwner){
-            binding.nrOfExpensesText.text = "nr of expenses $it"
-        }
+    private fun setNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int) {
+
+        expenseViewModel.getNrOfExpensesByYearMonthDate(year, month, date)!!
+            .observe(viewLifecycleOwner) {
+                binding.nrOfExpensesText.text = "nr of expenses $it"
+            }
 
     }
 
@@ -434,9 +435,10 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
 
         setNrOfExpensesByYearMonth(year, month)
     }
-    private fun setNrOfExpensesByYearMonth(year: Int, month: Int){
 
-        expenseViewModel.getNrOfExpensesByYearMonth(year, month)!!.observe(viewLifecycleOwner){
+    private fun setNrOfExpensesByYearMonth(year: Int, month: Int) {
+
+        expenseViewModel.getNrOfExpensesByYearMonth(year, month)!!.observe(viewLifecycleOwner) {
             binding.nrOfExpensesText.text = "nr of expenses $it"
         }
 
@@ -451,9 +453,10 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
 
         setNrOfExpensesByYear(currentYear)
     }
-    private fun setNrOfExpensesByYear(year: Int){
 
-        expenseViewModel.getNrOfExpensesByYear(year)!!.observe(viewLifecycleOwner){
+    private fun setNrOfExpensesByYear(year: Int) {
+
+        expenseViewModel.getNrOfExpensesByYear(year)!!.observe(viewLifecycleOwner) {
             binding.nrOfExpensesText.text = "nr of expenses $it"
         }
 
@@ -461,15 +464,17 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener{
 
     private fun setSpentValueByDescription(description: String) {
 
-        expenseViewModel.getValueOfExpensesByDescription(description)!!.observe(viewLifecycleOwner) {
-            binding.spentValueText.text = "Spent value : $it"
-        }
+        expenseViewModel.getValueOfExpensesByDescription(description)!!
+            .observe(viewLifecycleOwner) {
+                binding.spentValueText.text = "Spent value : $it"
+            }
 
         setNrOfExpensesByDescription(description)
     }
-    private fun setNrOfExpensesByDescription(description:String){
 
-        expenseViewModel.getNrOfExpensesByDescription(description)!!.observe(viewLifecycleOwner){
+    private fun setNrOfExpensesByDescription(description: String) {
+
+        expenseViewModel.getNrOfExpensesByDescription(description)!!.observe(viewLifecycleOwner) {
             binding.nrOfExpensesText.text = "nr of expenses $it"
         }
 

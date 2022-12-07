@@ -96,7 +96,6 @@ class AddReminderForm : BottomSheetDialogFragment() {
     }
 
 
-
     private fun isReminderValid(reminder: Reminder): Boolean {
 
         return reminder.alarmTimeInMillis >= System.currentTimeMillis()
@@ -133,7 +132,7 @@ class AddReminderForm : BottomSheetDialogFragment() {
 
 
         val timePickerDialog = TimePickerDialog(
-            context,{ _, h, m ->
+            context, { _, h, m ->
                 hour = h
                 minutes = m
                 showSelectedDate(year!!, month!!, date!!, hour!!, minutes!!)

@@ -2,7 +2,6 @@ package com.edimitre.handyapp.fragment.main_fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentSettingsBinding
@@ -112,7 +110,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
             binding.logOutText.visibility = View.GONE
             binding.btnLogout.visibility = View.GONE
             binding.importRow.visibility = View.GONE
-        }else{
+        } else {
             binding.btnLogin.visibility = View.GONE
             binding.loginText.visibility = View.GONE
         }

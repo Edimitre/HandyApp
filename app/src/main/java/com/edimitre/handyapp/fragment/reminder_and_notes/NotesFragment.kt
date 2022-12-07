@@ -63,7 +63,7 @@ class NotesFragment : Fragment() {
 
     private fun initViewModel() {
 
-        _noteVieModel= ViewModelProvider(this)[NoteViewModel::class.java]
+        _noteVieModel = ViewModelProvider(this)[NoteViewModel::class.java]
     }
 
     private fun initAdapterAndRecyclerView() {
@@ -81,10 +81,9 @@ class NotesFragment : Fragment() {
         }
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
 
         binding.nToolbar.inflateMenu(R.menu.toolbar_menu)
-
 
 
         val btnPickDate = binding.nToolbar.menu.findItem(R.id.btn_calendar_pick)
@@ -108,6 +107,7 @@ class NotesFragment : Fragment() {
                 showAllNotesByContent(query)
                 return false
             }
+
             override fun onQueryTextChange(newText: String): Boolean {
 
                 showAllNotesByContent(newText)
@@ -127,7 +127,7 @@ class NotesFragment : Fragment() {
 
     }
 
-    private fun showAllNotesByContent(content:String) {
+    private fun showAllNotesByContent(content: String) {
 
         lifecycleScope.launch {
             _noteVieModel.getAllNotesPagedByContent(content).collectLatest {
@@ -194,7 +194,6 @@ class NotesFragment : Fragment() {
 
         dialog.show()
     }
-
 
 
 }

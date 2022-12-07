@@ -44,7 +44,6 @@ class MainViewModel @Inject constructor(
     val hasConnection: LiveData<Boolean> get() = mutableHasConnection
 
 
-
     fun selectDarkTheme(isDark: Boolean) {
         mutableIsDarkSelected.value = isDark
     }
@@ -145,7 +144,6 @@ class MainViewModel @Inject constructor(
     }
 
     fun saveAuth(authModel: AuthModel): Job = viewModelScope.launch {
-
 
 
         authDao.save(authModel)

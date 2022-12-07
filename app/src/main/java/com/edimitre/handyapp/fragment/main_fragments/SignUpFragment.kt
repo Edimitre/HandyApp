@@ -1,10 +1,10 @@
 package com.edimitre.handyapp.fragment.main_fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.edimitre.handyapp.data.view_model.MainViewModel
@@ -17,8 +17,6 @@ class SignUpFragment : Fragment() {
 
 
     private lateinit var binding: FragmentSignUpBinding
-
-
 
 
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -39,16 +37,16 @@ class SignUpFragment : Fragment() {
         initFragment()
     }
 
-    private fun initFragment(){
+    private fun initFragment() {
 
         setListeners()
 
         observeData()
     }
 
-    private fun setListeners(){
+    private fun setListeners() {
         binding.btnSignUp.setOnClickListener {
-            when{
+            when {
                 inputsAreOk() -> {
                     val email = binding.inputEmail.text.trim().toString()
                     val password = binding.inputPassword.text.trim().toString()
@@ -62,12 +60,12 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    private fun observeData(){
+    private fun observeData() {
 
 
         activity?.let {
             mainViewModel.isDoingWork.observe(it, Observer { doingWork ->
-                when{
+                when {
                     doingWork -> {
 
                     }
@@ -77,14 +75,13 @@ class SignUpFragment : Fragment() {
     }
 
 
-
-    private fun inputsAreOk():Boolean{
+    private fun inputsAreOk(): Boolean {
 
         val email = binding.inputEmail.text.trim().toString()
         val password = binding.inputPassword.text.trim().toString()
         val confirmPassword = binding.inputConfirmPassword.text.trim().toString()
 
-        when{
+        when {
             email == "" -> {
                 binding.inputEmail.error = "email can't be empty"
                 return false
@@ -94,8 +91,8 @@ class SignUpFragment : Fragment() {
                 return false
             }
 
-            confirmPassword == ""->{
-                binding.inputConfirmPassword.error ="confirmed password can't be empty"
+            confirmPassword == "" -> {
+                binding.inputConfirmPassword.error = "confirmed password can't be empty"
 
                 return false
             }
@@ -105,15 +102,12 @@ class SignUpFragment : Fragment() {
                 return false
             }
 
-            else-> {
+            else -> {
                 return true
             }
         }
 
     }
-
-
-
 
 
 }

@@ -30,7 +30,7 @@ object HandyAppModule {
 
     @Singleton
     @Provides
-    fun provideShopExpenseDao(db:HandyDb):ShopExpenseDao{
+    fun provideShopExpenseDao(db: HandyDb): ShopExpenseDao {
 
         return db.getShopExpenseDao()
     }
@@ -38,14 +38,14 @@ object HandyAppModule {
 
     @Singleton
     @Provides
-    fun provideReminderNotesDao(db:HandyDb):ReminderNotesDao{
+    fun provideReminderNotesDao(db: HandyDb): ReminderNotesDao {
 
         return db.getReminderNotesDao()
     }
 
     @Singleton
     @Provides
-    fun provideAuthDao(db:HandyDb):AuthDao{
+    fun provideAuthDao(db: HandyDb): AuthDao {
 
         return db.getAuthDao()
     }
@@ -56,8 +56,6 @@ object HandyAppModule {
     fun provideSystemService(context: Application): SystemService {
         return SystemService(context)
     }
-
-
 
 
     @Singleton

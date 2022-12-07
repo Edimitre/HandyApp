@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class RemindersAndNotesPagerAdapter(private val items: ArrayList<Fragment>, activity: AppCompatActivity) :
+class RemindersAndNotesPagerAdapter(
+    private val items: ArrayList<Fragment>,
+    activity: AppCompatActivity
+) :
     FragmentStateAdapter(activity) {
 
 

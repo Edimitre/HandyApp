@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
+class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
     @Inject
     lateinit var auth: FirebaseAuth
@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // notification channel
+        systemService.createNotificationChannel()
 
         setInitialSettings()
 
@@ -60,6 +62,8 @@ class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
         observeActiveFragment()
 
         observeTheme()
+
+        startNotificationWorker()
     }
 
     private fun setInitialSettings() {
@@ -84,13 +88,15 @@ class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
                     mainViewModel.selectDarkTheme(false)
                     mainViewModel.selectBackupEnabled(false)
                     mainViewModel.setHasConnection(hasConnection)
-                }else -> {
+                }
+                else -> {
                     mainViewModel.setHasConnection(hasConnection)
                     mainViewModel.selectBackupEnabled(auth.isBackupEnabled).let {
-                        when (auth.isBackupEnabled){
+                        when (auth.isBackupEnabled) {
                             true -> {
                                 systemService.startBackupWorker()
-                            }false -> {
+                            }
+                            false -> {
 
                             }
                         }
@@ -216,7 +222,7 @@ class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
         getBackUpData()
     }
 
-    private fun getBackUpData(){
+    private fun getBackUpData() {
 
         lifecycleScope.launch {
             val authModel = mainViewModel.getAuthModel()
@@ -240,12 +246,16 @@ class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
 
     }
 
-    private fun startImportWorker(importData:String){
+    private fun startNotificationWorker() {
+        systemService.startNotificationWorker()
+    }
+
+    private fun startImportWorker(importData: String) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val data:Data = Data.Builder().putString("backup_data", importData).build()
+        val data: Data = Data.Builder().putString("backup_data", importData).build()
 
         val importWork = OneTimeWorkRequest.Builder(ImportDBWorker::class.java)
             .setConstraints(constraints)
@@ -256,8 +266,6 @@ class MainActivity : AppCompatActivity(),SettingsFragment.ImportDbListener {
 
         workManager.enqueue(importWork)
     }
-
-
 
 
 }

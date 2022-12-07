@@ -3,13 +3,9 @@ package com.edimitre.handyapp.data.util
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.liveData
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
 import com.edimitre.handyapp.data.model.Reminder
-
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,7 +19,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
-        Thread{
+        Thread {
             setFirstReminderFalse()
             activateNextReminder()
         }.start()

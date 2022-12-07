@@ -61,7 +61,6 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
         binding!!.myToolbar.inflateMenu(R.menu.toolbar_menu)
 
 
-
         val settingButton = binding!!.myToolbar.menu.findItem(R.id.btn_settings)
         settingButton.isVisible = false
 
@@ -131,7 +130,7 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
     // comes from shop adapter
     override fun onShopClicked(shop: Shop) {
 
-        Log.e(HandyAppEnvironment.TAG, "shop to send  $shop ", )
+        Log.e(HandyAppEnvironment.TAG, "shop to send  $shop ")
         listener.addShopToExpense(shop)
         dismiss()
 
@@ -140,7 +139,8 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
     interface ShopSelectedListener {
         fun addShopToExpense(shop: Shop)
     }
-//
+
+    //
     override fun onAttach(context: Context) {
         listener = try {
             context as ShopSelectedListener

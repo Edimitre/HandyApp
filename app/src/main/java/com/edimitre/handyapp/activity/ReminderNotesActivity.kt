@@ -47,9 +47,8 @@ class ReminderNotesActivity : AppCompatActivity(), AddReminderForm.AddReminderLi
         super.onCreate(savedInstanceState)
 
         binding = ActivityReminderNotesBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        systemService.createNotificationChannel()
+        setContentView(binding.root)
 
         initViewModel()
 

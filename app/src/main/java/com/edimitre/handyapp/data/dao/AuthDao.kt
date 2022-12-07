@@ -5,7 +5,6 @@ import androidx.room.*
 import com.edimitre.handyapp.data.model.firebase.AuthModel
 
 
-
 @Dao
 interface AuthDao {
 

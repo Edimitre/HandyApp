@@ -62,41 +62,36 @@ class ExpenseViewModel @Inject constructor(private val expenseService: ExpenseSe
     }
 
     // VALUE BY SHOP NAME
-    fun getValueOfExpensesByShopName(shopName:String):LiveData<Int>?{
+    fun getValueOfExpensesByShopName(shopName: String): LiveData<Int>? {
 
         return expenseService.getValueOfExpensesByShopName(shopName)
     }
 
 
-    fun getNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int):LiveData<Int>?{
+    fun getNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int): LiveData<Int>? {
 
         return expenseService.getNrOfExpensesByYearMonthDate(year, month, date)
     }
 
-    fun getNrOfExpensesByYearMonth(year: Int, month: Int):LiveData<Int>?{
+    fun getNrOfExpensesByYearMonth(year: Int, month: Int): LiveData<Int>? {
 
         return expenseService.getNrOfExpensesByYearMonth(year, month)
     }
 
-    fun getNrOfExpensesByYear(year: Int):LiveData<Int>?{
+    fun getNrOfExpensesByYear(year: Int): LiveData<Int>? {
 
         return expenseService.getNrOfExpensesByYear(year)
     }
 
-    fun getNrOfExpensesByDescription(description:String):LiveData<Int>?{
+    fun getNrOfExpensesByDescription(description: String): LiveData<Int>? {
 
         return expenseService.getNrOfExpensesByDescription(description)
     }
 
-    fun getNrOfExpensesByShopName(shopName:String):LiveData<Int>?{
+    fun getNrOfExpensesByShopName(shopName: String): LiveData<Int>? {
 
         return expenseService.getNrOfExpensesByShopName(shopName)
     }
-
-
-
-
-
 
 
     //  BY YEAR

@@ -25,7 +25,7 @@ class ReminderService @Inject constructor(private val reminderDao: ReminderNotes
 
     }
 
-    suspend fun getFirstReminderOnCoroutine():Reminder?{
+    suspend fun getFirstReminderOnCoroutine(): Reminder? {
         return reminderDao.getFirstReminderOnCoroutine()
     }
 

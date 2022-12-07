@@ -10,15 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.adapters.recycler_adapter.ShopAdapter
 import com.edimitre.handyapp.adapters.tabs_adapter.ShopExpensesAdapter
-import com.edimitre.handyapp.data.model.Expense
 import com.edimitre.handyapp.data.model.Shop
-import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.ExpenseViewModel
 import com.edimitre.handyapp.data.view_model.ShopsViewModel
 import com.edimitre.handyapp.databinding.ActivityExpenseBinding
-import com.edimitre.handyapp.fragment.shops_expenses.*
+import com.edimitre.handyapp.fragment.shops_expenses.AddExpenseValuesForm
+import com.edimitre.handyapp.fragment.shops_expenses.ExpensesFragment
+import com.edimitre.handyapp.fragment.shops_expenses.SelectShopForm
+import com.edimitre.handyapp.fragment.shops_expenses.ShopFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +26,7 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class ShopsExpensesActivity : AppCompatActivity(), SelectShopForm.ShopSelectedListener{
+class ShopsExpensesActivity : AppCompatActivity(), SelectShopForm.ShopSelectedListener {
 
 
     private lateinit var tabs: TabLayout
@@ -59,51 +59,7 @@ class ShopsExpensesActivity : AppCompatActivity(), SelectShopForm.ShopSelectedLi
 
         setButtonListeners()
 
-//        setInitialData()
     }
-//
-//    private fun setInitialData() {
-//        shopsViewModel.testShop!!.observe(this) {
-//            when (it) {
-//                null -> {
-//                    Log.e(HandyAppEnvironment.TAG, "initial data empty : inserting ..")
-//                    for (i in 0..100) {
-//
-//                        val year = TimeUtils().getCurrentYear()
-//                        var month = TimeUtils().getCurrentMonth()
-//                        var date = TimeUtils().getCurrentDate()
-//                        if (i > 30) {
-//                            month -= 1
-//                        } else if (i > 60) {
-//                            date -= 1
-//                        } else if (i > 80) {
-//                            date -= 2
-//                        }
-//
-//                        val shop = Shop(i.toLong(), "name $i")
-//                        val expense = Expense(
-//                            i.toLong(), "desc $i",
-//                            year,
-//                            month,
-//                            date,
-//                            TimeUtils().getCurrentHour(),
-//                            TimeUtils().getCurrentMinute(),
-//                            234.0,
-//                            shop,
-//                        )
-//                        shopsViewModel.saveShop(shop)
-//                        expenseViewModel.saveExpense(expense)
-//                    }
-//                }
-//                else -> {
-//                    Log.e(HandyAppEnvironment.TAG, "initial data exist : passing ..")
-//
-//                }
-//            }
-//        }
-//
-//
-//    }
 
     private fun initFragmentTabs() {
         // get adapter
@@ -238,17 +194,6 @@ class ShopsExpensesActivity : AppCompatActivity(), SelectShopForm.ShopSelectedLi
         addExpenseValuesForm.show(supportFragmentManager, "add expense values")
 
     }
-
-//    override fun onShopClicked(shop: Shop) {
-//
-//        val shopDetails = ShopDetailsFragment()
-//        val mBundle = Bundle()
-//        mBundle.putSerializable("shop", shop)
-//
-//        shopDetails.arguments = mBundle
-//        shopDetails.show(supportFragmentManager, "shop details fragment")
-//
-//    }
 
 
 }

@@ -11,18 +11,19 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.data.worker.BackUpDBWorker
 import com.edimitre.handyapp.data.worker.ImportDBWorker
+import com.edimitre.handyapp.data.worker.NotificationWorker
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -100,7 +101,7 @@ class SystemService(private val context: Context) {
                 context,
                 HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
                 mainActivity,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
 
 
@@ -149,7 +150,7 @@ class SystemService(private val context: Context) {
 
     }
 
-    fun startImportWorker(){
+    fun startImportWorker() {
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -164,6 +165,27 @@ class SystemService(private val context: Context) {
 
         workManager.enqueue(importWork)
 
+    }
+
+    fun startNotificationWorker() {
+
+        val workManager = WorkManager.getInstance(context)
+
+        val notificationWorker = PeriodicWorkRequest.Builder(
+            NotificationWorker::class.java,
+            4,
+            TimeUnit.HOURS,
+        )
+            .setInitialDelay(1, TimeUnit.MINUTES)
+            .addTag("notification_worker")
+            .build()
+        workManager.enqueueUniquePeriodicWork(
+            "notification_worker",
+            ExistingPeriodicWorkPolicy.KEEP,
+            notificationWorker
+        )
+
+        Log.e(TAG, "notification work scheduled")
     }
 
     private fun addOneDayToTimeInMillis(millis: Long): Long {

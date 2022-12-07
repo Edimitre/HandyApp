@@ -1,8 +1,5 @@
 package com.edimitre.handyapp.data.util
 
-import androidx.appcompat.app.AppCompatActivity
-import com.edimitre.handyapp.R
-
 class ThemeUtils {
 
 

@@ -1,10 +1,10 @@
 package com.edimitre.handyapp.fragment.main_fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.edimitre.handyapp.data.view_model.MainViewModel
@@ -31,17 +31,17 @@ class LogInFragment : Fragment() {
         initFragment()
     }
 
-    private fun initFragment(){
+    private fun initFragment() {
 
         setListeners()
 
         observeData()
     }
 
-    private fun setListeners(){
+    private fun setListeners() {
         binding.btnLogin.setOnClickListener {
 
-            when{
+            when {
                 inputsAreOk() -> {
                     val email = binding.inputLoginEmail.text.trim().toString()
                     val password = binding.inputLoginPassword.text.trim().toString()
@@ -51,17 +51,17 @@ class LogInFragment : Fragment() {
         }
 
         binding.signUpText.setOnClickListener {
-           mainViewModel.selectFragment(SignUpFragment())
+            mainViewModel.selectFragment(SignUpFragment())
         }
     }
 
-    private fun inputsAreOk():Boolean{
+    private fun inputsAreOk(): Boolean {
 
         val email = binding.inputLoginEmail.text.trim().toString()
         val password = binding.inputLoginPassword.text.trim().toString()
 
 
-        when{
+        when {
             email == "" -> {
                 binding.inputLoginEmail.error = "email can't be empty"
                 return false
@@ -71,18 +71,18 @@ class LogInFragment : Fragment() {
                 return false
             }
 
-            else-> {
+            else -> {
                 return true
             }
         }
 
     }
 
-    private fun observeData(){
+    private fun observeData() {
 
         activity?.let {
             mainViewModel.isDoingWork.observe(it, Observer { doingWork ->
-                when{
+                when {
                     doingWork -> {
 
                     }
@@ -90,7 +90,6 @@ class LogInFragment : Fragment() {
             })
         }
     }
-
 
 
 }
