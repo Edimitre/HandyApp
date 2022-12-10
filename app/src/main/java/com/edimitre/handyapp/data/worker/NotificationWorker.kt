@@ -1,9 +1,11 @@
 package com.edimitre.handyapp.data.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.util.TimeUtils
 
@@ -14,6 +16,7 @@ class NotificationWorker(context: Context, params: WorkerParameters) : Worker(co
 
     override fun doWork(): Result {
 
+        Log.e(TAG, "on notification worker ", )
         val hourNow = TimeUtils().getCurrentHour()
 
         when {

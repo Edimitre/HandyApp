@@ -16,6 +16,7 @@ import com.edimitre.handyapp.databinding.FragmentSettingsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -67,10 +68,14 @@ class SettingsFragment : BottomSheetDialogFragment() {
                 else -> {
 
                     lifecycleScope.launch {
-                        val authModel = mainViewModel.getAuthModel()
-                        authModel!!.isBackupEnabled = isChecked
 
-                        mainViewModel.saveAuth(authModel)
+                        runBlocking {
+                            val authModel = mainViewModel.getAuthModel()
+                            authModel!!.isBackupEnabled = isChecked
+
+                            mainViewModel.saveAuth(authModel)
+                        }
+
                     }
 
                 }
@@ -81,9 +86,13 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
             mainViewModel.selectDarkTheme(isChecked)
             lifecycleScope.launch {
-                val auth = mainViewModel.getAuthModel()
-                auth!!.isDarkThemeEnabled = isChecked
-                mainViewModel.saveAuth(auth)
+
+                runBlocking {
+                    val auth = mainViewModel.getAuthModel()
+                    auth!!.isDarkThemeEnabled = isChecked
+                    mainViewModel.saveAuth(auth)
+                }
+
             }
         })
 
@@ -115,11 +124,11 @@ class SettingsFragment : BottomSheetDialogFragment() {
             binding.loginText.visibility = View.GONE
         }
 
-        setSwitchMode()
+        observeSwitchMode()
 
     }
 
-    private fun setSwitchMode() {
+    private fun observeSwitchMode() {
 
 
         activity?.let {

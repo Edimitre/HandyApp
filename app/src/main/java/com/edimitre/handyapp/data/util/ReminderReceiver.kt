@@ -19,37 +19,8 @@ class ReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
-        Thread {
-            setFirstReminderFalse()
-            activateNextReminder()
-        }.start()
+        systemService.startReminderWorker()
 
     }
 
-    private fun setFirstReminderFalse() {
-
-        val reminder: Reminder? = reminderDao.getFirstReminderOnThread()
-
-        if (reminder != null) {
-
-            systemService.notify("Reminding you of : ", reminder.description)
-
-            reminder.isActive = false
-
-            reminderDao.saveReminderOnThread(reminder)
-        }
-
-    }
-
-    private fun activateNextReminder() {
-
-        val reminder: Reminder? = reminderDao.getFirstReminderOnThread()
-
-        if (reminder != null) {
-            systemService.cancelAllAlarms()
-
-            systemService.setAlarm(reminder.alarmTimeInMillis)
-        }
-
-    }
 }

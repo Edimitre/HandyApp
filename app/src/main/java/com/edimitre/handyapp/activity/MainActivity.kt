@@ -91,16 +91,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
                 }
                 else -> {
                     mainViewModel.setHasConnection(hasConnection)
-                    mainViewModel.selectBackupEnabled(auth.isBackupEnabled).let {
-                        when (auth.isBackupEnabled) {
-                            true -> {
-                                systemService.startBackupWorker()
-                            }
-                            false -> {
-
-                            }
-                        }
-                    }
+                    mainViewModel.selectBackupEnabled(auth.isBackupEnabled)
                     mainViewModel.selectDarkTheme(auth.isDarkThemeEnabled)
 
                 }
@@ -267,5 +258,55 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
         workManager.enqueue(importWork)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.e(TAG, "On Destroy")
+        val backupWorkList = WorkManager.getInstance(this).getWorkInfosByTag("backup_worker").get()
+
+        backupWorkList.forEach { work ->
+
+
+            when {
+                work != null -> {
+                    lifecycleScope.launch {
+                        val auth = mainViewModel.getAuthModel()
+                        when {
+                            auth!!.isBackupEnabled -> {
+                                when (work.state.name) {
+                                    "ENQUEUED" -> {
+
+                                    }
+                                    else -> {
+                                        systemService.startBackupWorker()
+                                    }
+                                }
+                            }
+                            else -> {
+                                systemService.stopBackupWorker()
+                            }
+                        }
+                    }
+                }
+                else -> {
+                    lifecycleScope.launch {
+                        val auth = mainViewModel.getAuthModel()
+                        when {
+                            auth!!.isBackupEnabled -> {
+                                systemService.startBackupWorker()
+                            }
+                            else -> {
+                                systemService.stopBackupWorker()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+//
+//        val work = backupWorkList[0]
+
+
+    }
 
 }

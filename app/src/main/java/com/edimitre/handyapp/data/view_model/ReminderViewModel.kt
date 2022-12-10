@@ -30,29 +30,8 @@ class ReminderViewModel @Inject constructor(private val reminderService: Reminde
     fun deleteReminder(reminder: Reminder): Job = viewModelScope.launch {
 
         reminderService.delete(reminder)
-        activateNextReminder()
-    }
-
-    private fun activateNextReminder() {
-        systemService.cancelAllAlarms()
-
-        viewModelScope.launch {
-
-
-            val firstReminder = reminderService.getFirstReminderOnCoroutine()
-
-            when {
-                firstReminder != null -> {
-                    systemService.setAlarm(firstReminder.alarmTimeInMillis)
-
-                }
-                else -> {
-
-                    Log.e(HandyAppEnvironment.TAG, "empty reminders")
-                }
-            }
-        }
 
     }
+
 
 }

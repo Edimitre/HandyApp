@@ -6,6 +6,7 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
@@ -13,6 +14,7 @@ import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.view.ContentInfoCompat.Flags
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
@@ -21,6 +23,7 @@ import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.data.worker.BackUpDBWorker
 import com.edimitre.handyapp.data.worker.ImportDBWorker
 import com.edimitre.handyapp.data.worker.NotificationWorker
+import com.edimitre.handyapp.data.worker.ReminderWorker
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -63,7 +66,7 @@ class SystemService(private val context: Context) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC,
@@ -101,7 +104,7 @@ class SystemService(private val context: Context) {
                 context,
                 HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
                 mainActivity,
-                PendingIntent.FLAG_IMMUTABLE
+                FLAG_IMMUTABLE
             )
 
 
@@ -132,21 +135,30 @@ class SystemService(private val context: Context) {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-
-        val backUpwork = OneTimeWorkRequest.Builder(BackUpDBWorker::class.java)
+        val backupWorker = PeriodicWorkRequest.Builder(
+            BackUpDBWorker::class.java,
+            4,
+            TimeUnit.HOURS,
+        )
+            .setInitialDelay(30, TimeUnit.MINUTES)
+            .addTag("backup_worker")
             .setConstraints(constraints)
-            .addTag("back_up_work")
             .build()
 
 
         val workManager = WorkManager.getInstance(context)
-        workManager.enqueue(backUpwork)
+        workManager.enqueueUniquePeriodicWork(
+            "backup_worker",
+            ExistingPeriodicWorkPolicy.KEEP,
+            backupWorker
+        )
+
 
     }
 
-    fun removeBackupWorker() {
+    fun stopBackupWorker() {
 
-        WorkManager.getInstance(context).cancelAllWorkByTag("back_up_work")
+        WorkManager.getInstance(context).cancelAllWorkByTag("backup_worker")
 
     }
 
@@ -186,6 +198,20 @@ class SystemService(private val context: Context) {
         )
 
         Log.e(TAG, "notification work scheduled")
+    }
+
+    fun startReminderWorker() {
+
+
+
+        val reminderWork = OneTimeWorkRequest.Builder(ReminderWorker::class.java)
+            .addTag("reminder_work")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(reminderWork)
+
     }
 
     private fun addOneDayToTimeInMillis(millis: Long): Long {
