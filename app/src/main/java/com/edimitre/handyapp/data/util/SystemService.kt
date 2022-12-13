@@ -36,7 +36,6 @@ class SystemService(private val context: Context) {
     @Inject
     lateinit var auth: FirebaseAuth
 
-
     fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel
@@ -66,7 +65,12 @@ class SystemService(private val context: Context) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
+        } else {
+            PendingIntent.getBroadcast(context, 0, intent, 0)
+
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC,
@@ -140,7 +144,7 @@ class SystemService(private val context: Context) {
             6,
             TimeUnit.HOURS,
         )
-            .setInitialDelay(60, TimeUnit.MINUTES)
+//            .setInitialDelay(60, TimeUnit.MINUTES)
             .addTag("backup_worker")
             .setConstraints(constraints)
             .build()
@@ -202,8 +206,6 @@ class SystemService(private val context: Context) {
     }
 
     fun startReminderWorker() {
-
-
 
         val reminderWork = OneTimeWorkRequest.Builder(ReminderWorker::class.java)
             .addTag("reminder_work")
