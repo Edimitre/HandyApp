@@ -178,7 +178,6 @@ class ShopsExpensesActivity : AppCompatActivity(), SelectShopForm.ShopSelectedLi
     }
 
     override fun addShopToExpense(shop: Shop) {
-        Log.e(HandyAppEnvironment.TAG, "shop selected $shop ")
 
         openAddExpenseValuesForm(shop)
 

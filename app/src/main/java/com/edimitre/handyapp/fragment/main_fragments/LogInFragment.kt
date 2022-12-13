@@ -51,7 +51,7 @@ class LogInFragment : Fragment() {
         }
 
         binding.signUpText.setOnClickListener {
-            mainViewModel.selectFragment(SignUpFragment())
+            mainViewModel.setActiveFragment(SignUpFragment())
         }
     }
 

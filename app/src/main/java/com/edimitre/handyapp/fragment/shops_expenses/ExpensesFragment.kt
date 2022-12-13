@@ -72,7 +72,6 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
         val thisYearCheck = binding.thisYearCheckBox
 
         if (timeNotSpecified(todayCheck, thisMonthCheck, thisYearCheck)) {
-            Log.e(HandyAppEnvironment.TAG, "time not specified setting it: ")
             todayCheck.isChecked = true
             showTodayExpenses()
         }
@@ -164,15 +163,12 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
             if (!hasFocus) {
                 when {
                     binding.todayCheckBox.isChecked -> {
-                        Log.e(HandyAppEnvironment.TAG, "today checked: ")
                         showTodayExpenses()
                     }
                     binding.thisMonthCheckBox.isChecked -> {
-                        Log.e(HandyAppEnvironment.TAG, "this month checked: ")
                         showThisMonthExpenses()
                     }
                     binding.thisYearCheckBox.isChecked -> {
-                        Log.e(HandyAppEnvironment.TAG, "this year checked: ")
                         showThisYearExpenses()
                     }
                 }
@@ -185,15 +181,12 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
         closeButton?.setOnClickListener {
             when {
                 binding.todayCheckBox.isChecked -> {
-                    Log.e(HandyAppEnvironment.TAG, "today checked: ")
                     showTodayExpenses()
                 }
                 binding.thisMonthCheckBox.isChecked -> {
-                    Log.e(HandyAppEnvironment.TAG, "this month checked: ")
                     showThisMonthExpenses()
                 }
                 binding.thisYearCheckBox.isChecked -> {
-                    Log.e(HandyAppEnvironment.TAG, "this year checked: ")
                     showThisYearExpenses()
                 }
             }
@@ -209,17 +202,14 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
                 R.id.btn_close_date_search -> {
                     when {
                         binding.todayCheckBox.isChecked -> {
-                            Log.e(HandyAppEnvironment.TAG, "today checked: ")
                             showTodayExpenses()
                             showCloseButton(false)
                         }
                         binding.thisMonthCheckBox.isChecked -> {
-                            Log.e(HandyAppEnvironment.TAG, "this month checked: ")
                             showThisMonthExpenses()
                             showCloseButton(false)
                         }
                         binding.thisYearCheckBox.isChecked -> {
-                            Log.e(HandyAppEnvironment.TAG, "this year checked: ")
                             showThisYearExpenses()
                             showCloseButton(false)
                         }

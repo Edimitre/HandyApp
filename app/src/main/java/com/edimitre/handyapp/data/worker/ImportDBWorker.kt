@@ -24,6 +24,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
 
+        Log.e(TAG, "import worker", )
         withContext(Dispatchers.Default) {
             launch {
                 val backUpData = inputData.getString("backup_data")
@@ -42,7 +43,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
         val shopDao = HandyDb.getInstance(ctx).getShopExpenseDao()
         val noteDao = HandyDb.getInstance(ctx).getReminderNotesDao()
 
-        Log.e(TAG, "starting")
+        Log.e(TAG, "starting restore")
 
         if (backUpDto.shopList.isNotEmpty()) {
             backUpDto.shopList.forEach { shop ->
@@ -66,10 +67,8 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
             backUpDto.reminderList.forEach { reminder ->
                 noteDao.saveReminder(reminder)
             }
-
-            val reminder = noteDao.getFirstReminderOnCoroutine()
-            activateReminder(reminder!!)
         }
+
 
     }
 

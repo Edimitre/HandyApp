@@ -1,8 +1,8 @@
 package com.edimitre.handyapp.fragment.shops_expenses
 
+
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +10,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.ShopAdapter
 import com.edimitre.handyapp.data.model.Shop
 import com.edimitre.handyapp.data.view_model.ShopsViewModel
 import com.edimitre.handyapp.databinding.SelectShopFormBinding
-
-
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -130,7 +127,6 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
     // comes from shop adapter
     override fun onShopClicked(shop: Shop) {
 
-        Log.e(HandyAppEnvironment.TAG, "shop to send  $shop ")
         listener.addShopToExpense(shop)
         dismiss()
 

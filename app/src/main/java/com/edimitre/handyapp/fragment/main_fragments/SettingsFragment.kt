@@ -2,6 +2,7 @@ package com.edimitre.handyapp.fragment.main_fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.work.WorkManager
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentSettingsBinding
@@ -43,7 +46,9 @@ class SettingsFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeUserSettings()
+        setButtonVisibility()
+
+        observeSwitchesStatus()
 
         setListeners()
 
@@ -54,16 +59,18 @@ class SettingsFragment : BottomSheetDialogFragment() {
         binding.backUpSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked -> // do something, the isChecked will be
 
 
-            mainViewModel.selectBackupEnabled(isChecked)
+            mainViewModel.setBackupEnabled(isChecked)
 
             when {
                 !mainViewModel.isAuthenticated() -> {
-                    mainViewModel.selectBackupEnabled(false)
+                    mainViewModel.setBackupEnabled(false)
                     Toast.makeText(
                         requireContext(),
                         "You need to be logged in to use this feature",
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    setBackupWorker(false)
                 }
                 else -> {
 
@@ -74,6 +81,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
                             authModel!!.isBackupEnabled = isChecked
 
                             mainViewModel.saveAuth(authModel)
+                            setBackupWorker(true)
                         }
 
                     }
@@ -84,7 +92,8 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
         binding.darkThemeSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
 
-            mainViewModel.selectDarkTheme(isChecked)
+            mainViewModel.setDarkTheme(isChecked)
+
             lifecycleScope.launch {
 
                 runBlocking {
@@ -98,7 +107,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
 
         binding.btnLogin.setOnClickListener {
-            mainViewModel.selectFragment(SignUpFragment())
+            mainViewModel.setActiveFragment(SignUpFragment())
             dismiss()
         }
 
@@ -112,7 +121,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun observeUserSettings() {
+    private fun setButtonVisibility() {
 
 
         if (!mainViewModel.isAuthenticated()) {
@@ -124,11 +133,10 @@ class SettingsFragment : BottomSheetDialogFragment() {
             binding.loginText.visibility = View.GONE
         }
 
-        observeSwitchMode()
 
     }
 
-    private fun observeSwitchMode() {
+    private fun observeSwitchesStatus() {
 
 
         activity?.let {
@@ -145,6 +153,36 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
     }
 
+    private fun setBackupWorker(active: Boolean) {
+
+        val backupWorkList =
+            WorkManager.getInstance(requireContext()).getWorkInfosByTag("backup_worker").get()
+
+        when (active) {
+            true -> {
+                if (backupWorkList.isNotEmpty()) {
+                    val workInfo = backupWorkList[0]
+                    val status = workInfo.state.name
+                    Log.e(TAG, "status of backup work $status")
+                    if (status != "ENQUEUED") {
+                        systemService.startBackupWorker()
+                    }
+                } else {
+                    systemService.startBackupWorker()
+                }
+            }
+            false -> {
+                if (backupWorkList.isNotEmpty()) {
+                    val workInfo = backupWorkList[0]
+                    val status = workInfo.state.name
+                    if (status == "ENQUEUED") {
+                        systemService.stopBackupWorker()
+                    }
+                }
+            }
+        }
+
+    }
 
     interface ImportDbListener {
         fun importDb()

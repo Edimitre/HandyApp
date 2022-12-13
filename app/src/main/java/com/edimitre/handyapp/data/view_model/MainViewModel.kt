@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
     val isDoingWork: LiveData<Boolean> get() = mutableDoingWork
 
     private val mutableFragmentSelected: MutableLiveData<Fragment> =
-        MutableLiveData<Fragment>(SignUpFragment())
+        MutableLiveData<Fragment>()
     val fragmentSelected: LiveData<Fragment> get() = mutableFragmentSelected
 
 
@@ -44,11 +44,45 @@ class MainViewModel @Inject constructor(
     val hasConnection: LiveData<Boolean> get() = mutableHasConnection
 
 
-    fun selectDarkTheme(isDark: Boolean) {
+    init {
+        setDoingWork(true)
+
+        viewModelScope.launch {
+            var authModel = getAuthModel()
+
+            when (authModel) {
+                null -> {
+                    // create initial auth settings
+                    authModel = AuthModel(
+                        0,
+                        "",
+                        "",
+                        "",
+                        false,
+                        isBackupEnabled = false,
+                        isDarkThemeEnabled = false
+                    )
+                    saveAuth(authModel)
+                    setDarkTheme(false)
+                    setBackupEnabled(false)
+                }
+                else -> {
+                    setBackupEnabled(authModel.isBackupEnabled)
+                    setDarkTheme(authModel.isDarkThemeEnabled)
+                }
+            }
+
+            setDoingWork(false)
+
+        }
+
+    }
+
+    fun setDarkTheme(isDark: Boolean) {
         mutableIsDarkSelected.value = isDark
     }
 
-    fun selectBackupEnabled(isEnabled: Boolean) {
+    fun setBackupEnabled(isEnabled: Boolean) {
         mutableIsBackupSelected.value = isEnabled
     }
 
@@ -56,13 +90,15 @@ class MainViewModel @Inject constructor(
         mutableHasConnection.value = hasConnection
     }
 
-    fun selectFragment(fragment: Fragment) {
+    fun setActiveFragment(fragment: Fragment) {
         mutableFragmentSelected.value = fragment
     }
 
     private fun setDoingWork(doingWork: Boolean) {
         mutableDoingWork.value = doingWork
     }
+
+
 
     fun doLogin(email: String, password: String) {
         setDoingWork(true)
@@ -79,7 +115,7 @@ class MainViewModel @Inject constructor(
                             saveAuth(authModel)
                         }
 
-                        selectFragment(NavigationFragment())
+                        setActiveFragment(NavigationFragment())
 
                     }
 
@@ -114,7 +150,7 @@ class MainViewModel @Inject constructor(
 
                     setDoingWork(false)
 
-                    selectFragment(NavigationFragment())
+                    setActiveFragment(NavigationFragment())
                     Log.e(
                         HandyAppEnvironment.TAG,
                         "sign up success for user with email : ${auth.currentUser!!.email}"
@@ -137,7 +173,7 @@ class MainViewModel @Inject constructor(
             authModel.isSignedIn = false
 
             saveAuth(authModel)
-//            selectBackupEnabled(false)
+            setBackupEnabled(false)
         }
 
 

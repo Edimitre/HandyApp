@@ -137,10 +137,10 @@ class SystemService(private val context: Context) {
 
         val backupWorker = PeriodicWorkRequest.Builder(
             BackUpDBWorker::class.java,
-            4,
+            6,
             TimeUnit.HOURS,
         )
-            .setInitialDelay(30, TimeUnit.MINUTES)
+            .setInitialDelay(60, TimeUnit.MINUTES)
             .addTag("backup_worker")
             .setConstraints(constraints)
             .build()
@@ -162,15 +162,17 @@ class SystemService(private val context: Context) {
 
     }
 
-    fun startImportWorker() {
+    fun startImportWorker(importData: String) {
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+        val data: Data = Data.Builder().putString("backup_data", importData).build()
 
         val importWork = OneTimeWorkRequest.Builder(ImportDBWorker::class.java)
             .setConstraints(constraints)
+            .setInputData(data)
             .addTag("import_work")
             .build()
         val workManager = WorkManager.getInstance(context)
@@ -197,7 +199,6 @@ class SystemService(private val context: Context) {
             notificationWorker
         )
 
-        Log.e(TAG, "notification work scheduled")
     }
 
     fun startReminderWorker() {
