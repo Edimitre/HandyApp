@@ -20,6 +20,7 @@ import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.MainActivity
+import com.edimitre.handyapp.data.scraper.BotaAlScrapper
 import com.edimitre.handyapp.data.worker.BackUpDBWorker
 import com.edimitre.handyapp.data.worker.ImportDBWorker
 import com.edimitre.handyapp.data.worker.NotificationWorker
@@ -226,5 +227,19 @@ class SystemService(private val context: Context) {
         return cal.timeInMillis
     }
 
+
+
+
+    fun startScrapWorker() {
+
+        val scrapWork = OneTimeWorkRequest.Builder(BotaAlScrapper::class.java)
+            .addTag("scrap_work")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(scrapWork)
+
+    }
 
 }

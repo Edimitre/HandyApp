@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
         startNotificationWorker()
 
         observeTheme()
+
+
     }
 
     private fun initToolBar() {
@@ -96,28 +98,18 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
     private fun observeTheme() {
 
-        mainViewModel.isDoingWork.observe(this) { work ->
-            when (work) {
+        mainViewModel.isDarkSelected.observe(this) { dark ->
+
+
+            when (dark) {
                 true -> {
-                    // show loading
+                    applyTheme("Dark")
                 }
-                else -> {
-
-                    mainViewModel.isDarkSelected.observe(this) { dark ->
-
-
-                        when (dark) {
-                            true -> {
-                                applyTheme("Dark")
-                            }
-                            false -> {
-                                applyTheme("Light")
-                            }
-                        }
-
-                    }
+                false -> {
+                    applyTheme("Light")
                 }
             }
+
         }
 
     }

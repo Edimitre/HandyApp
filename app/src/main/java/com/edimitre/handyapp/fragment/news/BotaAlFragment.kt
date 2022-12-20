@@ -1,6 +1,8 @@
-package com.edimitre.handyapp.fragment.reminder_and_notes
+package com.edimitre.handyapp.fragment.news
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,41 +14,61 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
+import com.edimitre.handyapp.adapters.recycler_adapter.NewsAdapter
 import com.edimitre.handyapp.adapters.recycler_adapter.NoteAdapter
+import com.edimitre.handyapp.data.model.News
 import com.edimitre.handyapp.data.model.Note
+import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.view_model.NewsViewModel
 import com.edimitre.handyapp.data.view_model.NoteViewModel
-import com.edimitre.handyapp.databinding.FragmentNotesBinding
-
+import com.edimitre.handyapp.databinding.FragmentBotaAlBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
-class NotesFragment : Fragment() {
+class BotaAlFragment : Fragment() {
 
-    private lateinit var myAdapter: NoteAdapter
 
-    private lateinit var _noteVieModel: NoteViewModel
+    @Inject
+    lateinit var systemService: SystemService
+
+    lateinit var binding: FragmentBotaAlBinding
+
+    private lateinit var myAdapter: NewsAdapter
+
+    private lateinit var _newsVieModel: NewsViewModel
 
     private lateinit var itemTouchHelper: ItemTouchHelper
 
-
-    private lateinit var binding: FragmentNotesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding = FragmentNotesBinding.inflate(inflater, container, false)
+
+
+        binding = FragmentBotaAlBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        systemService.startScrapWorker()
+
+        val t = isWorkEverScheduledBefore(requireContext(), "scrap_work")
+        Log.e(TAG, "is scheduled: $t")
 
 
         initViewModel()
@@ -55,23 +77,23 @@ class NotesFragment : Fragment() {
 
         initToolbar()
 
-        showAllNotes()
+        showAllNews()
 
         enableTouchFunctions()
-    }
 
+    }
 
     private fun initViewModel() {
 
-        _noteVieModel = ViewModelProvider(this)[NoteViewModel::class.java]
+        _newsVieModel = ViewModelProvider(this)[NewsViewModel::class.java]
     }
 
     private fun initAdapterAndRecyclerView() {
 
-        myAdapter = NoteAdapter()
+        myAdapter = NewsAdapter()
 
         val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
-        binding.notesRecyclerView.apply {
+        binding.newsRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
             adapter = myAdapter
@@ -116,20 +138,20 @@ class NotesFragment : Fragment() {
         })
     }
 
-    private fun showAllNotes() {
+    private fun showAllNews() {
 
         lifecycleScope.launch {
-            _noteVieModel.getAllNotesPaged().collectLatest {
+            _newsVieModel.getAllNewsPaged().collectLatest {
                 myAdapter.submitData(it)
             }
         }
 
     }
 
-    private fun showAllNotesByContent(content: String) {
+    private fun showAllNotesByContent(source: String) {
 
         lifecycleScope.launch {
-            _noteVieModel.getAllNotesPagedByContent(content).collectLatest {
+            _newsVieModel.getAllNewsBySourcePaged(source).collectLatest {
                 myAdapter.submitData(it)
             }
         }
@@ -149,31 +171,30 @@ class NotesFragment : Fragment() {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                    val note = myAdapter.getNoteByPos(viewHolder.absoluteAdapterPosition)
-
-                    openDeleteDialog(note!!, viewHolder.absoluteAdapterPosition)
+                    val news = myAdapter.getNewsByPos(viewHolder.absoluteAdapterPosition)
+                    openDeleteDialog(news!!, viewHolder.absoluteAdapterPosition)
 
                 }
             })
 
-        itemTouchHelper.attachToRecyclerView(binding.notesRecyclerView)
+        itemTouchHelper.attachToRecyclerView(binding.newsRecyclerView)
     }
 
 
-    private fun openDeleteDialog(note: Note, pos: Int) {
+    private fun openDeleteDialog(news: News, pos: Int) {
 
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
         dialog.setTitle(HandyAppEnvironment.TITLE)
         dialog.setMessage(
-            "are you sure you want to delete ${note.content} \n" +
+            "are you sure you want to delete ${news.title} \n" +
                     "this action can't be undone"
 
         )
         dialog.setPositiveButton("Delete") { _, _ ->
 
 
-            _noteVieModel.deleteNote(note)
+            _newsVieModel.deleteNews(news)
             myAdapter.notifyItemChanged(pos)
 
 
@@ -195,4 +216,70 @@ class NotesFragment : Fragment() {
     }
 
 
+
+
+
+
+
+
+//    private fun observeWork() {
+//
+//        val workManager = WorkManager.getInstance(requireContext())
+//
+//        val workList = workManager.getWorkInfosByTagLiveData("scrap_work")
+//
+//        workList.observe(viewLifecycleOwner) { listWorkInfo ->
+//
+//            listWorkInfo.forEach {
+//
+//
+//                Log.e(TAG, "observingProgres: ${it.progress}")
+//
+//                when (it.state.name) {
+//
+//                    "SUCCEEDED" -> {
+//
+//                        showLoading(false)
+//                    }
+//                    "RUNNING" -> {
+//
+//                        showLoading(true)
+//                    }
+//                }
+//
+//            }
+//        }
+//
+//
+//    }
+
+//    private fun showLoading(status: Boolean) {
+//        when {
+//            status == true -> {
+//                Log.e(TAG, "showing loading")
+//                binding.newsProgresBar.visibility = View.VISIBLE
+//            }
+//            else -> {
+//                Log.e(TAG, "not showing loading")
+//                binding.newsProgresBar.visibility = View.INVISIBLE
+//            }
+//        }
+//    }
+
+    private fun isWorkEverScheduledBefore(context: Context, tag: String): Boolean {
+        val instance = WorkManager.getInstance(context)
+        val statuses: ListenableFuture<List<WorkInfo>> = instance.getWorkInfosForUniqueWork(tag)
+        var workScheduled = false
+        statuses.get()?.let {
+            for (workStatus in it) {
+                workScheduled = (
+                        workStatus.state == WorkInfo.State.ENQUEUED
+                                || workStatus.state == WorkInfo.State.RUNNING
+                                || workStatus.state == WorkInfo.State.BLOCKED
+                                || workStatus.state.isFinished // It checks SUCCEEDED, FAILED, CANCELLED already
+                        )
+            }
+        }
+        return workScheduled
+    }
 }

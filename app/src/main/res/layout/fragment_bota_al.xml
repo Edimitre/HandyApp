@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".fragment.reminders_and_notes.NotesFragment">
+    tools:context=".fragment.news.BotaAlFragment">
 
     <!--TOOLBAR-->
     <com.google.android.material.appbar.MaterialToolbar
@@ -20,7 +20,7 @@
     <!--TOOLBAR END-->
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notes_recycler_view"
+        android:id="@+id/news_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/n_toolbar"

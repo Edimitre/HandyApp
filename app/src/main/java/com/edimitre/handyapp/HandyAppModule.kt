@@ -2,6 +2,7 @@ package com.edimitre.handyapp
 
 import android.app.Application
 import com.edimitre.handyapp.data.dao.AuthDao
+import com.edimitre.handyapp.data.dao.NewsDao
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
 import com.edimitre.handyapp.data.dao.ShopExpenseDao
 import com.edimitre.handyapp.data.room_database.HandyDb
@@ -48,6 +49,13 @@ object HandyAppModule {
     fun provideAuthDao(db: HandyDb): AuthDao {
 
         return db.getAuthDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideNewsDao(db: HandyDb): NewsDao {
+
+        return db.getNewsDao()
     }
 
 
