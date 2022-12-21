@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".fragment.news.BotaAlFragment">
+    tools:context=".fragment.news.LapsiFragment">
 
     <!--TOOLBAR-->
     <com.google.android.material.appbar.MaterialToolbar
@@ -23,8 +23,8 @@
         android:id="@+id/news_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/n_toolbar" />
-
+        android:layout_below="@+id/n_toolbar"
+        android:layout_marginBottom="?attr/actionBarSize"/>
 
 
 </RelativeLayout>

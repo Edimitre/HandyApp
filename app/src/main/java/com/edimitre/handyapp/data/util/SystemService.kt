@@ -21,6 +21,9 @@ import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.data.scraper.BotaAlScrapper
+import com.edimitre.handyapp.data.scraper.JoqScrapper
+import com.edimitre.handyapp.data.scraper.LapsiScrapper
+import com.edimitre.handyapp.data.scraper.SyriScrapper
 import com.edimitre.handyapp.data.worker.BackUpDBWorker
 import com.edimitre.handyapp.data.worker.ImportDBWorker
 import com.edimitre.handyapp.data.worker.NotificationWorker
@@ -230,10 +233,46 @@ class SystemService(private val context: Context) {
 
 
 
-    fun startScrapWorker() {
+    fun startScrapBotaAl() {
 
         val scrapWork = OneTimeWorkRequest.Builder(BotaAlScrapper::class.java)
-            .addTag("scrap_work")
+            .addTag("scrap_botaal_work")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(scrapWork)
+
+    }
+
+    fun startScrapJoqAl() {
+
+        val scrapWork = OneTimeWorkRequest.Builder(JoqScrapper::class.java)
+            .addTag("scrap_joq_work")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(scrapWork)
+
+    }
+
+    fun startScrapLapsiAl() {
+
+        val scrapWork = OneTimeWorkRequest.Builder(LapsiScrapper::class.java)
+            .addTag("scrap_lapsi_work")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(scrapWork)
+
+    }
+
+    fun startScrapSyriNet() {
+
+        val scrapWork = OneTimeWorkRequest.Builder(SyriScrapper::class.java)
+            .addTag("scrap_syri_work")
             .build()
 
 

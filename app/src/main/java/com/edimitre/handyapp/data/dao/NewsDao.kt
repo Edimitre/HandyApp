@@ -15,14 +15,11 @@ interface NewsDao {
     @Delete
     suspend fun delete(news: News?)
 
-    @Query("DELETE FROM news_table")
-    suspend fun deleteAllNews()
+    @Query("DELETE FROM news_table where source = :source")
+    suspend fun deleteAllNewsBySource(source:String)
 
-    @Query("SELECT * FROM news_table")
-    suspend fun getAllNewsList(): List<News?>?
-
-    @Query("SELECT * FROM news_table where id = '1' LIMIT 1")
-    suspend fun getOne(): News?
+    @Query("SELECT * FROM news_table where source = :source LIMIT 1")
+    suspend fun getOneBySource(source:String): News?
 
     @Query("SELECT * FROM news_table")
     fun getAllNewsPaged(): PagingSource<Int, News>?

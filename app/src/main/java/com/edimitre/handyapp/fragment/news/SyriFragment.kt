@@ -1,49 +1,38 @@
 package com.edimitre.handyapp.fragment.news
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.NewsAdapter
-import com.edimitre.handyapp.adapters.recycler_adapter.NoteAdapter
 import com.edimitre.handyapp.data.model.News
-import com.edimitre.handyapp.data.model.Note
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.NewsViewModel
-import com.edimitre.handyapp.data.view_model.NoteViewModel
-import com.edimitre.handyapp.databinding.FragmentBotaAlBinding
+import com.edimitre.handyapp.databinding.FragmentJoqBinding
+import com.edimitre.handyapp.databinding.FragmentSyriBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class BotaAlFragment : Fragment() {
-
+class SyriFragment : Fragment() {
 
     @Inject
     lateinit var systemService: SystemService
 
-    lateinit var binding: FragmentBotaAlBinding
+    lateinit var binding: FragmentSyriBinding
 
     private lateinit var myAdapter: NewsAdapter
 
@@ -56,20 +45,13 @@ class BotaAlFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
-        binding = FragmentBotaAlBinding.inflate(inflater, container, false)
+        binding = FragmentSyriBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
-        val t = isWorkEverScheduledBefore(requireContext(), "scrap_work")
-        Log.e(TAG, "is scheduled: $t")
 
         initAdapterAndRecyclerView()
 
@@ -78,7 +60,6 @@ class BotaAlFragment : Fragment() {
         showAllNews()
 
         enableTouchFunctions()
-
     }
 
     private fun initAdapterAndRecyclerView() {
@@ -119,13 +100,13 @@ class BotaAlFragment : Fragment() {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                showAllNotesByContent(query)
+                showAllNewsByContent(query)
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
 
-                showAllNotesByContent(newText)
+                showAllNewsByContent(newText)
                 return false
             }
         })
@@ -134,14 +115,14 @@ class BotaAlFragment : Fragment() {
     private fun showAllNews() {
 
         lifecycleScope.launch {
-            _newsViewModel.getAllNewsBySourcePaged("bota.al").collectLatest {
+            _newsViewModel.getAllNewsBySourcePaged("syri.net").collectLatest {
                 myAdapter.submitData(it)
             }
         }
 
     }
 
-    private fun showAllNotesByContent(source: String) {
+    private fun showAllNewsByContent(source: String) {
 
         lifecycleScope.launch {
             _newsViewModel.getAllNewsBySourcePaged(source).collectLatest {
@@ -172,7 +153,6 @@ class BotaAlFragment : Fragment() {
 
         itemTouchHelper.attachToRecyclerView(binding.newsRecyclerView)
     }
-
 
     private fun openDeleteDialog(news: News, pos: Int) {
 
@@ -208,71 +188,4 @@ class BotaAlFragment : Fragment() {
         dialog.show()
     }
 
-
-
-
-
-
-
-
-//    private fun observeWork() {
-//
-//        val workManager = WorkManager.getInstance(requireContext())
-//
-//        val workList = workManager.getWorkInfosByTagLiveData("scrap_work")
-//
-//        workList.observe(viewLifecycleOwner) { listWorkInfo ->
-//
-//            listWorkInfo.forEach {
-//
-//
-//                Log.e(TAG, "observingProgres: ${it.progress}")
-//
-//                when (it.state.name) {
-//
-//                    "SUCCEEDED" -> {
-//
-//                        showLoading(false)
-//                    }
-//                    "RUNNING" -> {
-//
-//                        showLoading(true)
-//                    }
-//                }
-//
-//            }
-//        }
-//
-//
-//    }
-
-//    private fun showLoading(status: Boolean) {
-//        when {
-//            status == true -> {
-//                Log.e(TAG, "showing loading")
-//                binding.newsProgresBar.visibility = View.VISIBLE
-//            }
-//            else -> {
-//                Log.e(TAG, "not showing loading")
-//                binding.newsProgresBar.visibility = View.INVISIBLE
-//            }
-//        }
-//    }
-
-    private fun isWorkEverScheduledBefore(context: Context, tag: String): Boolean {
-        val instance = WorkManager.getInstance(context)
-        val statuses: ListenableFuture<List<WorkInfo>> = instance.getWorkInfosForUniqueWork(tag)
-        var workScheduled = false
-        statuses.get()?.let {
-            for (workStatus in it) {
-                workScheduled = (
-                        workStatus.state == WorkInfo.State.ENQUEUED
-                                || workStatus.state == WorkInfo.State.RUNNING
-                                || workStatus.state == WorkInfo.State.BLOCKED
-                                || workStatus.state.isFinished // It checks SUCCEEDED, FAILED, CANCELLED already
-                        )
-            }
-        }
-        return workScheduled
-    }
 }

@@ -24,6 +24,14 @@ class NewsService @Inject constructor(private val newsDao: NewsDao) {
         newsDao.delete(news)
     }
 
+    suspend fun getOneBySource(source:String): News? {
+        return newsDao.getOneBySource(source)
+    }
+
+    suspend fun deleteAllBySource(source:String){
+
+        return newsDao.deleteAllNewsBySource(source)
+    }
 
     fun getAllNewsPaged(): PagingSource<Int, News>? {
 

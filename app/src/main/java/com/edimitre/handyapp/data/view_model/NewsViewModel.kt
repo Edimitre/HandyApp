@@ -8,10 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.edimitre.handyapp.data.model.News
-import com.edimitre.handyapp.data.model.Note
 import com.edimitre.handyapp.data.service.NewsService
-import com.edimitre.handyapp.data.service.NoteService
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +34,15 @@ class NewsViewModel @Inject constructor(private val newsService: NewsService) : 
 
     }
 
+    suspend fun getOneBySource(source: String): News? {
+
+        return newsService.getOneBySource(source)
+    }
+
+    suspend fun deleteAllBySource(source: String) {
+
+        return newsService.deleteAllBySource(source)
+    }
 
     fun getAllNewsPaged(): Flow<PagingData<News>> {
         return Pager(
