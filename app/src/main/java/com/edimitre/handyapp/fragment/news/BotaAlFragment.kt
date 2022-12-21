@@ -26,6 +26,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
@@ -97,7 +98,13 @@ class BotaAlFragment : Fragment(), NewsAdapter.OnNewsClickListener {
 
             when (_newsViewModel.getOneBySource("bota.al")) {
                 null -> {
-                    systemService.startScrapBotaAl()
+                    val job = _newsViewModel.deleteAllBySource("bota.al")
+
+                    runBlocking {
+                        job.start()
+                        systemService.startScrapBotaAl()
+                    }
+
                 }
                 else -> {
 
@@ -109,7 +116,14 @@ class BotaAlFragment : Fragment(), NewsAdapter.OnNewsClickListener {
     private fun setRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
 
-            systemService.startScrapBotaAl()
+            lifecycleScope.launch {
+                val job = _newsViewModel.deleteAllBySource("bota.al")
+                runBlocking {
+                    job.start()
+                    systemService.startScrapBotaAl()
+                }
+
+            }
 
         }
     }

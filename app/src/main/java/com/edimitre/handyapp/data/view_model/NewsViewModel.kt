@@ -38,9 +38,9 @@ class NewsViewModel @Inject constructor(private val newsService: NewsService) : 
         return newsService.getOneBySource(source)
     }
 
-    suspend fun deleteAllBySource(source: String) {
+    suspend fun deleteAllBySource(source: String):Job = viewModelScope.launch {
 
-        return newsService.deleteAllBySource(source)
+        newsService.deleteAllBySource(source)
     }
 
     fun getAllLikedNewsPaged(): Flow<PagingData<News>> {

@@ -13,6 +13,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.view.ContentInfoCompat.Flags
 import androidx.work.*
@@ -72,7 +73,7 @@ class SystemService(private val context: Context) {
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
         } else {
-            PendingIntent.getBroadcast(context, 0, intent, 0)
+            PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
 
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -92,12 +93,13 @@ class SystemService(private val context: Context) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun cancelAllAlarms() {
 
         val i = Intent(context, ReminderReceiver::class.java)
 
         @SuppressLint("UnspecifiedImmutableFlag")
-        val pi = PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pi = PendingIntent.getBroadcast(context, 0, i, FLAG_IMMUTABLE)
         val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarm.cancel(pi)
     }

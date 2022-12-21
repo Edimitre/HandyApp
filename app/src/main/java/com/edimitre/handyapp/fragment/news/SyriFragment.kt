@@ -84,7 +84,11 @@ class SyriFragment : Fragment(), NewsAdapter.OnNewsClickListener {
     private fun setRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
 
-            systemService.startScrapSyriNet()
+            lifecycleScope.launch {
+                _newsViewModel.deleteAllBySource("syri.net")
+                systemService.startScrapSyriNet()
+            }
+
 
         }
     }
@@ -95,6 +99,7 @@ class SyriFragment : Fragment(), NewsAdapter.OnNewsClickListener {
 
             when (_newsViewModel.getOneBySource("syri.net")) {
                 null -> {
+                    _newsViewModel.deleteAllBySource("syri.net")
                     systemService.startScrapSyriNet()
                 }
                 else -> {

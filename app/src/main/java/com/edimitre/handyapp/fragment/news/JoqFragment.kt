@@ -91,7 +91,10 @@ class JoqFragment : Fragment(), NewsAdapter.OnNewsClickListener {
     private fun setRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
 
-            systemService.startScrapJoqAl()
+            lifecycleScope.launch {
+                _newsViewModel.deleteAllBySource("joq.al")
+                systemService.startScrapJoqAl()
+            }
 
         }
     }
@@ -103,6 +106,7 @@ class JoqFragment : Fragment(), NewsAdapter.OnNewsClickListener {
 
             when (_newsViewModel.getOneBySource("joq.al")) {
                 null -> {
+                    _newsViewModel.deleteAllBySource("joq.al")
                     systemService.startScrapJoqAl()
                 }
                 else -> {

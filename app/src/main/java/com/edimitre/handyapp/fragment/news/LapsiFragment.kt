@@ -87,7 +87,10 @@ class LapsiFragment : Fragment(), NewsAdapter.OnNewsClickListener {
     private fun setRefreshListener() {
         binding.swipeRefreshLayout.setOnRefreshListener {
 
-            systemService.startScrapLapsiAl()
+            lifecycleScope.launch{
+                _newsViewModel.deleteAllBySource("lapsi.al")
+                systemService.startScrapLapsiAl()
+            }
 
         }
     }
@@ -98,6 +101,7 @@ class LapsiFragment : Fragment(), NewsAdapter.OnNewsClickListener {
 
             when (_newsViewModel.getOneBySource("lapsi.al")) {
                 null -> {
+                    _newsViewModel.deleteAllBySource("lapsi.al")
                     systemService.startScrapLapsiAl()
                 }
                 else -> {

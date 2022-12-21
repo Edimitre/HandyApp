@@ -81,7 +81,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="16dp"
-                android:autoLink="web"/>
+                android:autoLink="web"
+                android:textColorLink="?attr/colorOnPrimary"/>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
