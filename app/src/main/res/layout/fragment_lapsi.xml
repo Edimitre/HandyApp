@@ -8,23 +8,23 @@
     android:padding="8dp"
     tools:context=".fragment.news.LapsiFragment">
 
-    <!--TOOLBAR-->
-    <com.google.android.material.appbar.MaterialToolbar
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/n_toolbar"
-        android:elevation="12dp"
-        android:background="?attr/colorPrimaryVariant"
-        android:minHeight="?attr/actionBarSize">
-    </com.google.android.material.appbar.MaterialToolbar>
-    <!--TOOLBAR END-->
+        android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/news_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/n_toolbar"
-        android:layout_marginBottom="?attr/actionBarSize"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/news_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </RelativeLayout>

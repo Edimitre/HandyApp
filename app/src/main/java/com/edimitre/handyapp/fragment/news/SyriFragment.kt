@@ -1,24 +1,24 @@
 package com.edimitre.handyapp.fragment.news
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.NewsAdapter
 import com.edimitre.handyapp.data.model.News
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.NewsViewModel
-import com.edimitre.handyapp.databinding.FragmentJoqBinding
 import com.edimitre.handyapp.databinding.FragmentSyriBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SyriFragment : Fragment() {
+class SyriFragment : Fragment(), NewsAdapter.OnNewsClickListener {
 
     @Inject
     lateinit var systemService: SystemService
@@ -55,16 +55,20 @@ class SyriFragment : Fragment() {
 
         initAdapterAndRecyclerView()
 
-        initToolbar()
+        setRefreshListener()
+
+        checkIfNewsEmpty()
 
         showAllNews()
+
+        observeWork()
 
         enableTouchFunctions()
     }
 
     private fun initAdapterAndRecyclerView() {
 
-        myAdapter = NewsAdapter()
+        myAdapter = NewsAdapter(this)
 
         val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
         binding.newsRecyclerView.apply {
@@ -77,55 +81,34 @@ class SyriFragment : Fragment() {
         }
     }
 
-    private fun initToolbar() {
+    private fun setRefreshListener() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
 
-        binding.nToolbar.inflateMenu(R.menu.toolbar_menu)
+            systemService.startScrapSyriNet()
 
+        }
+    }
 
-        val btnPickDate = binding.nToolbar.menu.findItem(R.id.btn_calendar_pick)
-        btnPickDate.isVisible = false
+    private fun checkIfNewsEmpty() {
 
-        val btnCloseSearch = binding.nToolbar.menu.findItem(R.id.btn_close_date_search)
-        btnCloseSearch.isVisible = false
+        lifecycleScope.launch {
 
-        val settingButton = binding.nToolbar.menu.findItem(R.id.btn_settings)
-        settingButton.isVisible = false
+            when (_newsViewModel.getOneBySource("syri.net")) {
+                null -> {
+                    systemService.startScrapSyriNet()
+                }
+                else -> {
 
-        val search = binding.nToolbar.menu.findItem(R.id.btn_search_db)
-
-        val searchView = search.actionView as SearchView
-        searchView.isSubmitButtonEnabled = true
-
-
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                showAllNewsByContent(query)
-                return false
+                }
             }
+        }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-
-                showAllNewsByContent(newText)
-                return false
-            }
-        })
     }
 
     private fun showAllNews() {
 
         lifecycleScope.launch {
             _newsViewModel.getAllNewsBySourcePaged("syri.net").collectLatest {
-                myAdapter.submitData(it)
-            }
-        }
-
-    }
-
-    private fun showAllNewsByContent(source: String) {
-
-        lifecycleScope.launch {
-            _newsViewModel.getAllNewsBySourcePaged(source).collectLatest {
                 myAdapter.submitData(it)
             }
         }
@@ -186,6 +169,61 @@ class SyriFragment : Fragment() {
 
 
         dialog.show()
+    }
+
+    private fun observeWork() {
+
+        val workManager = WorkManager.getInstance(requireContext())
+
+        val workList = workManager.getWorkInfosByTagLiveData("scrap_syri_work")
+
+        workList.observe(viewLifecycleOwner) { listWorkInfo ->
+
+            listWorkInfo.forEach {
+
+
+                when (it.state) {
+                    WorkInfo.State.SUCCEEDED -> {
+
+                        binding.swipeRefreshLayout.isRefreshing = false
+                    }
+                    WorkInfo.State.RUNNING -> {
+
+                        binding.swipeRefreshLayout.isRefreshing = true
+                    }
+                    else -> {
+
+                    }
+                }
+
+            }
+        }
+
+
+    }
+
+    override fun onLikeClicked(news: News) {
+        _newsViewModel.likeNews(news)
+    }
+
+    override fun onShareClicked(news: News) {
+
+        shareOnOtherApp(news.link)
+    }
+
+    private fun shareOnOtherApp(link: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, link)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+
+        activity.let {
+            it!!.startActivity(shareIntent)
+        }
+
     }
 
 }

@@ -20,7 +20,6 @@ class LapsiScrapper(context: Context, params: WorkerParameters) :
     private val ctx = context
 
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     override suspend fun doWork(): Result {
 
@@ -28,7 +27,6 @@ class LapsiScrapper(context: Context, params: WorkerParameters) :
             launch {
 
                 scrapLapsiAl1().also { scrapLapsiAl2() }
-
 
 
             }
@@ -92,15 +90,13 @@ class LapsiScrapper(context: Context, params: WorkerParameters) :
             .replace("Adresa juaj email s’do të bëhet publike. Koment Emër Email Sajt", "")
 
 
-        val news = News(0, "lapsi.al", link, title, paragraph)
+        val news = News(0, "lapsi.al", link, title, paragraph, false)
 
 
         val newsDao = HandyDb.getInstance(ctx).getNewsDao()
 
         newsDao.insert(news)
     }
-
-
 
 
 }

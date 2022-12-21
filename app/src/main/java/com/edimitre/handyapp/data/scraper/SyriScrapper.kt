@@ -20,7 +20,6 @@ class SyriScrapper(context: Context, params: WorkerParameters) :
     private val ctx = context
 
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     override suspend fun doWork(): Result {
 
@@ -66,17 +65,14 @@ class SyriScrapper(context: Context, params: WorkerParameters) :
 
         // ngarko faqen html si dokument
         try {
-//            html_page = Jsoup.connect(link).get()
             html_page = Jsoup.connect(link).get()
 
             assert(html_page != null)
-            val title = html_page.getElementsByClass("ndaje-pak").select("h1").text().replace("Komentet", "")
+            val title = html_page.getElementsByClass("ndaje-pak").select("h1").text()
+                .replace("Komentet", "")
             val paragraph = html_page.getElementsByClass("ndaje-pak").select("p").text()
 
-            println("link $link")
-
-
-            val news = News(0, "syri.net", link, title, paragraph)
+            val news = News(0, "syri.net", link, title, paragraph, false)
             val newsDao = HandyDb.getInstance(ctx).getNewsDao()
 
             newsDao.insert(news)

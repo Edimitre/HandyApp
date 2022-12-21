@@ -3,15 +3,10 @@ package com.edimitre.handyapp.data.service
 
 import androidx.paging.PagingSource
 import com.edimitre.handyapp.data.dao.NewsDao
-import com.edimitre.handyapp.data.dao.ReminderNotesDao
 import com.edimitre.handyapp.data.model.News
-import com.edimitre.handyapp.data.model.Note
-
 import javax.inject.Inject
 
 class NewsService @Inject constructor(private val newsDao: NewsDao) {
-
-
 
 
     suspend fun saveNews(news: News) {
@@ -24,18 +19,18 @@ class NewsService @Inject constructor(private val newsDao: NewsDao) {
         newsDao.delete(news)
     }
 
-    suspend fun getOneBySource(source:String): News? {
+    suspend fun getOneBySource(source: String): News? {
         return newsDao.getOneBySource(source)
     }
 
-    suspend fun deleteAllBySource(source:String){
+    suspend fun deleteAllBySource(source: String) {
 
         return newsDao.deleteAllNewsBySource(source)
     }
 
-    fun getAllNewsPaged(): PagingSource<Int, News>? {
+    fun getAllLikedNewsPaged(): PagingSource<Int, News>? {
 
-        return newsDao.getAllNewsPaged()
+        return newsDao.getAllLikedNewsPaged()
     }
 
     fun getNewsBySourcePaged(source: String): PagingSource<Int, News>? {

@@ -9,22 +9,22 @@ import com.edimitre.handyapp.data.model.News
 interface NewsDao {
 
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(news: News?)
 
     @Delete
     suspend fun delete(news: News?)
 
-    @Query("DELETE FROM news_table where source = :source")
-    suspend fun deleteAllNewsBySource(source:String)
+    @Query("DELETE FROM news_table where source = :source and liked = '0'")
+    suspend fun deleteAllNewsBySource(source: String)
 
     @Query("SELECT * FROM news_table where source = :source LIMIT 1")
-    suspend fun getOneBySource(source:String): News?
+    suspend fun getOneBySource(source: String): News?
 
-    @Query("SELECT * FROM news_table")
-    fun getAllNewsPaged(): PagingSource<Int, News>?
+    @Query("SELECT * FROM news_table where liked = '1'")
+    fun getAllLikedNewsPaged(): PagingSource<Int, News>?
 
-    @Query("SELECT * FROM news_table WHERE source LIKE :source")
+    @Query("SELECT * FROM news_table WHERE source = :source and liked = '0'")
     fun getNewsBySourcePaged(source: String?): PagingSource<Int, News>?
 
 }

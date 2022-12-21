@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
-import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.edimitre.handyapp.data.model.News
 import com.edimitre.handyapp.data.room_database.HandyDb
@@ -23,12 +22,12 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
     private val ctx = context
 
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     override suspend fun doWork(): Result {
 
         withContext(Dispatchers.Default) {
             launch {
+
 
                 scrapBotaAl()
 
@@ -69,8 +68,8 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
         for (link in links!!) {
             populateNewsFromLink(link)
             i += 1
-            if (i == 20) {
-                return
+            if (i == 25) {
+                break
             }
         }
     }
@@ -89,7 +88,7 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
         val title: String = html_page!!.select("h1").text()
         val paragraph: String = html_page.select("p").text()
 
-        val news = News(0, "bota.al", link, title, paragraph)
+        val news = News(0, "bota.al", link, title, paragraph, false)
 
 
         val newsDao = HandyDb.getInstance(ctx).getNewsDao()
@@ -97,8 +96,6 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
         newsDao.insert(news)
 
     }
-
-
 
 
 }

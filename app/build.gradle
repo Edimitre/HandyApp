@@ -91,9 +91,6 @@ dependencies {
 
     //GSON
     implementation 'com.google.code.gson:gson:2.9.0'
-//
-//
-//    implementation "androidx.fragment:fragment:1.6.0-alpha01"
 
     def activity_version = "1.6.1"
     def fragment_version = "1.5.4"
@@ -101,5 +98,9 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
 
+    // JSOUP
     implementation 'org.jsoup:jsoup:1.14.2'
+
+    // SWIPE REFRESH LAYOUT
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

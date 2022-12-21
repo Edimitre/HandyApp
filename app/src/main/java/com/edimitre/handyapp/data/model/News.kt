@@ -16,14 +16,16 @@ data class News(
 
     val title:String,
 
-    val paragraph:String
+    val paragraph:String,
 
+    var liked:Boolean
 ): Serializable {
     constructor():this(
         0,
         "",
         "",
         "",
-        ""
+        "",
+        false
     )
 }

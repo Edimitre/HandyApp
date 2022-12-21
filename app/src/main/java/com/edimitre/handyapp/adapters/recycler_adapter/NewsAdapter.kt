@@ -4,16 +4,17 @@ package com.edimitre.handyapp.adapters.recycler_adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.News
-import com.edimitre.handyapp.data.model.Note
 
 
-class NewsAdapter : PagingDataAdapter<News, NewsAdapter.NewsViewHolder>(DiffUtilCallback()) {
+class NewsAdapter(private val onNewsClickListener: OnNewsClickListener) :
+    PagingDataAdapter<News, NewsAdapter.NewsViewHolder>(DiffUtilCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
@@ -25,7 +26,7 @@ class NewsAdapter : PagingDataAdapter<News, NewsAdapter.NewsViewHolder>(DiffUtil
 
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(getItem(position)!!)
+        holder.bind(getItem(position)!!, onNewsClickListener)
 
     }
 
@@ -49,17 +50,37 @@ class NewsAdapter : PagingDataAdapter<News, NewsAdapter.NewsViewHolder>(DiffUtil
         private val newsParagraph: TextView = itemView.findViewById(R.id.news_paragraph)
         private val newsSource: TextView = itemView.findViewById(R.id.news_source)
         private val newsLink: TextView = itemView.findViewById(R.id.news_link)
-
-
-        fun bind(news: News) {
+        private val newsLikeBtn: ImageView = itemView.findViewById(R.id.button_like)
+        private val newsShareBtn: ImageView = itemView.findViewById(R.id.button_share)
+        fun bind(news: News, newsLikeClickListener: OnNewsClickListener) {
             newsTitle.text = news.title
             newsParagraph.text = news.paragraph
-            newsSource.text = news.source
-            newsLink.text = news.link
+            newsSource.text = "source ${news.source}"
+            newsLink.text = "link ${news.link}"
+
+            if (news.liked) {
+                newsLikeBtn.setImageResource(R.drawable.ic_check_circle)
+            }
+
+            newsLikeBtn.setOnClickListener {
+                newsLikeClickListener.onLikeClicked(news)
+            }
+            newsShareBtn.setOnClickListener {
+                newsLikeClickListener.onShareClicked(news)
+            }
+
+
         }
     }
 
     fun getNewsByPos(pos: Int): News? {
         return getItem(pos)
     }
+
+    interface OnNewsClickListener {
+        fun onLikeClicked(news: News)
+        fun onShareClicked(news: News)
+    }
+
+
 }

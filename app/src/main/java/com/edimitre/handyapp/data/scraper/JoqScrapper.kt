@@ -20,7 +20,6 @@ class JoqScrapper(context: Context, params: WorkerParameters) :
     private val ctx = context
 
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     override suspend fun doWork(): Result {
 
@@ -69,15 +68,13 @@ class JoqScrapper(context: Context, params: WorkerParameters) :
         val title = html_page!!.select("h1").text()
         val paragraph = html_page.select("p").text()
 
-        val news = News(0, "joq.al", link, title, paragraph)
+        val news = News(0, "joq.al", link, title, paragraph, false)
 
 
         val newsDao = HandyDb.getInstance(ctx).getNewsDao()
 
         newsDao.insert(news)
     }
-
-
 
 
 }

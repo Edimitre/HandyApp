@@ -5,19 +5,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.edimitre.handyapp.adapters.tabs_adapter.NewsTabAdapter
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.NewsViewModel
 import com.edimitre.handyapp.databinding.ActivityNewsBinding
-import com.edimitre.handyapp.fragment.news.BotaAlFragment
-import com.edimitre.handyapp.fragment.news.JoqFragment
-import com.edimitre.handyapp.fragment.news.LapsiFragment
-import com.edimitre.handyapp.fragment.news.SyriFragment
+import com.edimitre.handyapp.fragment.news.*
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -53,68 +48,6 @@ class NewsActivity : AppCompatActivity() {
         initFragmentTabs()
 
 
-        startScrapers()
-
-
-    }
-
-
-    private fun startScrapers() {
-        lifecycleScope.launch {
-
-
-            val botaAlNews = newsViewModel.getOneBySource("bota.al")
-
-            when (botaAlNews) {
-                null -> {
-                    systemService.startScrapBotaAl()
-                }
-                else -> {
-                    newsViewModel.deleteAllBySource("bota.al")
-                        .also { systemService.startScrapBotaAl() }
-
-                }
-            }
-
-            val joqAlNews = newsViewModel.getOneBySource("joq.al")
-
-            when (joqAlNews) {
-                null -> {
-                    systemService.startScrapJoqAl()
-                }
-                else -> {
-                    newsViewModel.deleteAllBySource("joq.al")
-                        .also { systemService.startScrapJoqAl() }
-
-                }
-            }
-
-            val lapsiNews = newsViewModel.getOneBySource("lapsi.al")
-
-            when (lapsiNews) {
-                null -> {
-                    systemService.startScrapLapsiAl()
-                }
-                else -> {
-                    newsViewModel.deleteAllBySource("lapsi.al")
-                        .also { systemService.startScrapLapsiAl() }
-
-                }
-            }
-
-            val syriNews = newsViewModel.getOneBySource("syri.net")
-
-            when (syriNews) {
-                null -> {
-                    systemService.startScrapSyriNet()
-                }
-                else -> {
-                    newsViewModel.deleteAllBySource("syri.net")
-                        .also { systemService.startScrapSyriNet() }
-
-                }
-            }
-        }
     }
 
 
@@ -155,7 +88,8 @@ class NewsActivity : AppCompatActivity() {
             BotaAlFragment(),
             JoqFragment(),
             LapsiFragment(),
-            SyriFragment()
+            SyriFragment(),
+            LikedNewsFragment()
         )
     }
 

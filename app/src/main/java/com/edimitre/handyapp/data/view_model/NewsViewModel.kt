@@ -20,9 +20,8 @@ import javax.inject.Inject
 class NewsViewModel @Inject constructor(private val newsService: NewsService) : ViewModel() {
 
 
-    fun saveNews(news: News): Job = viewModelScope.launch {
-
-
+    fun likeNews(news: News): Job = viewModelScope.launch {
+        news.liked = true
         newsService.saveNews(news)
 
     }
@@ -44,7 +43,7 @@ class NewsViewModel @Inject constructor(private val newsService: NewsService) : 
         return newsService.deleteAllBySource(source)
     }
 
-    fun getAllNewsPaged(): Flow<PagingData<News>> {
+    fun getAllLikedNewsPaged(): Flow<PagingData<News>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -52,7 +51,7 @@ class NewsViewModel @Inject constructor(private val newsService: NewsService) : 
                 enablePlaceholders = false,
                 initialLoadSize = 20
             ),
-            pagingSourceFactory = { newsService.getAllNewsPaged()!! })
+            pagingSourceFactory = { newsService.getAllLikedNewsPaged()!! })
             .flow
             .cachedIn(viewModelScope)
     }
