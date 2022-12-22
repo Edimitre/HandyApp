@@ -12,11 +12,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkManager
+import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentSettingsBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -56,7 +58,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
     private fun setListeners() {
 
-        binding.backUpSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked -> // do something, the isChecked will be
+        binding.backUpSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
 
 
             mainViewModel.setBackupEnabled(isChecked)
@@ -81,7 +83,11 @@ class SettingsFragment : BottomSheetDialogFragment() {
                             authModel!!.isBackupEnabled = isChecked
 
                             mainViewModel.saveAuth(authModel)
-                            setBackupWorker(true)
+
+                            when {
+                                isChecked -> {askForImportBackupStart()}
+                            }
+
                         }
 
                     }
@@ -105,7 +111,6 @@ class SettingsFragment : BottomSheetDialogFragment() {
             }
         })
 
-
         binding.btnLogin.setOnClickListener {
             mainViewModel.setActiveFragment(SignUpFragment())
             dismiss()
@@ -119,6 +124,39 @@ class SettingsFragment : BottomSheetDialogFragment() {
         binding.importRow.setOnClickListener {
             listener.importDb()
         }
+    }
+
+    private fun askForImportBackupStart() {
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+        dialog.setTitle(HandyAppEnvironment.TITLE)
+        dialog.setMessage(
+            "do you want to perform a restore of your data right now ?..\n" +
+                    "select yes only if app is installed fresh and you have the old data \n" +
+                    "select no if you are a fresh registered user \n" +
+                    "click outside to close the warning and cancel all \n" +
+                    "you can retry at another time.."
+
+        )
+        dialog.setPositiveButton("Yes") { dlg, _ ->
+
+
+            listener.importDb().also {
+                setBackupWorker(true)
+            }
+
+            dlg.dismiss()
+            dismiss()
+        }
+
+        dialog.setNegativeButton("No") { _, _ ->
+
+            setBackupWorker(true)
+            dismiss()
+        }
+
+
+        dialog.show()
     }
 
     private fun setButtonVisibility() {

@@ -195,7 +195,6 @@ class BotaAlFragment : Fragment(), NewsAdapter.OnNewsClickListener {
         dialog.show()
     }
 
-
     private fun observeWork() {
 
         val workManager = WorkManager.getInstance(requireContext())
@@ -253,7 +252,6 @@ class BotaAlFragment : Fragment(), NewsAdapter.OnNewsClickListener {
     override fun onShareClicked(news: News) {
         shareOnOtherApp(news.link)
     }
-
 
     private fun shareOnOtherApp(link: String) {
         val sendIntent: Intent = Intent().apply {

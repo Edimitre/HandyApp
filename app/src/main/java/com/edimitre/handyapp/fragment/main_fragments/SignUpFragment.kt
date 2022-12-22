@@ -74,7 +74,6 @@ class SignUpFragment : Fragment() {
         }
     }
 
-
     private fun inputsAreOk(): Boolean {
 
         val email = binding.inputEmail.text.trim().toString()
