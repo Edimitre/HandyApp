@@ -63,6 +63,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
         val shopDao = HandyDb.getInstance(ctx).getShopExpenseDao()
         val noteDao = HandyDb.getInstance(ctx).getReminderNotesDao()
         val newsDao = HandyDb.getInstance(ctx).getNewsDao()
+        val workDayDao = HandyDb.getInstance(ctx).getWorkDayDao()
 
         progress = "starting restore";
 
@@ -116,6 +117,17 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
             progress = "liked news found ...restoring"
             backUpDto.likedNewsList.forEach { news ->
                 newsDao.insert(news)
+
+                delay(1000)
+            }
+
+        }
+
+        if (backUpDto.workDaysList.isNotEmpty()) {
+
+            progress = "workdays found ...restoring"
+            backUpDto.workDaysList.forEach { workday ->
+                workDayDao.save(workday)
 
                 delay(1000)
             }

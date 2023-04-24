@@ -58,6 +58,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
                 val likedNewsList = HandyDb.getInstance(ctx).getNewsDao().getAllLikedNewsForBackUp()
 
+                val workDaysList = HandyDb.getInstance(ctx).getWorkDayDao().getAllWorkDaysForBackUp()
 
                 when {
                     auth != null -> {
@@ -77,6 +78,8 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
                         backUpDto.notesList = notesList!!
 
                         backUpDto.likedNewsList = likedNewsList!!
+
+                        backUpDto.workDaysList = workDaysList!!
 
                         backUpDto.backUpDate = TimeUtils().getTimeInMilliSeconds(
                             TimeUtils().getCurrentYear(),
@@ -130,6 +133,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
             "reminderList" to Gson().toJson(backUpDto.reminderList),
             "notesList" to Gson().toJson(backUpDto.notesList),
             "likedNewsList" to Gson().toJson(backUpDto.likedNewsList),
+            "workDaysList" to Gson().toJson(backUpDto.workDaysList),
             "backupDate" to backUpDto.backUpDate
         )
 

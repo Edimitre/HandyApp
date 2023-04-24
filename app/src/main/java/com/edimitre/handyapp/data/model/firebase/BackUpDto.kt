@@ -18,11 +18,14 @@ data class BackUpDto(
 
     var likedNewsList:List<News>,
 
+    var workDaysList:List<WorkDay>,
+
     var backUpDate: Long
 ) : Serializable {
 
     constructor():this(
         "",
+        ArrayList(),
         ArrayList(),
         ArrayList(),
         ArrayList(),

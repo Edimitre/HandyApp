@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.work_related.AddWorkDayForm"
+    android:padding="8dp">
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="?attr/colorPrimary">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/form_banner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add work day"
+                android:textSize="45sp"
+                android:layout_marginTop="8dp"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/input_hours_label"
+                android:layout_below="@+id/form_banner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set hours"
+                android:textSize="20sp"
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true"/>
+
+            <EditText
+                android:id="@+id/input_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="set hours ex:5"
+                android:layout_below="@+id/input_hours_label"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"/>
+
+
+            <TextView
+                android:id="@+id/input_activity_label"
+                android:layout_below="@+id/input_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="prescribe day activity"
+                android:textSize="20sp"
+                android:layout_marginTop="16dp"
+                android:layout_centerHorizontal="true"/>
+
+            <EditText
+                android:id="@+id/input_activity"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/input_activity_label"
+                android:padding="8dp"
+                android:inputType="text|textMultiLine"
+                android:lines="20"
+                android:minLines="3"
+                android:scrollHorizontally="false"
+                android:scrollbars="vertical"
+                android:layout_marginTop="16dp"/>
+
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cancel"
+                android:layout_below="@+id/input_activity"
+                android:layout_alignParentStart="true"
+                android:backgroundTint="?attr/colorOnBackground"
+
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="32dp"/>
+
+            <Button
+                android:id="@+id/btn_add_workday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:text="save"
+                android:layout_below="@+id/input_activity"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"/>
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>

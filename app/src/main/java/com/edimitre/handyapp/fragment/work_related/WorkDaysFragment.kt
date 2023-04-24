@@ -11,18 +11,23 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.NewsAdapter
 import com.edimitre.handyapp.adapters.recycler_adapter.NoteAdapter
 import com.edimitre.handyapp.adapters.recycler_adapter.WorkDayAdapter
+import com.edimitre.handyapp.data.model.Expense
 import com.edimitre.handyapp.data.model.WorkDay
+import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.WorkDayViewModel
 import com.edimitre.handyapp.databinding.FragmentBotaAlBinding
 import com.edimitre.handyapp.databinding.FragmentWorkDaysBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WorkDaysFragment : Fragment() {
@@ -34,6 +39,10 @@ class WorkDaysFragment : Fragment() {
     private lateinit var itemTouchHelper: ItemTouchHelper
 
     private lateinit var binding: FragmentWorkDaysBinding
+
+    @Inject
+    lateinit var fileService: FileService
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +66,11 @@ class WorkDaysFragment : Fragment() {
 
         initAdapterAndRecyclerView()
 
+
+
         showAllWorkDaysByYearAndMonth(TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth())
+
+        enableTouchFunctions()
     }
 
     private fun initAdapterAndRecyclerView() {
@@ -70,7 +83,7 @@ class WorkDaysFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = myAdapter
 
-            addItemDecoration(dividerItemDecoration)
+//            addItemDecoration(dividerItemDecoration)
 
         }
     }
@@ -93,5 +106,67 @@ class WorkDaysFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun enableTouchFunctions() {
+        itemTouchHelper =
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                    val workday = myAdapter.getWorkDayByPos(viewHolder.absoluteAdapterPosition)
+
+                    openDeleteDialog(workday!!, viewHolder.absoluteAdapterPosition)
+
+
+                }
+            })
+
+        itemTouchHelper.attachToRecyclerView(binding.workdaysRecyclerView)
+    }
+
+    private fun openDeleteDialog(workDay:WorkDay, pos: Int) {
+
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+        dialog.setTitle(HandyAppEnvironment.TITLE)
+        dialog.setMessage(
+            "Are you sure you want to delete ${workDay.id} \n" +
+                    "this action can't be undone"
+
+        )
+        dialog.setPositiveButton("Delete") { _, _ ->
+
+
+            _workDayViewModel.deleteWorkDay(workDay)
+            myAdapter.notifyItemChanged(pos)
+
+
+
+
+        }
+
+        dialog.setNegativeButton("Close") { _, _ ->
+
+
+        }
+
+
+        dialog.setOnDismissListener {
+
+            myAdapter.notifyItemChanged(pos)
+
+
+        }
+
+
+        dialog.show()
     }
 }
