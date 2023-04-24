@@ -1,9 +1,6 @@
 package com.edimitre.handyapp.data.model.firebase
 
-import com.edimitre.handyapp.data.model.Expense
-import com.edimitre.handyapp.data.model.Note
-import com.edimitre.handyapp.data.model.Reminder
-import com.edimitre.handyapp.data.model.Shop
+import com.edimitre.handyapp.data.model.*
 import java.io.Serializable
 import kotlin.collections.ArrayList
 
@@ -19,11 +16,14 @@ data class BackUpDto(
 
     var notesList:List<Note>,
 
+    var likedNewsList:List<News>,
+
     var backUpDate: Long
 ) : Serializable {
 
     constructor():this(
         "",
+        ArrayList(),
         ArrayList(),
         ArrayList(),
         ArrayList(),

@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
         observeActiveFragment()
 
-        startNotificationWorker()
+//        startNotificationWorker()
 
         observeTheme()
 
@@ -201,31 +201,6 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
     }
 
-    // function that starts a local notification worker
-    private fun startNotificationWorker() {
-        val notificationWork =
-            WorkManager.getInstance(this).getWorkInfosByTag("notification_worker").get()
-
-        when {
-            notificationWork.isNotEmpty() -> {
-                notificationWork.forEach { workInfo ->
-                    when (workInfo.state.name) {
-                        "ENQUEUED" -> {
-
-                        }
-                        else -> {
-                            systemService.startNotificationWorker()
-                        }
-                    }
-                }
-            }
-            else -> {
-                systemService.startNotificationWorker()
-            }
-        }
-
-
-    }
 
 
 }

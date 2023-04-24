@@ -90,13 +90,13 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-                android:src="@drawable/newspaper"/>
+                android:src="@drawable/ic_newspaper"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
-                android:text=""
+                android:text="News"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="17sp" />
 
@@ -105,7 +105,7 @@
 
         <!--REPORTS CARD-->
         <androidx.cardview.widget.CardView
-            android:id="@+id/profile_card"
+            android:id="@+id/work_related_card"
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_gravity="fill"
@@ -117,13 +117,14 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/ic_case"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
-                android:text=""
+                android:text="Work related"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="17sp" />
 

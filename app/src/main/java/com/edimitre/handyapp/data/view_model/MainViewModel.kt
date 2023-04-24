@@ -1,6 +1,7 @@
 package com.edimitre.handyapp.data.view_model
 
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -44,6 +45,10 @@ class MainViewModel @Inject constructor(
     val hasConnection: LiveData<Boolean> get() = mutableHasConnection
 
 
+    private val mutableIsNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    val isNotificationEnabled: LiveData<Boolean> get() = mutableIsNotificationEnabled
+
+
     init {
         setDoingWork(true)
 
@@ -60,7 +65,8 @@ class MainViewModel @Inject constructor(
                         "",
                         false,
                         isBackupEnabled = false,
-                        isDarkThemeEnabled = false
+                        isDarkThemeEnabled = false,
+                        isNotificationEnabled = false
                     )
                     saveAuth(authModel)
                     setDarkTheme(false)
@@ -69,6 +75,7 @@ class MainViewModel @Inject constructor(
                 else -> {
                     setBackupEnabled(authModel.isBackupEnabled)
                     setDarkTheme(authModel.isDarkThemeEnabled)
+                    setIsNotificationEnabled(authModel.isNotificationEnabled)
                 }
             }
 
@@ -98,10 +105,14 @@ class MainViewModel @Inject constructor(
         mutableDoingWork.value = doingWork
     }
 
+    fun setIsNotificationEnabled(isEnabled:Boolean){
 
+        mutableIsNotificationEnabled.value = isEnabled
+    }
 
     fun doLogin(email: String, password: String) {
         setDoingWork(true)
+        
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 when {
@@ -120,7 +131,9 @@ class MainViewModel @Inject constructor(
                     }
 
                     else -> {
+
                         Log.e(HandyAppEnvironment.TAG, "exception happened : ${it.exception}")
+
                         setDoingWork(false)
                     }
 
@@ -143,7 +156,9 @@ class MainViewModel @Inject constructor(
                             password,
                             isSignedIn = true,
                             isBackupEnabled = false,
-                            isDarkThemeEnabled = false
+                            isDarkThemeEnabled = false,
+                            isNotificationEnabled = false
+
                         )
 
                     saveAuth(authModel)

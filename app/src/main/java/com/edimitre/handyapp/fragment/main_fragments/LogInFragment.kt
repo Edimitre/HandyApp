@@ -36,6 +36,8 @@ class LogInFragment : Fragment() {
         setListeners()
 
         observeData()
+
+        observeLoading()
     }
 
     private fun setListeners() {
@@ -89,6 +91,39 @@ class LogInFragment : Fragment() {
                 }
             })
         }
+    }
+
+    private fun observeLoading() {
+
+        mainViewModel.isDoingWork.observe(viewLifecycleOwner, Observer {
+
+            setLoadingMode(it)
+        })
+    }
+
+    private fun setLoadingMode(value: Boolean) {
+        when {
+            value -> {
+
+                binding.loadingSpinner.visibility = View.VISIBLE
+                binding.sampleText.visibility = View.INVISIBLE
+                binding.inputLoginEmail.visibility = View.INVISIBLE
+                binding.inputLoginPassword.visibility = View.INVISIBLE
+                binding.btnLogin.visibility = View.INVISIBLE
+                binding.signUpText.visibility = View.INVISIBLE
+            }
+            else -> {
+
+                binding.loadingSpinner.visibility = View.INVISIBLE
+                binding.sampleText.visibility = View.VISIBLE
+                binding.inputLoginEmail.visibility = View.VISIBLE
+                binding.inputLoginPassword.visibility = View.VISIBLE
+                binding.btnLogin.visibility = View.VISIBLE
+                binding.signUpText.visibility = View.VISIBLE
+
+            }
+        }
+
     }
 
 

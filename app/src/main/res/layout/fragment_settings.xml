@@ -64,6 +64,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+<!--        auto backup card-->
         <androidx.cardview.widget.CardView
             android:id="@+id/back_up_row"
             android:layout_width="match_parent"
@@ -92,6 +93,8 @@
 
         </androidx.cardview.widget.CardView>
 
+
+<!--        enable dark theme card-->
         <androidx.cardview.widget.CardView
             android:id="@+id/black_theme_row"
             android:layout_width="match_parent"
@@ -120,8 +123,10 @@
 
         </androidx.cardview.widget.CardView>
 
+
+<!--        enable notification card-->
         <androidx.cardview.widget.CardView
-            android:id="@+id/import_row"
+            android:id="@+id/enable_notifications_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorPrimaryVariant"
@@ -132,7 +137,59 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="enable expense notifications"
+                android:textSize="20sp"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp"
+                android:padding="8dp"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/enable_notifications_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+        </androidx.cardview.widget.CardView>
+
+<!--        import db card-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/import_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/enable_notifications_row"
+            app:cardCornerRadius="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="import db"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:padding="8dp"/>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+
+<!--        backup db card-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/manual_backup_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/import_row"
+            app:cardCornerRadius="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="backup db"
                 android:textSize="20sp"
                 android:layout_gravity="center"
 
@@ -141,6 +198,17 @@
 
 
         </androidx.cardview.widget.CardView>
+
+
+<!--        loading spinner-->
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 

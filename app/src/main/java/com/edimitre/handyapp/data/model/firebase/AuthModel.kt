@@ -21,7 +21,9 @@ data class AuthModel(
 
     var isBackupEnabled: Boolean,
 
-    var isDarkThemeEnabled: Boolean
+    var isDarkThemeEnabled: Boolean,
+
+    var isNotificationEnabled :Boolean
 
 ) : Serializable {
 
@@ -31,6 +33,7 @@ data class AuthModel(
         "",
         "",
         true,
+        false,
         false,
         false
     )

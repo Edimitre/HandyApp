@@ -172,6 +172,17 @@ class SystemService(private val context: Context) {
 
     }
 
+    fun startOneTimeBackupWork(){
+
+        val backUpWork = OneTimeWorkRequest.Builder(BackUpDBWorker::class.java)
+            .addTag("backup_worker")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(backUpWork)
+    }
+
     fun startImportWorker(importData: String) {
 
         val constraints = Constraints.Builder()
@@ -208,6 +219,12 @@ class SystemService(private val context: Context) {
             ExistingPeriodicWorkPolicy.KEEP,
             notificationWorker
         )
+
+    }
+
+    fun stopNotificationWorker(){
+
+        WorkManager.getInstance(context).cancelAllWorkByTag("notification_worker")
 
     }
 

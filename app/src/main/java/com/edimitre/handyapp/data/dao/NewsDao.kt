@@ -3,6 +3,7 @@ package com.edimitre.handyapp.data.dao
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.edimitre.handyapp.data.model.News
+import com.edimitre.handyapp.data.model.Reminder
 
 
 @Dao
@@ -23,6 +24,9 @@ interface NewsDao {
 
     @Query("SELECT * FROM news_table where liked = '1'")
     fun getAllLikedNewsPaged(): PagingSource<Int, News>?
+
+    @Query("SELECT * FROM news_table where liked = '1'")
+    suspend fun getAllLikedNewsForBackUp(): List<News>?
 
     @Query("SELECT * FROM news_table WHERE source = :source and liked = '0'")
     fun getNewsBySourcePaged(source: String?): PagingSource<Int, News>?

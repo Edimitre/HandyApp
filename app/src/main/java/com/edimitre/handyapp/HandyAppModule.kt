@@ -1,10 +1,7 @@
 package com.edimitre.handyapp
 
 import android.app.Application
-import com.edimitre.handyapp.data.dao.AuthDao
-import com.edimitre.handyapp.data.dao.NewsDao
-import com.edimitre.handyapp.data.dao.ReminderNotesDao
-import com.edimitre.handyapp.data.dao.ShopExpenseDao
+import com.edimitre.handyapp.data.dao.*
 import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.util.SystemService
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +31,14 @@ object HandyAppModule {
     fun provideShopExpenseDao(db: HandyDb): ShopExpenseDao {
 
         return db.getShopExpenseDao()
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideWorkDayDao(db: HandyDb): WorkDayDao {
+
+        return db.getWorkDayDao()
     }
 
 

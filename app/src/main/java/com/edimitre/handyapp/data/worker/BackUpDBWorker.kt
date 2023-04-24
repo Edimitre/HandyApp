@@ -2,6 +2,7 @@ package com.edimitre.handyapp.data.worker
 
 import android.content.Context
 import androidx.work.CoroutineWorker
+import androidx.work.Data
 import androidx.work.WorkerParameters
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
@@ -25,15 +26,22 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
     private var backUpDb = Firebase.firestore
 
+    private var failed = false
+
     override suspend fun doWork(): Result {
+
+        createOutputData("BACKUP STARTED")
 
         val backUpDto = BackUpDto()
 
         val systemService = SystemService(ctx)
 
+
         withContext(Dispatchers.Default) {
 
             launch {
+
+                createOutputData("GATHERING DATA")
                 val auth = HandyDb.getInstance(ctx).getAuthDao().getAuthModelOnCoroutine()
 
 
@@ -47,6 +55,8 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
                 val notesList =
                     HandyDb.getInstance(ctx).getReminderNotesDao().getAllNotesForBackUp()
+
+                val likedNewsList = HandyDb.getInstance(ctx).getNewsDao().getAllLikedNewsForBackUp()
 
 
                 when {
@@ -66,6 +76,8 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
                         backUpDto.notesList = notesList!!
 
+                        backUpDto.likedNewsList = likedNewsList!!
+
                         backUpDto.backUpDate = TimeUtils().getTimeInMilliSeconds(
                             TimeUtils().getCurrentYear(),
                             TimeUtils().getCurrentMonth(),
@@ -76,16 +88,20 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
                         val backup = getMapFromDto(backUpDto)
 
+                        createOutputData("BACKING UP")
                         backUpDb.collection("handy_app").document(auth.uid)
                             .set(backup, SetOptions.merge())
                             .addOnSuccessListener {
-                                systemService.notify(HandyAppEnvironment.TITLE, "back up success")
+
+                                failed = false
+                                createOutputData("BACK UP SUCCESSFULLY")
                             }
                             .addOnFailureListener { error ->
-                                systemService.notify(
-                                    HandyAppEnvironment.TITLE,
-                                    "back up worker failure : error -> ${error.localizedMessage}"
-                                )
+
+                                failed = true
+                                createOutputData("ERROR OCCURRED : ${error.message}")
+
+
 
                             }
                     }
@@ -94,11 +110,15 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
             }
         }
 
+        return if(!failed){
+
+            Result.success()
+        }else{
+
+            Result.failure()
+        }
 
 
-
-
-        return Result.success()
     }
 
 
@@ -109,9 +129,16 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
             "expenseList" to Gson().toJson(backUpDto.expenseList),
             "reminderList" to Gson().toJson(backUpDto.reminderList),
             "notesList" to Gson().toJson(backUpDto.notesList),
+            "likedNewsList" to Gson().toJson(backUpDto.likedNewsList),
             "backupDate" to backUpDto.backUpDate
         )
 
 
+    }
+
+    private fun createOutputData(status:String): Data {
+        return Data.Builder()
+            .putString("STATUS", status)
+            .build()
     }
 }

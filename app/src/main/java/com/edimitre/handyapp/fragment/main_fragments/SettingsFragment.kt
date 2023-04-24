@@ -85,7 +85,9 @@ class SettingsFragment : BottomSheetDialogFragment() {
                             mainViewModel.saveAuth(authModel)
 
                             when {
-                                isChecked -> {askForImportBackupStart()}
+                                isChecked -> {
+                                    askForImportBackupStart()
+                                }
                             }
 
                         }
@@ -124,6 +126,57 @@ class SettingsFragment : BottomSheetDialogFragment() {
         binding.importRow.setOnClickListener {
             listener.importDb()
         }
+
+        binding.enableNotificationsSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
+
+            when {
+                isChecked -> {
+
+                    Toast.makeText(context, "expense notification turned on", Toast.LENGTH_SHORT)
+                        .show()
+
+                    lifecycleScope.launch {
+
+                        runBlocking {
+                            val auth = mainViewModel.getAuthModel()
+                            auth!!.isNotificationEnabled = true
+                            mainViewModel.saveAuth(auth)
+
+                            systemService.startNotificationWorker()
+                            mainViewModel.setIsNotificationEnabled(true)
+
+                            Log.e(TAG, "notification work is : ${auth.isNotificationEnabled}")
+
+                        }
+
+                    }
+                }
+                else -> {
+                    Toast.makeText(context, "expense notification turned off", Toast.LENGTH_SHORT)
+                        .show()
+
+                    lifecycleScope.launch {
+
+                        runBlocking {
+                            val auth = mainViewModel.getAuthModel()
+                            auth!!.isNotificationEnabled = false
+                            mainViewModel.saveAuth(auth)
+                            mainViewModel.setIsNotificationEnabled(false)
+                            systemService.stopNotificationWorker()
+
+                            Log.e(TAG, "notification work is : ${auth.isNotificationEnabled}")
+                        }
+
+                    }
+
+                }
+            }
+
+        })
+
+        binding.manualBackupRow.setOnClickListener {
+            systemService.startOneTimeBackupWork()
+        }
     }
 
     private fun askForImportBackupStart() {
@@ -161,11 +214,12 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
     private fun setButtonVisibility() {
 
-
         if (!mainViewModel.isAuthenticated()) {
             binding.logOutText.visibility = View.GONE
             binding.btnLogout.visibility = View.GONE
+            binding.backUpRow.visibility = View.GONE
             binding.importRow.visibility = View.GONE
+            binding.manualBackupRow.visibility = View.GONE
         } else {
             binding.btnLogin.visibility = View.GONE
             binding.loginText.visibility = View.GONE
@@ -186,6 +240,12 @@ class SettingsFragment : BottomSheetDialogFragment() {
         activity?.let {
             mainViewModel.isDarkSelected.observe(it, Observer { check ->
                 binding.darkThemeSwitch.isChecked = check
+            })
+        }
+
+        activity?.let {
+            mainViewModel.isNotificationEnabled.observe(it, Observer { check ->
+                binding.enableNotificationsSwitch.isChecked = check
             })
         }
 
@@ -221,6 +281,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
         }
 
     }
+
 
     interface ImportDbListener {
         fun importDb()

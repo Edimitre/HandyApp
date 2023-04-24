@@ -19,11 +19,14 @@
         android:theme="@style/Theme.HandyApp"
         tools:targetApi="33">
         <activity
+            android:name=".activity.WorkActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
             android:name=".activity.NewsActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+
         </activity>
 
         <receiver

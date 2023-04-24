@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.edimitre.handyapp.activity.NewsActivity
 import com.edimitre.handyapp.activity.ReminderNotesActivity
 import com.edimitre.handyapp.activity.ShopsExpensesActivity
+import com.edimitre.handyapp.activity.WorkActivity
 import com.edimitre.handyapp.databinding.FragmentNavigationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,6 +55,13 @@ class NavigationFragment : Fragment() {
         binding.newsCard.setOnClickListener {
             activity?.let {
                 it.startActivity(Intent(it, NewsActivity::class.java))
+            }
+        }
+
+        binding.workRelatedCard.setOnClickListener {
+
+            activity?.let {
+                it.startActivity(Intent(it, WorkActivity::class.java))
             }
         }
     }

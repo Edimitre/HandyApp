@@ -402,7 +402,18 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
 
         expenseViewModel.getValueOfExpensesByYearMonthDate(year, month, date)!!
             .observe(viewLifecycleOwner) {
-                binding.spentValueText.text = "Spent value : $it"
+
+               when {
+                   it != null -> {
+                       binding.spentValueText.text = "Spent value : $it"
+                   }
+                   else -> {
+
+                       binding.spentValueText.text = "Spent value : 0"
+                   }
+               }
+
+
             }
 
         setNrOfExpensesByYearMonthDate(year, month, date)
@@ -420,7 +431,17 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
     private fun setSpentValueByYearMonth(year: Int, month: Int) {
 
         expenseViewModel.getValueOfExpensesbyYearMonth(year, month)!!.observe(viewLifecycleOwner) {
-            binding.spentValueText.text = "Spent value : $it"
+
+
+            when {
+                it != null -> {
+                    binding.spentValueText.text = "Spent value : $it"
+                }
+                else -> {
+
+                    binding.spentValueText.text = "Spent value : 0"
+                }
+            }
         }
 
         setNrOfExpensesByYearMonth(year, month)
@@ -438,7 +459,16 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
     private fun setSpentValueByYear(currentYear: Int) {
 
         expenseViewModel.getValueOfExpensesbyYear(currentYear)!!.observe(viewLifecycleOwner) {
-            binding.spentValueText.text = "Spent value : $it"
+
+            when {
+                it != null -> {
+                    binding.spentValueText.text = "Spent value : $it"
+                }
+                else -> {
+
+                    binding.spentValueText.text = "Spent value : 0"
+                }
+            }
         }
 
         setNrOfExpensesByYear(currentYear)
