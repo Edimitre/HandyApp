@@ -25,10 +25,7 @@ import com.edimitre.handyapp.data.scraper.BotaAlScrapper
 import com.edimitre.handyapp.data.scraper.JoqScrapper
 import com.edimitre.handyapp.data.scraper.LapsiScrapper
 import com.edimitre.handyapp.data.scraper.SyriScrapper
-import com.edimitre.handyapp.data.worker.BackUpDBWorker
-import com.edimitre.handyapp.data.worker.ImportDBWorker
-import com.edimitre.handyapp.data.worker.NotificationWorker
-import com.edimitre.handyapp.data.worker.ReminderWorker
+import com.edimitre.handyapp.data.worker.*
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -181,6 +178,17 @@ class SystemService(private val context: Context) {
 
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(backUpWork)
+    }
+
+    fun startCreateFileWorker(){
+
+        val createFileWork = OneTimeWorkRequest.Builder(FileWorker::class.java)
+            .addTag("file_worker")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(createFileWork)
     }
 
     fun startImportWorker(importData: String) {

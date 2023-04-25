@@ -71,12 +71,7 @@ object HandyAppModule {
         return SystemService(context)
     }
 
-    @Singleton
-    @Provides
-    fun provideFileService(context: Application): FileService {
 
-        return FileService(context)
-    }
 
     @Singleton
     @Provides

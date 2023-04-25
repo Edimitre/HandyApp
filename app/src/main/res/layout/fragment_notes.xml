@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".fragment.reminders_and_notes.NotesFragment">
+    tools:context=".fragment.reminder_and_notes.NotesFragment">
 
     <!--TOOLBAR-->
     <com.google.android.material.appbar.MaterialToolbar

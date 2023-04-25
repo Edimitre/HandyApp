@@ -46,7 +46,7 @@ class NewsAdapter(private val onNewsClickListener: OnNewsClickListener) :
         RecyclerView.ViewHolder(itemView) {
 
 
-        private val newsTitle: TextView = itemView.findViewById(R.id.news_title)
+        private val newsTitle: TextView = itemView.findViewById(R.id.file_name)
         private val newsParagraph: TextView = itemView.findViewById(R.id.news_paragraph)
         private val newsSource: TextView = itemView.findViewById(R.id.news_source)
         private val newsLink: TextView = itemView.findViewById(R.id.news_link)

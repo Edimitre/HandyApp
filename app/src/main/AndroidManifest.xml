@@ -25,16 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HandyApp"
         tools:targetApi="33">
-        <activity
-            android:name=".activity.WorkActivity"
-            android:exported="false">
-
-        </activity>
-        <activity
-            android:name=".activity.NewsActivity"
-            android:exported="false">
-
-        </activity>
 
         <receiver
             android:name=".data.util.BootReceiver"
@@ -64,6 +54,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.WorkActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
+            android:name=".activity.NewsActivity"
+            android:exported="false">
+
+        </activity>
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

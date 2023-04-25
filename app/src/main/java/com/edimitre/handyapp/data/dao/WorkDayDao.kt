@@ -32,6 +32,9 @@ interface WorkDayDao {
     @Query("SELECT * FROM workday_table")
     suspend fun getAllWorkDaysForBackUp(): List<WorkDay>?
 
+    @Query("SELECT * FROM workday_table where year =:year and month = :month")
+    suspend fun getAllWorkDaysForPrinting(year:Int, month:Int): List<WorkDay>?
+
 //    @Query("SELECT * FROM news_table WHERE source = :source and liked = '0'")
 //    fun getNewsBySourcePaged(source: String?): PagingSource<Int, News>?
 

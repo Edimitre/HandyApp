@@ -1,36 +1,36 @@
 package com.edimitre.handyapp.data.service
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Environment
-import android.provider.Settings
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.android.material.internal.ContextUtils.getActivity
-import javax.inject.Inject
-
-class FileService @Inject constructor(private val context: Context) {
+import com.edimitre.handyapp.data.model.FileObject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import java.io.File
 
 
+class FileService {
 
 
-    @SuppressLint("RestrictedApi")
-    fun getActivityByContext(context: Context?): Activity? {
-        if (context == null) {
-            return null
-        } else if (context is ContextWrapper && context is Activity) {
-            return context
-        } else if (context is ContextWrapper) {
-            return getActivity(context.baseContext)
+
+   fun getAllFiles(): ArrayList<FileObject> {
+
+        val folderName = "WORK_FOLDER"
+        val directory = File("${Environment.getExternalStorageDirectory()}/$folderName")
+
+
+
+        val files = directory.listFiles()
+
+        val listFile = arrayListOf<FileObject>()
+
+
+        if (files != null) {
+            for (i in files.indices) {
+
+                listFile.add(FileObject(files[i].name , files[i]))
+
+            }
         }
-        return null
-    }
 
+        return listFile
+    }
 }

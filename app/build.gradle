@@ -2,11 +2,13 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 
-    id 'kotlin-kapt'
+
 
     //DAGGER HILT
     id "dagger.hilt.android.plugin"
     id 'com.google.gms.google-services'
+
+    id 'kotlin-kapt'
 }
 
 android {
@@ -14,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.edimitre.handyapp"
-        minSdk 21
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -43,57 +45,66 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
-    implementation 'com.google.firebase:firebase-firestore:24.4.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-firestore:24.5.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.5.0'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
 
 
 
     // DAGGER HILT
-    implementation 'com.google.dagger:hilt-android:2.42'
-    kapt "com.google.dagger:hilt-android-compiler:2.42"
+    implementation 'com.google.dagger:hilt-android:2.45'
+    kapt "com.google.dagger:hilt-android-compiler:2.45"
 
     // WORK MANAGER
-    def work_version = "2.7.1"
+    def work_version = "2.8.1"
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
     // ROOM DATABASE
-    def roomVersion = "2.4.3"
+    def roomVersion = "2.5.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
 
     // optional - Kotlin Extensions and Coroutines support for Room
+
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt "androidx.room:room-compiler:$roomVersion"
-    // PAGING3 SUPPORT
-    implementation("androidx.room:room-paging:2.4.3")
+
+
+
+
+    // PAGING 3
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    // PAGING3 SUPPORT FOR ROOM
+    implementation "androidx.room:room-paging:$roomVersion"
 
     // VIEW MODEL LIFECYCLE
-    def lifecycle_version = "2.5.1"
+    def lifecycle_version = "2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
+
+
 
     //LIFECYCLE SCOPE
     // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
-    // PAGING 3
-    def paging_version = "3.1.1"
-    implementation("androidx.paging:paging-runtime:$paging_version")
+
 
     //GSON
     implementation 'com.google.code.gson:gson:2.9.0'
 
-    def activity_version = "1.6.1"
-    def fragment_version = "1.5.4"
+    def activity_version = "1.7.1"
+    def fragment_version = "1.5.7"
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
@@ -103,4 +114,11 @@ dependencies {
 
     // SWIPE REFRESH LAYOUT
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+
+    // xls dependecies
+    implementation group: 'org.apache.poi', name: 'poi', version: '5.0.0'
+    implementation 'javax.xml.stream:stax-api:1.0'
+
+
 }

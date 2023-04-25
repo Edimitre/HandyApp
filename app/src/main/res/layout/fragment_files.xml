@@ -3,16 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.work_related.WorkDaysFragment">
-
-
+    tools:context=".fragment.work_related.FilesFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/workdays_recycler_view"
+        android:id="@+id/files_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-
 
 </RelativeLayout>

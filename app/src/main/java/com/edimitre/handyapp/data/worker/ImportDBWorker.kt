@@ -35,16 +35,6 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
 
 
-//        withContext(Dispatchers.Default) {
-//            launch {
-//                val backUpData = inputData.getString("backup_data")
-//                val backUpDto = Gson().fromJson(backUpData, BackUpDto::class.java)
-//                importDto(backUpDto)
-//
-//            }
-//
-//        }
-
         val backUpData = inputData.getString("backup_data")
         val backUpDto = Gson().fromJson(backUpData, BackUpDto::class.java)
         importDto(backUpDto)

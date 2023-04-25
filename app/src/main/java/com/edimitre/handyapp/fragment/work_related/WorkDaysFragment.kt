@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -40,10 +41,6 @@ class WorkDaysFragment : Fragment() {
 
     private lateinit var binding: FragmentWorkDaysBinding
 
-    @Inject
-    lateinit var fileService: FileService
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,8 +62,6 @@ class WorkDaysFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapterAndRecyclerView()
-
-
 
         showAllWorkDaysByYearAndMonth(TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth())
 

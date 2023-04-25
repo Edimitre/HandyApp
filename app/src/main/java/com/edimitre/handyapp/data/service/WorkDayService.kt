@@ -30,4 +30,9 @@ class WorkDayService @Inject constructor(private val workDayDao: WorkDayDao) {
         return workDayDao.getAllWorkDaysPagedByYearAndMonth(year,month)
     }
 
+    suspend fun getAllWorkDaysByYearAndMonth(year:Int,month:Int):List<WorkDay>?{
+
+        return workDayDao.getAllWorkDaysForPrinting(year, month)
+
+    }
 }
