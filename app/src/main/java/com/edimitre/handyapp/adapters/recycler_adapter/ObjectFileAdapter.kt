@@ -39,6 +39,8 @@ class ObjectFileAdapter(
 
         private val fileName: TextView = itemView.findViewById(R.id.file_name)
         private val shareButton: CardView = itemView.findViewById(R.id.button_share)
+        private val openButton: CardView = itemView.findViewById(R.id.button_open)
+
 
         fun bind(fileObject: FileObject, onFileClickListener: OnObjectFileClickListener) {
 
@@ -49,6 +51,9 @@ class ObjectFileAdapter(
             }
 
 
+            openButton.setOnClickListener {
+                onFileClickListener.onFileOpenClicked(fileObject)
+            }
         }
     }
 
@@ -63,6 +68,8 @@ class ObjectFileAdapter(
 
     interface OnObjectFileClickListener {
         fun onFileShareClicked(fileObject: FileObject)
+
+        fun onFileOpenClicked(fileObject: FileObject)
     }
 
 

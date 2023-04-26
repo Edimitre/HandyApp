@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.WorkDay
@@ -55,17 +56,9 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
         initViewModel()
 
-
-        initToolBar()
-
-        setToolbarItems()
-
-        setToolbarListeners()
-
         displayFragment(WorkDaysFragment())
 
         setActiveButton("WORKDAYS")
-
 
         setListeners()
 
@@ -86,30 +79,6 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
         _workDayViewModel = ViewModelProvider(this)[WorkDayViewModel::class.java]
 
 
-    }
-
-    private fun initToolBar() {
-        binding.toolbar.inflateMenu(R.menu.toolbar_menu)
-
-
-    }
-
-    private fun setToolbarListeners() {
-
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.btn_create_xls -> {
-
-                    createXlsFile()
-
-                    true
-                }
-
-                else -> {
-                    true
-                }
-            }
-        }
     }
 
     private fun setListeners() {
@@ -151,24 +120,6 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
         }
     }
 
-    private fun setToolbarItems() {
-
-        val calendarButton = binding.toolbar.menu.findItem(R.id.btn_calendar_pick)
-        val closeSearchButton = binding.toolbar.menu.findItem(R.id.btn_close_date_search)
-        val searchButton = binding.toolbar.menu.findItem(R.id.btn_search_db)
-        val settingsButton = binding.toolbar.menu.findItem(R.id.btn_settings)
-        val createFileButton = binding.toolbar.menu.findItem(R.id.btn_create_xls)
-
-        if(!hasPermission()){
-            createFileButton.isVisible = false
-        }
-
-        calendarButton.isVisible = false
-        closeSearchButton.isVisible = false
-        searchButton.isVisible = false
-        settingsButton.isVisible = false
-    }
-
     private fun displayFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frag_container, fragment)
@@ -184,7 +135,7 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
     private fun createFolder() {
 
-        val folderName = "WORK_FOLDER"
+        val folderName = HandyAppEnvironment.FILES_STORAGE_DIRECTORY
 
         val file = File("${Environment.getExternalStorageDirectory()}/$folderName")
 
@@ -280,11 +231,5 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
         }
 
-    private fun createXlsFile(){
-
-        systemService.startCreateFileWorker()
-
-
-    }
 
 }

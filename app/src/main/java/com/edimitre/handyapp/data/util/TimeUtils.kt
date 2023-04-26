@@ -123,9 +123,22 @@ class TimeUtils {
 
         val formatter = SimpleDateFormat("dd/MM/yyyy");
 
+        return formatter.format(getDateFromMilliseconds(dateTimeInMillis))
 
+    }
 
-        return formatter.format(Date(dateTimeInMillis))
+    fun getDateFromMilliseconds(millis:Long):Date{
 
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = millis
+
+        return cal.time
+    }
+
+    fun isFriday():Boolean{
+
+        val cal = Calendar.getInstance()
+
+        return cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY
     }
 }

@@ -44,7 +44,8 @@
                 android:hint="set hours ex:5"
                 android:layout_below="@+id/input_hours_label"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:maxLength="1"/>
 
 
             <TextView

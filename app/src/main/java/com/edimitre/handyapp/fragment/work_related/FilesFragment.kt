@@ -1,7 +1,6 @@
 package com.edimitre.handyapp.fragment.work_related
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.adapters.recycler_adapter.ObjectFileAdapter
 import com.edimitre.handyapp.data.model.FileObject
+import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.FilesViewModel
 import com.edimitre.handyapp.databinding.FragmentFilesBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
-import java.net.URLConnection
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
 
@@ -30,8 +33,10 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private lateinit var itemTouchHelper: ItemTouchHelper
 
-
     private lateinit var binding: FragmentFilesBinding
+
+    @Inject
+    lateinit var systemService:SystemService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +57,18 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
         initViewModel()
         initAdapterAndRecyclerView()
+
+        setListeners()
+    }
+
+    private fun setListeners() {
+
+        if(!TimeUtils().isFriday()){
+            binding.btnGenerateFile.isEnabled = false
+        }
+        binding.btnGenerateFile.setOnClickListener {
+            createXlsFile()
+        }
     }
 
     private fun initViewModel() {
@@ -85,6 +102,10 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
         shareOnOtherApp(fileObject.actualFile!!)
     }
+    override fun onFileOpenClicked(fileObject: FileObject) {
+
+        openOnOtherApp(fileObject.actualFile!!)
+    }
 
     private fun shareOnOtherApp(file: File) {
         val sendIntent: Intent = Intent().apply {
@@ -102,6 +123,31 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
     }
 
 
+    private fun openOnOtherApp(file: File) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+
+            val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".provider", file)
+
+            val mime: String = requireContext().contentResolver.getType(uri)!!
+            setDataAndType(uri, mime);
+            type = requireContext().contentResolver.getType(uri)
+
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+
+        activity.let {
+            it!!.startActivity(sendIntent)
+        }
+
+    }
+
+    private fun createXlsFile(){
+
+        systemService.startCreateFileWorker()
+
+
+    }
 
 
 }

@@ -74,14 +74,14 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
         val calendarButton = binding.toolbar.menu.findItem(R.id.btn_calendar_pick)
         val closeSearchButton = binding.toolbar.menu.findItem(R.id.btn_close_date_search)
         val searchButton = binding.toolbar.menu.findItem(R.id.btn_search_db)
-        val createFileButton = binding.toolbar.menu.findItem(R.id.btn_create_xls)
+
 
 
 
         calendarButton.isVisible = false
         closeSearchButton.isVisible = false
         searchButton.isVisible = false
-        createFileButton.isVisible = false
+
     }
 
     private fun observeActiveFragment() {

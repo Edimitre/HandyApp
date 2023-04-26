@@ -41,8 +41,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/file_name"
                 android:layout_centerHorizontal="true"
+                android:layout_alignParentEnd="true"
                 android:backgroundTint="?attr/colorPrimary"
-                android:layout_marginTop="32dp">
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32px">
 
                 <ImageView
                     android:layout_width="70px"
@@ -60,6 +62,33 @@
 
             </androidx.cardview.widget.CardView>
 
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/button_open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/file_name"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentStart="true"
+                android:backgroundTint="?attr/colorPrimary"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="32px">
+
+                <ImageView
+                    android:layout_width="70px"
+                    android:layout_height="70px"
+                    android:src="@drawable/ic_create_file"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="openn"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"/>
+
+            </androidx.cardview.widget.CardView>
 
 
         </RelativeLayout>
