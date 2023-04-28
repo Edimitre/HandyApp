@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -127,12 +128,10 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_VIEW
 
+            val myMime: MimeTypeMap = MimeTypeMap.getSingleton()
+            val fileMime = myMime.getMimeTypeFromExtension(file.extension).toString()
             val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".provider", file)
-
-            val mime: String = requireContext().contentResolver.getType(uri)!!
-            setDataAndType(uri, mime);
-            type = requireContext().contentResolver.getType(uri)
-
+            setDataAndType(uri, fileMime)
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
 
