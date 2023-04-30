@@ -9,13 +9,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.FileObject
-import kotlinx.coroutines.CoroutineScope
 
 
 class ObjectFileAdapter(private val onFileClickListener: OnObjectFileClickListener) :
     RecyclerView.Adapter<ObjectFileAdapter.FileObjectViewHolder>() {
 
-    var fileList:List<FileObject> = ArrayList<FileObject>()
+    private var fileList: List<FileObject> = ArrayList<FileObject>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileObjectViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -56,7 +55,7 @@ class ObjectFileAdapter(private val onFileClickListener: OnObjectFileClickListen
     }
 
 
-    fun setContent(listFile:List<FileObject>){
+    fun setContent(listFile: List<FileObject>) {
 
         this.fileList = listFile
 

@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
-import com.edimitre.handyapp.data.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

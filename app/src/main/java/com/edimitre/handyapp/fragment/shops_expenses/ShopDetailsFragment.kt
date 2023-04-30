@@ -1,5 +1,6 @@
 package com.edimitre.handyapp.fragment.shops_expenses
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -91,6 +92,7 @@ class ShopDetailsFragment : BottomSheetDialogFragment(), ExpenseAdapter.OnExpens
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun setSpentValueByShopName(shopName: String) {
 
         expenseViewModel.getValueOfExpensesByShopName(shopName)!!
@@ -101,6 +103,7 @@ class ShopDetailsFragment : BottomSheetDialogFragment(), ExpenseAdapter.OnExpens
         setNrOfExpensesByShopName(shopName)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setNrOfExpensesByShopName(shopName: String) {
 
         expenseViewModel.getNrOfExpensesByShopName(shopName)!!.observe(viewLifecycleOwner) {

@@ -6,12 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.work.WorkManager
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.util.SystemService
@@ -58,7 +55,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
     private fun setListeners() {
 
-        binding.backUpSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
+        binding.backUpSwitch.setOnCheckedChangeListener { _, isChecked ->
 
 
             mainViewModel.setBackupEnabled(isChecked)
@@ -72,25 +69,42 @@ class SettingsFragment : BottomSheetDialogFragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                else -> {
+                mainViewModel.isAuthenticated() && isChecked -> {
 
                     lifecycleScope.launch {
 
                         runBlocking {
                             val authModel = mainViewModel.getAuthModel()
-                            authModel!!.isBackupEnabled = isChecked
+                            authModel!!.isBackupEnabled = true
 
                             mainViewModel.saveAuth(authModel)
 
+                            systemService.startBackupWorker()
+                        }
+
+                    }
+
+                }
+                mainViewModel.isAuthenticated() && !isChecked -> {
+
+                    lifecycleScope.launch {
+
+                        runBlocking {
+                            val authModel = mainViewModel.getAuthModel()
+                            authModel!!.isBackupEnabled = false
+
+                            mainViewModel.saveAuth(authModel)
+
+                            systemService.stopBackupWorker()
                         }
 
                     }
 
                 }
             }
-        })
+        }
 
-        binding.darkThemeSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
+        binding.darkThemeSwitch.setOnCheckedChangeListener { _, isChecked ->
 
             mainViewModel.setDarkTheme(isChecked)
 
@@ -103,7 +117,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
                 }
 
             }
-        })
+        }
 
         binding.btnLogin.setOnClickListener {
             mainViewModel.setActiveFragment(SignUpFragment())
@@ -120,7 +134,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        binding.enableNotificationsSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
+        binding.enableNotificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
 
             when {
                 isChecked -> {
@@ -165,7 +179,52 @@ class SettingsFragment : BottomSheetDialogFragment() {
                 }
             }
 
-        })
+        }
+
+        binding.enableWorkNotificationsSwitch.setOnCheckedChangeListener { _, isChecked ->
+
+            when {
+                isChecked -> {
+
+                    Toast.makeText(context, "work notification turned on", Toast.LENGTH_SHORT)
+                        .show()
+
+                    lifecycleScope.launch {
+
+                        runBlocking {
+                            val auth = mainViewModel.getAuthModel()
+                            auth!!.isWorkNotificationEnabled = true
+                            mainViewModel.saveAuth(auth)
+                            systemService.startNotificationWorker()
+                            mainViewModel.setIsWorkNotificationEnabled(true)
+
+                        }
+
+                    }
+                }
+                else -> {
+                    Toast.makeText(context, "expense notification turned off", Toast.LENGTH_SHORT)
+                        .show()
+
+                    lifecycleScope.launch {
+
+                        runBlocking {
+                            val auth = mainViewModel.getAuthModel()
+                            auth!!.isWorkNotificationEnabled = false
+                            mainViewModel.saveAuth(auth)
+                            mainViewModel.setIsWorkNotificationEnabled(false)
+
+                            if (!auth.isNotificationEnabled) {
+                                systemService.stopNotificationWorker()
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+        }
 
         binding.manualBackupRow.setOnClickListener {
             listener.backupDb()
@@ -223,25 +282,30 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
 
         activity?.let {
-            mainViewModel.isBackupSelected.observe(it, Observer { checked ->
+            mainViewModel.isBackupSelected.observe(it) { checked ->
                 binding.backUpSwitch.isChecked = checked
-            })
+            }
         }
 
         activity?.let {
-            mainViewModel.isDarkSelected.observe(it, Observer { check ->
+            mainViewModel.isDarkSelected.observe(it) { check ->
                 binding.darkThemeSwitch.isChecked = check
-            })
+            }
         }
 
         activity?.let {
-            mainViewModel.isNotificationEnabled.observe(it, Observer { check ->
+            mainViewModel.isNotificationEnabled.observe(it) { check ->
                 binding.enableNotificationsSwitch.isChecked = check
-            })
+            }
+        }
+
+        activity?.let {
+            mainViewModel.isWorkNotificationEnabled.observe(it) { check ->
+                binding.enableWorkNotificationsSwitch.isChecked = check
+            }
         }
 
     }
-
 
 
     interface ImportDbListener {

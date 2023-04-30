@@ -51,7 +51,6 @@ class NavigationFragment : Fragment() {
             }
         }
 
-
         binding.newsCard.setOnClickListener {
             activity?.let {
                 it.startActivity(Intent(it, NewsActivity::class.java))

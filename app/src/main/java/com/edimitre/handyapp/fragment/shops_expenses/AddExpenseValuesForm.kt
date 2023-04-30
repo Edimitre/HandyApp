@@ -92,14 +92,14 @@ class AddExpenseValuesForm : BottomSheetDialogFragment() {
         val description =
             binding!!.inputExpenseDescription.text.trim().toString().lowercase(Locale.ROOT)
         val spentValue = binding!!.inputExpenseValue.text.trim().toString()
-        if (description == "") {
+        return if (description == "") {
             binding!!.inputExpenseDescription.error = "description can't be empty"
-            return false
+            false
         } else if (spentValue == "") {
             binding!!.inputExpenseValue.error = "value can't be empty"
-            return false
+            false
         } else {
-            return true
+            true
         }
     }
 

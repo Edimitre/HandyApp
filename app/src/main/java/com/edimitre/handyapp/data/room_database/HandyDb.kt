@@ -11,7 +11,7 @@ import com.edimitre.handyapp.data.model.firebase.AuthModel
 
 
 @Database(
-    entities = [Shop::class, Expense::class, Note::class, Reminder::class, AuthModel::class,News::class,WorkDay::class],
+    entities = [Shop::class, Expense::class, Note::class, Reminder::class, AuthModel::class, News::class, WorkDay::class],
     version = 1,
     exportSchema = false
 )

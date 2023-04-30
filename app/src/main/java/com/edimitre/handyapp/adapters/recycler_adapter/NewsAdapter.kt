@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -50,8 +51,9 @@ class NewsAdapter(private val onNewsClickListener: OnNewsClickListener) :
         private val newsParagraph: TextView = itemView.findViewById(R.id.news_paragraph)
         private val newsSource: TextView = itemView.findViewById(R.id.news_source)
         private val newsLink: TextView = itemView.findViewById(R.id.news_link)
-        private val newsLikeBtn: ImageView = itemView.findViewById(R.id.button_like)
-        private val newsShareBtn: ImageView = itemView.findViewById(R.id.button_share)
+        private val newsLikeBtn: CardView = itemView.findViewById(R.id.button_like)
+        private val likeImage: ImageView = itemView.findViewById(R.id.like_img)
+        private val newsShareBtn: CardView = itemView.findViewById(R.id.button_share_news)
         fun bind(news: News, newsLikeClickListener: OnNewsClickListener) {
             newsTitle.text = news.title
             newsParagraph.text = news.paragraph
@@ -59,7 +61,7 @@ class NewsAdapter(private val onNewsClickListener: OnNewsClickListener) :
             newsLink.text = "link ${news.link}"
 
             if (news.liked) {
-                newsLikeBtn.setImageResource(R.drawable.ic_check_circle)
+                likeImage.setImageResource(R.drawable.ic_check_circle)
             }
 
             newsLikeBtn.setOnClickListener {

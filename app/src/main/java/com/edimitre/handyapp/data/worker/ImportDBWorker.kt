@@ -2,11 +2,12 @@ package com.edimitre.handyapp.data.worker
 
 import android.app.Notification
 import android.content.Context
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
@@ -14,10 +15,7 @@ import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class ImportDBWorker(context: Context, params: WorkerParameters) :
@@ -132,6 +130,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
             delay(1000)
         }
+
 
 
     }

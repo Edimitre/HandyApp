@@ -1,8 +1,6 @@
 package com.edimitre.handyapp.data.scraper
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.edimitre.handyapp.data.model.News
@@ -19,8 +17,6 @@ class JoqScrapper(context: Context, params: WorkerParameters) :
 
     private val ctx = context
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
     override suspend fun doWork(): Result {
 
         withContext(Dispatchers.Default) {
@@ -38,35 +34,35 @@ class JoqScrapper(context: Context, params: WorkerParameters) :
 
 
     suspend fun scrapJetaOshQef() {
-        var html_page: Document? = null
+        var htmlPage: Document? = null
 
 
         // ngarko faqen html si dokument
         try {
-            html_page = Jsoup.connect("https://joq-albania.com/kategori/lajme.html").get()
+            htmlPage = Jsoup.connect("https://joq-albania.com/kategori/lajme.html").get()
         } catch (e: Exception) {
             println("faqja nuk u gjend")
         }
-        assert(html_page != null)
-        val newsSection = html_page!!.getElementsByClass("home-category-post")
+        assert(htmlPage != null)
+        val newsSection = htmlPage!!.getElementsByClass("home-category-post")
         for (li in newsSection.select("a")) {
             val link = "https://joq-albania.com" + li.attr("href")
             populateNewsFromLink(link)
         }
     }
 
-    suspend fun populateNewsFromLink(link: String) {
-        var html_page: Document? = null
+    private suspend fun populateNewsFromLink(link: String) {
+        var htmlPage: Document? = null
 
         // ngarko faqen html si dokument
         try {
-            html_page = Jsoup.connect(link).get()
+            htmlPage = Jsoup.connect(link).get()
         } catch (e: Exception) {
             println("faqja nuk u gjend")
         }
-        assert(html_page != null)
-        val title = html_page!!.select("h1").text()
-        val paragraph = html_page.select("p").text()
+        assert(htmlPage != null)
+        val title = htmlPage!!.select("h1").text()
+        val paragraph = htmlPage.select("p").text()
 
         val news = News(0, "joq.al", link, title, paragraph, false)
 

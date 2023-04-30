@@ -2,14 +2,14 @@ package com.edimitre.handyapp.data.model.firebase
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
+
 
 
 @Entity(tableName = "auth_table")
 data class AuthModel(
 
     @PrimaryKey(autoGenerate = true)
-    var id:Int,
+    var id: Int,
 
     var uid: String,
 
@@ -23,20 +23,8 @@ data class AuthModel(
 
     var isDarkThemeEnabled: Boolean,
 
-    var isNotificationEnabled :Boolean
+    var isNotificationEnabled: Boolean,
 
-) : Serializable {
+    var isWorkNotificationEnabled: Boolean
 
-    constructor() : this(
-        0,
-        "",
-        "",
-        "",
-        true,
-        false,
-        false,
-        false
-    )
-
-
-}
+)

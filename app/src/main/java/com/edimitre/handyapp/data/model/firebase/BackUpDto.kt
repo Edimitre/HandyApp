@@ -2,7 +2,6 @@ package com.edimitre.handyapp.data.model.firebase
 
 import com.edimitre.handyapp.data.model.*
 import java.io.Serializable
-import kotlin.collections.ArrayList
 
 data class BackUpDto(
 
@@ -20,11 +19,14 @@ data class BackUpDto(
 
     var workDaysList:List<WorkDay>,
 
+    var filesAsBytesList:List<FileAsByte>,
+
     var backUpDate: Long
 ) : Serializable {
 
     constructor():this(
         "",
+        ArrayList(),
         ArrayList(),
         ArrayList(),
         ArrayList(),

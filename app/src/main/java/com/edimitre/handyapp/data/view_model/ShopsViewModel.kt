@@ -18,7 +18,7 @@ import javax.inject.Inject
 class ShopsViewModel @Inject constructor(private val shopService: ShopService) :
     ViewModel() {
 
-    val testShop = shopService.getTestShop()
+
 
     fun saveShop(shop: Shop): Job = viewModelScope.launch {
 
@@ -30,10 +30,10 @@ class ShopsViewModel @Inject constructor(private val shopService: ShopService) :
         shopService.deleteShop(shop)
     }
 
-    fun deleteAllShop(): Job = viewModelScope.launch {
-
-        shopService.deleteAllShops()
-    }
+//    fun deleteAllShop(): Job = viewModelScope.launch {
+//
+//        shopService.deleteAllShops()
+//    }
 
     fun getAllShopsPaged(): Flow<PagingData<Shop>> {
 

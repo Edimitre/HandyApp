@@ -1,6 +1,5 @@
 package com.edimitre.handyapp.fragment.news
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,7 +21,6 @@ import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.NewsViewModel
 import com.edimitre.handyapp.databinding.FragmentBotaAlBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -227,22 +225,22 @@ class BotaAlFragment : Fragment(), NewsAdapter.OnNewsClickListener {
     }
 
 
-    private fun isWorkEverScheduledBefore(context: Context, tag: String): Boolean {
-        val instance = WorkManager.getInstance(context)
-        val statuses: ListenableFuture<List<WorkInfo>> = instance.getWorkInfosForUniqueWork(tag)
-        var workScheduled = false
-        statuses.get()?.let {
-            for (workStatus in it) {
-                workScheduled = (
-                        workStatus.state == WorkInfo.State.ENQUEUED
-                                || workStatus.state == WorkInfo.State.RUNNING
-                                || workStatus.state == WorkInfo.State.BLOCKED
-                                || workStatus.state.isFinished // It checks SUCCEEDED, FAILED, CANCELLED already
-                        )
-            }
-        }
-        return workScheduled
-    }
+//    private fun isWorkEverScheduledBefore(context: Context, tag: String): Boolean {
+//        val instance = WorkManager.getInstance(context)
+//        val statuses: ListenableFuture<List<WorkInfo>> = instance.getWorkInfosForUniqueWork(tag)
+//        var workScheduled = false
+//        statuses.get()?.let {
+//            for (workStatus in it) {
+//                workScheduled = (
+//                        workStatus.state == WorkInfo.State.ENQUEUED
+//                                || workStatus.state == WorkInfo.State.RUNNING
+//                                || workStatus.state == WorkInfo.State.BLOCKED
+//                                || workStatus.state.isFinished // It checks SUCCEEDED, FAILED, CANCELLED already
+//                        )
+//            }
+//        }
+//        return workScheduled
+//    }
 
     override fun onLikeClicked(news: News) {
 

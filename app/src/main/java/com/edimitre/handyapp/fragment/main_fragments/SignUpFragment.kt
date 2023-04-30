@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,13 +63,13 @@ class SignUpFragment : Fragment() {
 
 
         activity?.let {
-            mainViewModel.isDoingWork.observe(it, Observer { doingWork ->
+            mainViewModel.isDoingWork.observe(it) { doingWork ->
                 when {
                     doingWork -> {
 
                     }
                 }
-            })
+            }
         }
     }
 

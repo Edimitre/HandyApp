@@ -11,19 +11,21 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
-import androidx.annotation.RequiresApi
+
 import androidx.core.app.NotificationCompat
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.MainActivity
+import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.scraper.BotaAlScrapper
 import com.edimitre.handyapp.data.scraper.JoqScrapper
 import com.edimitre.handyapp.data.scraper.LapsiScrapper
 import com.edimitre.handyapp.data.scraper.SyriScrapper
+import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.worker.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -36,26 +38,24 @@ class SystemService(private val context: Context) {
     lateinit var auth: FirebaseAuth
 
     fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the NotificationChannel
+        // Create the NotificationChannel
 
-            val mChannel = NotificationChannel(
-                HandyAppEnvironment.NOTIFICATION_CHANNEL_ID,
-                HandyAppEnvironment.NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH
-            )
+        val mChannel = NotificationChannel(
+            HandyAppEnvironment.NOTIFICATION_CHANNEL_ID,
+            HandyAppEnvironment.NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH
+        )
 
-            mChannel.description = HandyAppEnvironment.NOTIFICATION_CHANNEL_ID
+        mChannel.description = HandyAppEnvironment.NOTIFICATION_CHANNEL_ID
 
-            mChannel.enableLights(true)
-            mChannel.lightColor = Color.RED
-            mChannel.enableVibration(true)
-            mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
-            // register in system
-            val notificationManager =
-                context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        mChannel.enableLights(true)
+        mChannel.lightColor = Color.RED
+        mChannel.enableVibration(true)
+        mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+        // register in system
+        val notificationManager =
+            context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-            notificationManager.createNotificationChannel(mChannel)
-        }
+        notificationManager.createNotificationChannel(mChannel)
 
     }
 
@@ -64,30 +64,17 @@ class SystemService(private val context: Context) {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ReminderReceiver::class.java)
-        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val pendingIntent =
             PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
-        } else {
-            PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC,
+            alarmTime,
+            pendingIntent
+        )
 
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC,
-                alarmTime,
-                pendingIntent
-            )
-
-        } else {
-            alarmManager.setExact(
-                AlarmManager.RTC,
-                alarmTime,
-                pendingIntent
-            )
-
-        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
+
     fun cancelAllAlarms() {
 
         val i = Intent(context, ReminderReceiver::class.java)
@@ -99,37 +86,34 @@ class SystemService(private val context: Context) {
     }
 
     fun notify(title: String?, message: String?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            val mainActivity = Intent(context, MainActivity::class.java)
+        val mainActivity = Intent(context, MainActivity::class.java)
 
-            @SuppressLint("UnspecifiedImmutableFlag")
-            val pi = PendingIntent.getActivity(
-                context,
-                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
-                mainActivity,
-                FLAG_IMMUTABLE
-            )
+        @SuppressLint("UnspecifiedImmutableFlag")
+        val pi = PendingIntent.getActivity(
+            context,
+            HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+            mainActivity,
+            FLAG_IMMUTABLE
+        )
 
 
-            val mBuilder: NotificationCompat.Builder =
-                NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
+        val mBuilder: NotificationCompat.Builder =
+            NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
 
-            mBuilder.setSmallIcon(R.drawable.ic_reminder)
-            mBuilder.setContentIntent(pi)
-            mBuilder.setContentTitle(title)
-            mBuilder.setContentText(message)
-            mBuilder.priority = NotificationCompat.PRIORITY_HIGH
-            mBuilder.setAutoCancel(true)
+        mBuilder.setSmallIcon(R.drawable.ic_reminder)
+        mBuilder.setContentIntent(pi)
+        mBuilder.setContentTitle(title)
+        mBuilder.setContentText(message)
+        mBuilder.priority = NotificationCompat.PRIORITY_HIGH
+        mBuilder.setAutoCancel(true)
 
-            val notificationManager =
-                context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
-            notificationManager!!.notify(
-                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
-                mBuilder.build()
-            )
-
-        }
+        val notificationManager =
+            context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
+        notificationManager!!.notify(
+            HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+            mBuilder.build()
+        )
 
     }
 
@@ -183,8 +167,8 @@ class SystemService(private val context: Context) {
 
         val createFileWork = OneTimeWorkRequest.Builder(FileWorker::class.java)
             .addTag("file_worker")
-            .build()
 
+            .build()
 
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(createFileWork)
@@ -198,7 +182,15 @@ class SystemService(private val context: Context) {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val data: Data = Data.Builder().putString("backup_data", importData).build()
+        val backUpDto = Gson().fromJson(importData, BackUpDto::class.java)
+
+
+        // because cant serialize files because they are more than 10240 bytes so we save them first and then remove from backup dto
+        val fileService = FileService()
+        fileService.createLocalFiles(backUpDto.filesAsBytesList)
+        backUpDto.filesAsBytesList = emptyList()
+
+        val data: Data = Data.Builder().putString("backup_data", Gson().toJson(backUpDto)).build()
 
         val importWork = OneTimeWorkRequest.Builder(ImportDBWorker::class.java)
             .setConstraints(constraints)
@@ -232,7 +224,7 @@ class SystemService(private val context: Context) {
 
     }
 
-    fun stopNotificationWorker(){
+    fun stopNotificationWorker() {
 
         WorkManager.getInstance(context).cancelAllWorkByTag("notification_worker")
 
@@ -259,7 +251,6 @@ class SystemService(private val context: Context) {
 //        return cal.timeInMillis
 //    }
 //
-
 
 
     fun startScrapBotaAl() {

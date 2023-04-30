@@ -10,12 +10,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.R
-import com.edimitre.handyapp.data.model.Note
 import com.edimitre.handyapp.data.model.WorkDay
 import com.edimitre.handyapp.data.util.TimeUtils
 
 
-class WorkDayAdapter : PagingDataAdapter<WorkDay, WorkDayAdapter.WorkDayViewHolder>(DiffUtilCallback()) {
+class WorkDayAdapter :
+    PagingDataAdapter<WorkDay, WorkDayAdapter.WorkDayViewHolder>(DiffUtilCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkDayViewHolder {
@@ -52,12 +52,12 @@ class WorkDayAdapter : PagingDataAdapter<WorkDay, WorkDayAdapter.WorkDayViewHold
 
 //        private val noteContent: TextView = itemView.findViewById(R.id.note_content_text)
 
-        private val date:TextView = itemView.findViewById(R.id.work_day_date)
+        private val date: TextView = itemView.findViewById(R.id.work_day_date)
 
 
-        private val workHours:TextView = itemView.findViewById(R.id.work_day_hours)
+        private val workHours: TextView = itemView.findViewById(R.id.work_day_hours)
 
-        private val activity:TextView = itemView.findViewById(R.id.work_day_activity)
+        private val activity: TextView = itemView.findViewById(R.id.work_day_activity)
 
         @SuppressLint("SetTextI18n")
         fun bind(workDay: WorkDay) {

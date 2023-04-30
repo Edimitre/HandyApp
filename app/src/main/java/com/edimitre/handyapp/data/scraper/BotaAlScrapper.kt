@@ -1,8 +1,6 @@
 package com.edimitre.handyapp.data.scraper
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.edimitre.handyapp.data.model.News
@@ -21,8 +19,6 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
 
     private val ctx = context
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
     override suspend fun doWork(): Result {
 
         withContext(Dispatchers.Default) {
@@ -39,19 +35,18 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
         return Result.success()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private suspend fun scrapBotaAl() {
-        var html_page: Document? = null
+        var htmlPage: Document? = null
         val linksList = ArrayList<String>()
 
         // ngarko faqen html si dokument
         try {
-            html_page = Jsoup.connect("https://bota.al/").get()
+            htmlPage = Jsoup.connect("https://bota.al/").get()
         } catch (e: Exception) {
             println("faqja nuk u gjend")
         }
-        assert(html_page != null)
-        val newsSection: Elements = html_page!!.getElementsByClass("background-overlay")
+        assert(htmlPage != null)
+        val newsSection: Elements = htmlPage!!.getElementsByClass("background-overlay")
 
 
         for (links in newsSection.select("a")) {
@@ -60,10 +55,7 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
                 linksList.add(link)
             }
         }
-        var links: List<String>? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            links = linksList.stream().distinct().collect(Collectors.toList())
-        }
+        val links: List<String>? = linksList.stream().distinct().collect(Collectors.toList())
         var i = 0
         for (link in links!!) {
             populateNewsFromLink(link)
@@ -75,18 +67,18 @@ class BotaAlScrapper(context: Context, params: WorkerParameters) :
     }
 
     private suspend fun populateNewsFromLink(link: String) {
-        var html_page: Document? = null
+        var htmlPage: Document? = null
 
 
         // ngarko faqen html si dokument
         try {
-            html_page = Jsoup.connect(link).get()
+            htmlPage = Jsoup.connect(link).get()
         } catch (e: Exception) {
             println("faqja nuk u gjend")
         }
-        assert(html_page != null)
-        val title: String = html_page!!.select("h1").text()
-        val paragraph: String = html_page.select("p").text()
+        assert(htmlPage != null)
+        val title: String = htmlPage!!.select("h1").text()
+        val paragraph: String = htmlPage.select("p").text()
 
         val news = News(0, "bota.al", link, title, paragraph, false)
 

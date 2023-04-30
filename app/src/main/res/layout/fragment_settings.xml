@@ -266,12 +266,41 @@
 
     </androidx.cardview.widget.CardView>
 
+    <!--        enable work notification card-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/enable_work_notifications_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enable_notifications_row"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:padding="8dp"
+            android:text="enable workdays notifications"
+            android:textSize="20sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/enable_work_notifications_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+    </androidx.cardview.widget.CardView>
+
     <!--        import db card-->
     <androidx.cardview.widget.CardView
         android:id="@+id/import_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/enable_notifications_row"
+        android:layout_below="@+id/enable_work_notifications_row"
         android:layout_marginTop="8dp"
         android:backgroundTint="?attr/colorPrimaryVariant"
         app:cardCornerRadius="16dp">

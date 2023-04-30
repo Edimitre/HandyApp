@@ -3,7 +3,6 @@ package com.edimitre.handyapp.data.util
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class TimeUtils {
 
@@ -95,25 +94,25 @@ class TimeUtils {
         return cal.timeInMillis
     }
 
-    private fun getNrOfDaysOfActualMonth(): Int {
-        val date = Date()
-        val cal = Calendar.getInstance()
-        cal.time = date
-        return cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-    }
+//    private fun getNrOfDaysOfActualMonth(): Int {
+//        val date = Date()
+//        val cal = Calendar.getInstance()
+//        cal.time = date
+//        return cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+//    }
 
-    fun getNrOfRemainingDaysOfActualMonth(): Int {
-
-        val todayDate = getCurrentDate()
-        val nrOfDays = getNrOfDaysOfActualMonth()
-
-        return nrOfDays - todayDate
-    }
-
-    fun convertMillisToMinutes(millis: Long): Long {
-
-        return TimeUnit.MILLISECONDS.toMinutes(millis)
-    }
+//    fun getNrOfRemainingDaysOfActualMonth(): Int {
+//
+//        val todayDate = getCurrentDate()
+//        val nrOfDays = getNrOfDaysOfActualMonth()
+//
+//        return nrOfDays - todayDate
+//    }
+//
+//    fun convertMillisToMinutes(millis: Long): Long {
+//
+//        return TimeUnit.MILLISECONDS.toMinutes(millis)
+//    }
 
     @SuppressLint("SimpleDateFormat")
     fun getDateStringFromMilliSeconds(dateTimeInMillis: Long): String {
@@ -121,13 +120,13 @@ class TimeUtils {
 //        val cal = Calendar.getInstance()
 //        cal.timeInMillis = dateTimeInMillis
 
-        val formatter = SimpleDateFormat("dd/MM/yyyy");
+        val formatter = SimpleDateFormat("dd/MM/yyyy")
 
         return formatter.format(getDateFromMilliseconds(dateTimeInMillis))
 
     }
 
-    fun getDateFromMilliseconds(millis:Long):Date{
+    private fun getDateFromMilliseconds(millis: Long): Date {
 
         val cal = Calendar.getInstance()
         cal.timeInMillis = millis
@@ -135,10 +134,24 @@ class TimeUtils {
         return cal.time
     }
 
-    fun isFriday():Boolean{
+    fun isFriday(): Boolean {
 
         val cal = Calendar.getInstance()
 
         return cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY
+    }
+
+    fun isSaturdayOrSunday(): Boolean {
+
+        var isNotWorkDay = false
+        val cal = Calendar.getInstance()
+
+        if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            isNotWorkDay = true
+        } else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            isNotWorkDay = true
+        }
+
+        return isNotWorkDay
     }
 }

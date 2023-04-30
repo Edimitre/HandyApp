@@ -10,7 +10,7 @@ import javax.inject.Inject
 class NoteService @Inject constructor(private val noteDao: ReminderNotesDao) {
 
 
-    var allNotes = noteDao.getAllNotesLiveData()
+//    var allNotes = noteDao.getAllNotesLiveData()
 
     suspend fun saveNote(note: Note) {
         noteDao.save(note)

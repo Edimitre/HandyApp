@@ -2,8 +2,6 @@ package com.edimitre.handyapp.data.dao
 
 import androidx.paging.PagingSource
 import androidx.room.*
-import com.edimitre.handyapp.data.model.News
-import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.model.WorkDay
 
 
@@ -24,16 +22,20 @@ interface WorkDayDao {
 //    suspend fun getOneBySource(source: String): News?
 
     @Query("SELECT * FROM workday_table where year =:year")
-    fun getAllWorkDaysPagedByYear(year:Int): PagingSource<Int, WorkDay>?
+    fun getAllWorkDaysPagedByYear(year: Int): PagingSource<Int, WorkDay>?
 
     @Query("SELECT * FROM workday_table where year =:year and month = :month")
-    fun getAllWorkDaysPagedByYearAndMonth(year:Int, month:Int): PagingSource<Int, WorkDay>?
+    fun getAllWorkDaysPagedByYearAndMonth(year: Int, month: Int): PagingSource<Int, WorkDay>?
 
     @Query("SELECT * FROM workday_table")
     suspend fun getAllWorkDaysForBackUp(): List<WorkDay>?
 
     @Query("SELECT * FROM workday_table where year =:year and month = :month")
-    suspend fun getAllWorkDaysForPrinting(year:Int, month:Int): List<WorkDay>?
+    suspend fun getAllWorkDaysByYearMonth(year: Int, month: Int): List<WorkDay>?
+
+    @Query("SELECT * FROM workday_table where year = :year and month = :month and day = :day")
+    suspend fun getWorkDayByYearMonthDay(year: Int, month: Int, day: Int): WorkDay?
+
 
 //    @Query("SELECT * FROM news_table WHERE source = :source and liked = '0'")
 //    fun getNewsBySourcePaged(source: String?): PagingSource<Int, News>?

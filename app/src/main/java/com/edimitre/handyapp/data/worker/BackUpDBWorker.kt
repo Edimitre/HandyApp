@@ -3,21 +3,21 @@ package com.edimitre.handyapp.data.worker
 import android.app.Notification
 import android.content.Context
 import androidx.core.app.NotificationCompat
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.room_database.HandyDb
-import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class BackUpDBWorker(context: Context, params: WorkerParameters) :
@@ -35,11 +35,17 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
 
+        delay(1000)
 
-        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("STARTING BACKUP", 0, true)))
+        setForeground(
+            ForegroundInfo(
+                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                getNotification("STARTING BACKUP", 0, true)
+            )
+        )
         setProgress(workDataOf("isRunning" to true))
 
-        delay(2000)
+        delay(1000)
         val backUpDto = BackUpDto()
 
 
@@ -65,7 +71,12 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
         when {
             auth != null -> {
 
-                setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("DATA GATHERED", 30, true)))
+                setForeground(
+                    ForegroundInfo(
+                        HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                        getNotification("DATA GATHERED", 30, true)
+                    )
+                )
 
                 delay(2000)
                 // set dto uid
@@ -87,6 +98,10 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
                 backUpDto.workDaysList = workDaysList!!
 
+                val fileService = FileService()
+                val filesAsBytesList = fileService.getFilesAsBytesList()
+                backUpDto.filesAsBytesList = filesAsBytesList
+
                 backUpDto.backUpDate = TimeUtils().getTimeInMilliSeconds(
                     TimeUtils().getCurrentYear(),
                     TimeUtils().getCurrentMonth(),
@@ -95,7 +110,12 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
                     TimeUtils().getCurrentMinute()
                 )
 
-                setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("DATA GATHERED", 50, true)))
+                setForeground(
+                    ForegroundInfo(
+                        HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                        getNotification("DATA GATHERED", 50, true)
+                    )
+                )
 
                 delay(2000)
                 val backup = getMapFromDto(backUpDto)
@@ -107,7 +127,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
                         failed = false
                     }
-                    .addOnFailureListener { error ->
+                    .addOnFailureListener {
 
                         failed = true
 
@@ -116,13 +136,23 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
         }
 
 
-        return if(!failed){
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("SUCCESS", 100, false)))
+        return if (!failed) {
+            setForeground(
+                ForegroundInfo(
+                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                    getNotification("SUCCESS", 100, false)
+                )
+            )
             delay(2000)
             setProgress(workDataOf("isRunning" to false))
             Result.success()
-        }else{
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("FAILED", 100, false)))
+        } else {
+            setForeground(
+                ForegroundInfo(
+                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                    getNotification("FAILED", 100, false)
+                )
+            )
             delay(2000)
             setProgress(workDataOf("isRunning" to false))
             Result.failure()
@@ -141,6 +171,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
             "notesList" to Gson().toJson(backUpDto.notesList),
             "likedNewsList" to Gson().toJson(backUpDto.likedNewsList),
             "workDaysList" to Gson().toJson(backUpDto.workDaysList),
+            "filesAsBytesList" to Gson().toJson(backUpDto.filesAsBytesList),
             "backupDate" to backUpDto.backUpDate
         )
 
@@ -148,7 +179,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
     }
 
 
-    private fun getNotification(text:String, progress:Int, onGoing:Boolean): Notification {
+    private fun getNotification(text: String, progress: Int, onGoing: Boolean): Notification {
 
         val maxProgress = 100
 
@@ -165,5 +196,16 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
         return notifBuilder.build()
     }
 
+//    fun testGetFileBytes(){
+//
+//        val fileService = FileService()
+//
+//        val allFilesAsBytes = fileService.getFilesAsBytesList()
+//
+//        allFilesAsBytes.forEach { file ->
+//
+//            Log.e(TAG, "testGetFileBytes:${file.name} / ${Arrays.toString(file.fileBytes)}", )
+//        }
+//    }
 
 }

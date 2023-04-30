@@ -8,9 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.edimitre.handyapp.data.model.WorkDay
-import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.service.WorkDayService
-import com.edimitre.handyapp.data.util.TimeUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +36,7 @@ class WorkDayViewModel @Inject constructor(private val workDayService: WorkDaySe
     }
 
 
-    fun getAllWorkDaysPagedByYear(year:Int): Flow<PagingData<WorkDay>> {
+    fun getAllWorkDaysPagedByYear(year: Int): Flow<PagingData<WorkDay>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -51,7 +49,7 @@ class WorkDayViewModel @Inject constructor(private val workDayService: WorkDaySe
             .cachedIn(viewModelScope)
     }
 
-    fun getAllWorkDaysPagedByYearAndMonth(year:Int,month:Int): Flow<PagingData<WorkDay>> {
+    fun getAllWorkDaysPagedByYearAndMonth(year: Int, month: Int): Flow<PagingData<WorkDay>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
@@ -59,16 +57,20 @@ class WorkDayViewModel @Inject constructor(private val workDayService: WorkDaySe
                 enablePlaceholders = false,
                 initialLoadSize = 20
             ),
-            pagingSourceFactory = { workDayService.getAllWorkDaysPagedByYearAndMonth(year,month)!! })
+            pagingSourceFactory = {
+                workDayService.getAllWorkDaysPagedByYearAndMonth(
+                    year,
+                    month
+                )!!
+            })
             .flow
             .cachedIn(viewModelScope)
     }
 
-    private suspend fun getAllWorkDays(year:Int, month:Int):List<WorkDay>?{
-
-        return workDayService.getAllWorkDaysByYearAndMonth(year, month)
-    }
-
+//    private suspend fun getAllWorkDays(year: Int, month: Int): List<WorkDay>? {
+//
+//        return workDayService.getAllWorkDaysByYearAndMonth(year, month)
+//    }
 
 
 }

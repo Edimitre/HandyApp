@@ -56,8 +56,6 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
         observeActiveFragment()
 
-//        startNotificationWorker()
-
         observeTheme()
 
 
@@ -185,7 +183,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
     override fun backupDb() {
 
-        val uuid:UUID = systemService.startOneTimeBackupWork()
+        val uuid: UUID = systemService.startOneTimeBackupWork()
 
         WorkManager.getInstance(this@MainActivity)
             .getWorkInfoByIdLiveData(uuid).observe(this@MainActivity) {
@@ -219,10 +217,10 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
                             WorkManager.getInstance(this@MainActivity)
                                 .getWorkInfoByIdLiveData(uuid!!).observe(this@MainActivity) {
 
-                                val running = it.progress.getBoolean("isRunning", false)
-                                setLoading(running)
+                                    val running = it.progress.getBoolean("isRunning", false)
+                                    setLoading(running)
 
-                            }
+                                }
 
                         }
                     }

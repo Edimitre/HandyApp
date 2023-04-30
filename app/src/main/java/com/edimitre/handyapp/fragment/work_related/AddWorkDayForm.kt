@@ -5,16 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.edimitre.handyapp.R
-import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.model.WorkDay
 import com.edimitre.handyapp.data.util.TimeUtils
-import com.edimitre.handyapp.databinding.AddReminderFormBinding
 import com.edimitre.handyapp.databinding.AddWorkDayFormBinding
-import com.edimitre.handyapp.fragment.reminder_and_notes.AddReminderForm
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.sql.Time
 
 
 class AddWorkDayForm : BottomSheetDialogFragment() {
@@ -22,13 +16,8 @@ class AddWorkDayForm : BottomSheetDialogFragment() {
 
     private var listener: AddWorkDayListener? = null
 
-    private lateinit var binding:AddWorkDayFormBinding
+    private lateinit var binding: AddWorkDayFormBinding
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +37,7 @@ class AddWorkDayForm : BottomSheetDialogFragment() {
     }
 
 
-    private fun setListeners(){
+    private fun setListeners() {
 
         binding.btnCancel.setOnClickListener {
 
@@ -66,7 +55,7 @@ class AddWorkDayForm : BottomSheetDialogFragment() {
                     val hours = binding.inputHours.text.toString().toInt()
                     val activity = binding.inputActivity.text.toString()
 
-                    listener?.addWorkDay(WorkDay(0,year,month,day,hours,activity))
+                    listener?.addWorkDay(WorkDay(0, year, month, day, hours, activity))
                     dismiss()
                 }
             }
@@ -103,11 +92,8 @@ class AddWorkDayForm : BottomSheetDialogFragment() {
     }
 
 
-
-
-
     interface AddWorkDayListener {
-        fun addWorkDay(workDay:WorkDay)
+        fun addWorkDay(workDay: WorkDay)
     }
 
     override fun onAttach(context: Context) {

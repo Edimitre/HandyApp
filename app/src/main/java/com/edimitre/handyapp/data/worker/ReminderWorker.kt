@@ -6,9 +6,6 @@ import androidx.work.WorkerParameters
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.util.SystemService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class ReminderWorker(context: Context, params: WorkerParameters) :
@@ -20,33 +17,26 @@ class ReminderWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
 
-        withContext(Dispatchers.Default) {
+        val reminderDao = HandyDb.getInstance(ctx).getReminderNotesDao()
 
-            launch {
+        val reminder: Reminder? = reminderDao.getFirstReminderOnCoroutine()
 
-                val reminderDao = HandyDb.getInstance(ctx).getReminderNotesDao()
+        if (reminder != null) {
 
-                val reminder: Reminder? = reminderDao.getFirstReminderOnCoroutine()
+            systemService.notify("Reminding you of : ", reminder.description)
 
-                if (reminder != null) {
+            reminder.isActive = false
 
-                    systemService.notify("Reminding you of : ", reminder.description)
-
-                    reminder.isActive = false
-
-                    reminderDao.saveReminder(reminder)
+            reminderDao.saveReminder(reminder)
 
 
-                    val nextReminder: Reminder? = reminderDao.getFirstReminderOnThread()
+            val nextReminder: Reminder? = reminderDao.getFirstReminderOnThread()
 
-                    if (nextReminder != null) {
-                        systemService.cancelAllAlarms()
+            if (nextReminder != null) {
+                systemService.cancelAllAlarms()
 
-                        systemService.setAlarm(nextReminder.alarmTimeInMillis)
-                    }
-                }
+                systemService.setAlarm(nextReminder.alarmTimeInMillis)
             }
-
         }
 
         return Result.success()

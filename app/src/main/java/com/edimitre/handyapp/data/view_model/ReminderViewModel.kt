@@ -1,13 +1,10 @@
 package com.edimitre.handyapp.data.view_model
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.service.ReminderService
 import com.edimitre.handyapp.data.util.SystemService
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

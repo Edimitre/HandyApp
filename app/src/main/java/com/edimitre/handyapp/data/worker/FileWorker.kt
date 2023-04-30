@@ -4,11 +4,9 @@ import android.app.Notification
 import android.content.Context
 import android.os.Environment
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
-import androidx.work.workDataOf
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.WorkDay
@@ -32,19 +30,36 @@ class FileWorker(context: Context, params: WorkerParameters) :
 
     private lateinit var notifBuilder: NotificationCompat.Builder
 
+    private val storageDirectory =
+        File("${Environment.getExternalStorageDirectory()}/${HandyAppEnvironment.FILES_STORAGE_DIRECTORY}")
+
+
 //    var progress = MutableLiveData<Int>(0)
 
     override suspend fun doWork(): Result {
 
+        return doWorkFromDb()
 
-        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("STARTING",0,true)))
+    }
+
+
+    private suspend fun doWorkFromDb(): Result {
+
+        delay(1000)
+
+        setForeground(
+            ForegroundInfo(
+                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                getNotification("STARTING", 0, true)
+            )
+        )
 
 
         delay(2000)
 
         val workDayDao = HandyDb.getInstance(ctx).getWorkDayDao()
 
-        val workDayList = workDayDao.getAllWorkDaysForPrinting(
+        val workDayList = workDayDao.getAllWorkDaysByYearMonth(
             TimeUtils().getCurrentYear(),
             TimeUtils().getCurrentMonth()
         )
@@ -52,29 +67,48 @@ class FileWorker(context: Context, params: WorkerParameters) :
         val fileName =
             "dt_" + TimeUtils().getCurrentDate() + "_" + TimeUtils().getCurrentMonth() + "_" + TimeUtils().getCurrentYear() + ".xls"
 
-        val storageDirectory =
-            File("${Environment.getExternalStorageDirectory()}/${HandyAppEnvironment.FILES_STORAGE_DIRECTORY}")
 
 
         return if (workDayList != null && workDayList.isNotEmpty() && storageDirectory.exists()) {
 
             val workBook = getXmlSheet(workDayList)
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("SHEET CREATED",30,true)))
+            setForeground(
+                ForegroundInfo(
+                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                    getNotification("SHEET CREATED", 30, true)
+                )
+            )
 
             delay(2000)
             createFile(workBook, storageDirectory, fileName)
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("FILE CREATED",70,true)))
+            setForeground(
+                ForegroundInfo(
+                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                    getNotification("FILE CREATED", 70, true)
+                )
+            )
 
             delay(2000)
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("SUCCESS",100,false)))
+            setForeground(
+                ForegroundInfo(
+                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                    getNotification("SUCCESS", 100, false)
+                )
+            )
             delay(2000)
 
             Result.success()
         } else {
 
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("FAILURE",100,false)))
+            setForeground(
+                ForegroundInfo(
+                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                    getNotification("FAILURE", 100, false)
+                )
+            )
             Result.failure()
         }
+
 
     }
 
@@ -128,8 +162,7 @@ class FileWorker(context: Context, params: WorkerParameters) :
 
     }
 
-
-    private fun getNotification(text:String, progress:Int, onGoing:Boolean): Notification {
+    private fun getNotification(text: String, progress: Int, onGoing: Boolean): Notification {
 
         val maxProgress = 100
 
@@ -145,6 +178,7 @@ class FileWorker(context: Context, params: WorkerParameters) :
 
         return notifBuilder.build()
     }
+
 
 }
 

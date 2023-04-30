@@ -3,7 +3,6 @@ package com.edimitre.handyapp
 import android.app.Application
 import com.edimitre.handyapp.data.dao.*
 import com.edimitre.handyapp.data.room_database.HandyDb
-import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.util.SystemService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -70,7 +69,6 @@ object HandyAppModule {
     fun provideSystemService(context: Application): SystemService {
         return SystemService(context)
     }
-
 
 
     @Singleton

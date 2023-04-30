@@ -16,4 +16,5 @@ object HandyAppEnvironment {
     var NOTIFICATION_CHANNEL_ID = "HandyNotificationChannel"
     var NOTIFICATION_NUMBER_ID = 1
     var FILES_STORAGE_DIRECTORY = "HandyAppWorkStorage"
+
 }

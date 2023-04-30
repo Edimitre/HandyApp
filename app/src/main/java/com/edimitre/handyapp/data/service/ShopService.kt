@@ -25,10 +25,10 @@ class ShopService @Inject constructor(private val shopExpenseDao: ShopExpenseDao
         return shopExpenseDao.getTestShop()
     }
 
-    fun getShopById(id: Long): LiveData<Shop>? {
-
-        return shopExpenseDao.getShopById(id)
-    }
+//    fun getShopById(id: Long): LiveData<Shop>? {
+//
+//        return shopExpenseDao.getShopById(id)
+//    }
 
     fun getAllShops(): PagingSource<Int, Shop>? {
 

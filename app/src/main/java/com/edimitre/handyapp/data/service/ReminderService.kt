@@ -10,7 +10,7 @@ class ReminderService @Inject constructor(private val reminderDao: ReminderNotes
 
     var allReminders = reminderDao.getAllRemindersLiveData()
 
-    var firstReminder = reminderDao.getFirstReminderLiveData()
+//    var firstReminder = reminderDao.getFirstReminderLiveData()
 
 
     suspend fun save(reminder: Reminder) {
@@ -25,8 +25,8 @@ class ReminderService @Inject constructor(private val reminderDao: ReminderNotes
 
     }
 
-    suspend fun getFirstReminderOnCoroutine(): Reminder? {
-        return reminderDao.getFirstReminderOnCoroutine()
-    }
+//    suspend fun getFirstReminderOnCoroutine(): Reminder? {
+//        return reminderDao.getFirstReminderOnCoroutine()
+//    }
 
 }

@@ -1,7 +1,6 @@
 package com.edimitre.handyapp.data.view_model
 
 import android.util.Log
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +10,6 @@ import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.data.dao.AuthDao
 import com.edimitre.handyapp.data.model.firebase.AuthModel
 import com.edimitre.handyapp.fragment.main_fragments.NavigationFragment
-import com.edimitre.handyapp.fragment.main_fragments.SignUpFragment
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -45,8 +43,14 @@ class MainViewModel @Inject constructor(
     val hasConnection: LiveData<Boolean> get() = mutableHasConnection
 
 
-    private val mutableIsNotificationEnabled: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
+    private val mutableIsNotificationEnabled: MutableLiveData<Boolean> =
+        MutableLiveData<Boolean>(false)
     val isNotificationEnabled: LiveData<Boolean> get() = mutableIsNotificationEnabled
+
+
+    private val mutableIsWorkNotificationEnabled: MutableLiveData<Boolean> =
+        MutableLiveData<Boolean>(false)
+    val isWorkNotificationEnabled: LiveData<Boolean> get() = mutableIsWorkNotificationEnabled
 
 
     init {
@@ -66,7 +70,8 @@ class MainViewModel @Inject constructor(
                         false,
                         isBackupEnabled = false,
                         isDarkThemeEnabled = false,
-                        isNotificationEnabled = false
+                        isNotificationEnabled = false,
+                        isWorkNotificationEnabled = false
                     )
                     saveAuth(authModel)
                     setDarkTheme(false)
@@ -76,6 +81,7 @@ class MainViewModel @Inject constructor(
                     setBackupEnabled(authModel.isBackupEnabled)
                     setDarkTheme(authModel.isDarkThemeEnabled)
                     setIsNotificationEnabled(authModel.isNotificationEnabled)
+                    setIsWorkNotificationEnabled(authModel.isWorkNotificationEnabled)
                 }
             }
 
@@ -105,14 +111,19 @@ class MainViewModel @Inject constructor(
         mutableDoingWork.value = doingWork
     }
 
-    fun setIsNotificationEnabled(isEnabled:Boolean){
+    fun setIsNotificationEnabled(isEnabled: Boolean) {
 
         mutableIsNotificationEnabled.value = isEnabled
     }
 
+    fun setIsWorkNotificationEnabled(isEnabled: Boolean) {
+
+        mutableIsWorkNotificationEnabled.value = isEnabled
+    }
+
     fun doLogin(email: String, password: String) {
         setDoingWork(true)
-        
+
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 when {
@@ -157,7 +168,8 @@ class MainViewModel @Inject constructor(
                             isSignedIn = true,
                             isBackupEnabled = false,
                             isDarkThemeEnabled = false,
-                            isNotificationEnabled = false
+                            isNotificationEnabled = false,
+                            isWorkNotificationEnabled = false
 
                         )
 

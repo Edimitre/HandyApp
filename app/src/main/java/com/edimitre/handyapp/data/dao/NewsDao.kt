@@ -3,7 +3,6 @@ package com.edimitre.handyapp.data.dao
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.edimitre.handyapp.data.model.News
-import com.edimitre.handyapp.data.model.Reminder
 
 
 @Dao

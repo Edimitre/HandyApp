@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkManager
+import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.adapters.recycler_adapter.ObjectFileAdapter
 import com.edimitre.handyapp.data.model.FileObject
 import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.FilesViewModel
 import com.edimitre.handyapp.databinding.FragmentFilesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +40,6 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
     lateinit var systemService:SystemService
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,9 +59,9 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private fun setListeners() {
 
-//        if(!TimeUtils().isFriday()){
-//            binding.btnGenerateFile.isEnabled = false
-//        }
+        if(!TimeUtils().isFriday()){
+            binding.btnGenerateFile.isEnabled = false
+        }
         binding.btnGenerateFile.setOnClickListener {
             createXlsFile()
         }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import android.widget.Toast
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.databinding.AddReminderFormBinding
-
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DateFormat
@@ -104,27 +102,25 @@ class AddReminderForm : BottomSheetDialogFragment() {
 
     private fun openDatePicker() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val dateDialog = DatePickerDialog(requireContext())
+        val dateDialog = DatePickerDialog(requireContext())
 
-            val timeNow = System.currentTimeMillis() - 1000
-            dateDialog.datePicker.minDate = timeNow
+        val timeNow = System.currentTimeMillis() - 1000
+        dateDialog.datePicker.minDate = timeNow
 
-            dateDialog.setOnDateSetListener { _, y, m, d ->
-                year = y
-                month = m
-                date = d
-                showSelectedDate(
-                    year!!,
-                    month!!,
-                    date!!,
-                    TimeUtils().getCurrentHour(),
-                    TimeUtils().getCurrentMinute()
-                )
-                openTimePicker()
-            }
-            dateDialog.show()
+        dateDialog.setOnDateSetListener { _, y, m, d ->
+            year = y
+            month = m
+            date = d
+            showSelectedDate(
+                year!!,
+                month!!,
+                date!!,
+                TimeUtils().getCurrentHour(),
+                TimeUtils().getCurrentMinute()
+            )
+            openTimePicker()
         }
+        dateDialog.show()
 
     }
 

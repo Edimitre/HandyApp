@@ -1,7 +1,7 @@
 package com.edimitre.handyapp.fragment.shops_expenses
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -385,33 +385,32 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
 
     private fun openDatePicker() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val dateDialog = DatePickerDialog(requireContext())
+        val dateDialog = DatePickerDialog(requireContext())
 
-            dateDialog.setOnDateSetListener { _, y, m, d ->
+        dateDialog.setOnDateSetListener { _, y, m, d ->
 
-                showBySelectedDate(y, m, d)
-                showCloseButton(true)
-            }
-            dateDialog.show()
+            showBySelectedDate(y, m, d)
+            showCloseButton(true)
         }
+        dateDialog.show()
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setSpentValueByYearMonthDate(year: Int, month: Int, date: Int) {
 
         expenseViewModel.getValueOfExpensesByYearMonthDate(year, month, date)!!
             .observe(viewLifecycleOwner) {
 
-               when {
-                   it != null -> {
-                       binding.spentValueText.text = "Spent value : $it"
-                   }
-                   else -> {
+                when {
+                    it != null -> {
+                        binding.spentValueText.text = "Spent value : $it"
+                    }
+                    else -> {
 
-                       binding.spentValueText.text = "Spent value : 0"
-                   }
-               }
+                        binding.spentValueText.text = "Spent value : 0"
+                    }
+                }
 
 
             }
@@ -419,6 +418,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
         setNrOfExpensesByYearMonthDate(year, month, date)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setNrOfExpensesByYearMonthDate(year: Int, month: Int, date: Int) {
 
         expenseViewModel.getNrOfExpensesByYearMonthDate(year, month, date)!!
@@ -428,6 +428,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setSpentValueByYearMonth(year: Int, month: Int) {
 
         expenseViewModel.getValueOfExpensesbyYearMonth(year, month)!!.observe(viewLifecycleOwner) {
@@ -447,6 +448,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
         setNrOfExpensesByYearMonth(year, month)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setNrOfExpensesByYearMonth(year: Int, month: Int) {
 
         expenseViewModel.getNrOfExpensesByYearMonth(year, month)!!.observe(viewLifecycleOwner) {
@@ -456,6 +458,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun setSpentValueByYear(currentYear: Int) {
 
         expenseViewModel.getValueOfExpensesbyYear(currentYear)!!.observe(viewLifecycleOwner) {
@@ -474,6 +477,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
         setNrOfExpensesByYear(currentYear)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setNrOfExpensesByYear(year: Int) {
 
         expenseViewModel.getNrOfExpensesByYear(year)!!.observe(viewLifecycleOwner) {
@@ -482,6 +486,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setSpentValueByDescription(description: String) {
 
         expenseViewModel.getValueOfExpensesByDescription(description)!!
@@ -492,6 +497,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
         setNrOfExpensesByDescription(description)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setNrOfExpensesByDescription(description: String) {
 
         expenseViewModel.getNrOfExpensesByDescription(description)!!.observe(viewLifecycleOwner) {

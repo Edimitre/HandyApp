@@ -1,7 +1,7 @@
 package com.edimitre.handyapp.data.model
 
 import java.io.File
-import java.io.Serializable
+
 
 data class FileObject(
 
@@ -9,11 +9,4 @@ data class FileObject(
     val actualFile: File?
 
 
-) : Serializable {
-
-    constructor() : this(
-        null,
-        null
-    )
-
-}
+)
