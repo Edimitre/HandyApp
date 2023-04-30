@@ -10,13 +10,12 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.WorkManager
 import com.edimitre.handyapp.adapters.recycler_adapter.ObjectFileAdapter
 import com.edimitre.handyapp.data.model.FileObject
 import com.edimitre.handyapp.data.util.SystemService
-import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.FilesViewModel
 import com.edimitre.handyapp.databinding.FragmentFilesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,18 +31,13 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private lateinit var _fileViewModel: FilesViewModel
 
-    private lateinit var itemTouchHelper: ItemTouchHelper
 
     private lateinit var binding: FragmentFilesBinding
 
     @Inject
     lateinit var systemService:SystemService
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,9 +58,9 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private fun setListeners() {
 
-        if(!TimeUtils().isFriday()){
-            binding.btnGenerateFile.isEnabled = false
-        }
+//        if(!TimeUtils().isFriday()){
+//            binding.btnGenerateFile.isEnabled = false
+//        }
         binding.btnGenerateFile.setOnClickListener {
             createXlsFile()
         }
@@ -80,7 +74,8 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
     private fun initAdapterAndRecyclerView() {
 
 
-        myAdapter = ObjectFileAdapter(_fileViewModel.getAllFiles(), this)
+        myAdapter = ObjectFileAdapter( this)
+        myAdapter.setContent(_fileViewModel.getAllFiles())
 
         val dividerItemDecoration =
             DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
@@ -143,10 +138,19 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private fun createXlsFile(){
 
-        systemService.startCreateFileWorker()
+        val uuid = systemService.startCreateFileWorker()
 
+
+         WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(uuid).observe(viewLifecycleOwner) {
+
+             if (it.state.name === "SUCCEEDED") {
+
+                 val list = _fileViewModel.getAllFiles()
+                 myAdapter.setContent(list)
+                 myAdapter.notifyDataSetChanged()
+             }
+         }
 
     }
-
 
 }

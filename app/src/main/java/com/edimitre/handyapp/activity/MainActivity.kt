@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 
@@ -181,7 +183,22 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
         getBackUpDataFromFirebase()
     }
 
+    override fun backupDb() {
+
+        val uuid:UUID = systemService.startOneTimeBackupWork()
+
+        WorkManager.getInstance(this@MainActivity)
+            .getWorkInfoByIdLiveData(uuid).observe(this@MainActivity) {
+
+                val running = it.progress.getBoolean("isRunning", false)
+                setLoading(running)
+            }
+    }
+
+
     private fun getBackUpDataFromFirebase() {
+
+        var uuid: UUID?
 
         lifecycleScope.launch {
             val authModel = mainViewModel.getAuthModel()
@@ -197,14 +214,38 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
                         }
                         else -> {
                             val response = refDoc.data.toString()
-                            systemService.startImportWorker(response)
+                            uuid = systemService.startImportWorker(response)
+
+                            WorkManager.getInstance(this@MainActivity)
+                                .getWorkInfoByIdLiveData(uuid!!).observe(this@MainActivity) {
+
+                                val running = it.progress.getBoolean("isRunning", false)
+                                setLoading(running)
+
+                            }
+
                         }
                     }
                 }
         }
 
+
     }
 
+    private fun setLoading(value: Boolean) {
+
+        if (value) {
+            binding.progressLayout.visibility = View.VISIBLE
+            binding.fragContainer.visibility = View.INVISIBLE
+
+        } else {
+
+            binding.progressLayout.visibility = View.INVISIBLE
+            binding.fragContainer.visibility = View.VISIBLE
+
+        }
+
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.edimitre.handyapp.adapters.recycler_adapter
 
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,14 +59,15 @@ class WorkDayAdapter : PagingDataAdapter<WorkDay, WorkDayAdapter.WorkDayViewHold
 
         private val activity:TextView = itemView.findViewById(R.id.work_day_activity)
 
+        @SuppressLint("SetTextI18n")
         fun bind(workDay: WorkDay) {
 
             val timeInMilliSeconds =
                 TimeUtils().getTimeInMilliSeconds(workDay.year, workDay.month, workDay.day)
 
-            date.text = TimeUtils().getDateStringFromMilliSeconds(timeInMilliSeconds)
+            date.text = "date ${TimeUtils().getDateStringFromMilliSeconds(timeInMilliSeconds)}"
 
-            workHours.text = workDay.workHours.toString()
+            workHours.text = "hours ${workDay.workHours}"
 
             activity.text = workDay.activity
         }

@@ -12,13 +12,10 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.view.ContentInfoCompat.Flags
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.data.scraper.BotaAlScrapper
@@ -169,7 +166,7 @@ class SystemService(private val context: Context) {
 
     }
 
-    fun startOneTimeBackupWork(){
+    fun startOneTimeBackupWork(): UUID {
 
         val backUpWork = OneTimeWorkRequest.Builder(BackUpDBWorker::class.java)
             .addTag("backup_worker")
@@ -178,9 +175,11 @@ class SystemService(private val context: Context) {
 
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(backUpWork)
+
+        return backUpWork.id
     }
 
-    fun startCreateFileWorker(){
+    fun startCreateFileWorker(): UUID {
 
         val createFileWork = OneTimeWorkRequest.Builder(FileWorker::class.java)
             .addTag("file_worker")
@@ -189,9 +188,11 @@ class SystemService(private val context: Context) {
 
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(createFileWork)
+
+        return createFileWork.id
     }
 
-    fun startImportWorker(importData: String) {
+    fun startImportWorker(importData: String): UUID {
 
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -208,6 +209,7 @@ class SystemService(private val context: Context) {
 
         workManager.enqueue(importWork)
 
+        return importWork.id
     }
 
     fun startNotificationWorker() {
@@ -248,15 +250,15 @@ class SystemService(private val context: Context) {
 
     }
 
-    private fun addOneDayToTimeInMillis(millis: Long): Long {
-
-        val cal = Calendar.getInstance()
-        cal.timeInMillis = millis
-        cal.add(Calendar.DAY_OF_YEAR, 1)
-
-        return cal.timeInMillis
-    }
-
+//    private fun addOneDayToTimeInMillis(millis: Long): Long {
+//
+//        val cal = Calendar.getInstance()
+//        cal.timeInMillis = millis
+//        cal.add(Calendar.DAY_OF_YEAR, 1)
+//
+//        return cal.timeInMillis
+//    }
+//
 
 
 

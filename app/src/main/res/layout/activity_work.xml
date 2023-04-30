@@ -44,6 +44,8 @@
             android:layout_height="?attr/actionBarSize"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/centerLine"
             android:backgroundTint="?attr/colorPrimaryVariant"
@@ -61,6 +63,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@+id/centerLine"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:text="FILES">
@@ -117,7 +121,7 @@
         android:id="@+id/frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+
         android:layout_below="@+id/tab_view"
         android:layout_marginBottom="?attr/actionBarSize">
     </FrameLayout>

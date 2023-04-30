@@ -1,12 +1,10 @@
 package com.edimitre.handyapp.data.worker
 
+import android.app.Notification
 import android.content.Context
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
-import androidx.work.WorkManager
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
@@ -29,21 +27,26 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
     var systemService = SystemService(ctx)
 
-    private var progress = "";
+
+    private lateinit var notifBuilder: NotificationCompat.Builder
 
 
     override suspend fun doWork(): Result {
 
+        delay(2000)
 
         val backUpData = inputData.getString("backup_data")
         val backUpDto = Gson().fromJson(backUpData, BackUpDto::class.java)
+
+        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("BACKUP DATA FOUND", 10, true)))
+        setProgress(workDataOf("isRunning" to true))
+
+        delay(2000)
         importDto(backUpDto)
 
+        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORT FINISHED", 100, false)))
+        setProgress(workDataOf("isRunning" to false))
 
-        setForegroundAsync(createForegroundInfo(progress))
-
-
-        delay(10000)
         return Result.success()
     }
 
@@ -55,76 +58,81 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
         val newsDao = HandyDb.getInstance(ctx).getNewsDao()
         val workDayDao = HandyDb.getInstance(ctx).getWorkDayDao()
 
-        progress = "starting restore";
-
-        Log.e(TAG, "starting restore")
+        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("STARTING IMPORT", 20, true)))
 
         if (backUpDto.shopList.isNotEmpty()) {
 
-            progress = "shops found ...restoring"
             backUpDto.shopList.forEach { shop ->
                 shopDao.saveOrUpdateShop(shop)
-                delay(1000)
+
             }
 
 
+            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED SHOPS", 30, true)))
+
+            delay(1000)
 
         }
         if (backUpDto.expenseList.isNotEmpty()) {
-            progress = "expenses found ...restoring"
             backUpDto.expenseList.forEach { expense ->
                 shopDao.saveOrUpdateExpense(expense)
-                delay(1000)
             }
 
 
+            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED EXPENSES", 40, true)))
+
+            delay(1000)
         }
 
         if (backUpDto.notesList.isNotEmpty()) {
-            progress = "notes found ...restoring"
             backUpDto.notesList.forEach { note ->
                 noteDao.save(note)
-                delay(1000)
             }
 
+            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED NOTES", 50, true)))
+
+            delay(1000)
 
         }
 
         if (backUpDto.reminderList.isNotEmpty()) {
-            progress = "reminders found ...restoring"
             backUpDto.reminderList.forEach { reminder ->
                 noteDao.saveReminder(reminder)
-                delay(1000)
                 activateReminder(reminder)
             }
 
+
+            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED REMINDERS", 60, true)))
+
+            delay(1000)
 
         }
 
 
         if (backUpDto.likedNewsList.isNotEmpty()) {
 
-            progress = "liked news found ...restoring"
             backUpDto.likedNewsList.forEach { news ->
                 newsDao.insert(news)
 
-                delay(1000)
             }
 
+            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED NEWS", 70, true)))
+
+            delay(1000)
         }
 
         if (backUpDto.workDaysList.isNotEmpty()) {
 
-            progress = "workdays found ...restoring"
             backUpDto.workDaysList.forEach { workday ->
                 workDayDao.save(workday)
 
-                delay(1000)
             }
 
+            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED WORKDAYS", 90, true)))
+
+            delay(1000)
         }
 
-        progress = "finished ...restoring"
 
     }
 
@@ -150,27 +158,21 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
     // Creates an instance of ForegroundInfo which can be used to update the
     // ongoing notification.
-    private fun createForegroundInfo(progress: String): ForegroundInfo {
-        val id = HandyAppEnvironment.NOTIFICATION_CHANNEL_ID
-        val title = HandyAppEnvironment.TITLE
-        val cancel = "CANCEL"
-        // This PendingIntent can be used to cancel the worker
-        val intent = WorkManager.getInstance(ctx)
-            .createCancelPendingIntent(getId())
 
+    private fun getNotification(text:String, progress:Int, onGoing:Boolean): Notification {
 
-        val notification = NotificationCompat.Builder(ctx, id)
-            .setContentTitle(title)
-            .setTicker(title)
-            .setContentText(progress)
-            .setSmallIcon(R.drawable.ic_settings)
-            .setOngoing(true)
-            // Add the cancel action to the notification which can
-            // be used to cancel the worker
-            .addAction(android.R.drawable.ic_delete, cancel, intent)
-            .build()
+        val maxProgress = 100
 
-        return ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, notification)
+        notifBuilder =
+            NotificationCompat.Builder(ctx, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_reminder)
+                .setContentTitle(HandyAppEnvironment.TITLE)
+                .setContentText(text)
+                .setOngoing(onGoing)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setProgress(maxProgress, progress, false)
+                .setOnlyAlertOnce(true)
+
+        return notifBuilder.build()
     }
-
 }

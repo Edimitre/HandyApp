@@ -1,216 +1,314 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".fragment.main_fragments.SettingsFragment"
-    android:padding="8dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 
     <RelativeLayout
+        android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="50dp"
+        android:background="?attr/colorPrimaryVariant">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cs_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="?attr/colorPrimaryVariant"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/log_out_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-
-                android:text="logout"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_logout"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/login_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="login/signup"
-                android:textSize="20sp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btn_login"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/btn_login"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_login"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/btn_logout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_logout"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-<!--        auto backup card-->
         <androidx.cardview.widget.CardView
-            android:id="@+id/back_up_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimaryVariant"
-            android:layout_marginTop="8dp"
-            app:cardCornerRadius="16dp"
-            android:layout_below="@id/cs_layout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="auto_backup"
-                android:textSize="20sp"
-                android:layout_gravity="start"
-                android:layout_marginStart="16dp"
-                android:padding="8dp"/>
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/back_up_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-
-        </androidx.cardview.widget.CardView>
-
-
-<!--        enable dark theme card-->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/black_theme_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimaryVariant"
-            android:layout_marginTop="8dp"
-            android:layout_below="@+id/back_up_row"
-            app:cardCornerRadius="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="dark_theme"
-                android:textSize="20sp"
-                android:layout_gravity="start"
-                android:layout_marginStart="16dp"
-                android:padding="8dp"/>
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/dark_theme_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-
-        </androidx.cardview.widget.CardView>
-
-
-<!--        enable notification card-->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/enable_notifications_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimaryVariant"
-            android:layout_marginTop="8dp"
-            android:layout_below="@+id/black_theme_row"
-            app:cardCornerRadius="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="enable expense notifications"
-                android:textSize="20sp"
-                android:layout_gravity="start"
-                android:layout_marginStart="16dp"
-                android:padding="8dp"/>
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/enable_notifications_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-
-        </androidx.cardview.widget.CardView>
-
-<!--        import db card-->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/import_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimaryVariant"
-            android:layout_marginTop="8dp"
-            android:layout_below="@+id/enable_notifications_row"
-            app:cardCornerRadius="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="import db"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:padding="8dp"/>
-
-
-
-        </androidx.cardview.widget.CardView>
-
-
-<!--        backup db card-->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/manual_backup_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimaryVariant"
-            android:layout_marginTop="8dp"
-            android:layout_below="@+id/import_row"
-            app:cardCornerRadius="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="backup db"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-
-                android:padding="8dp"/>
-
-
-
-        </androidx.cardview.widget.CardView>
-
-
-<!--        loading spinner-->
-        <ProgressBar
-            android:id="@+id/loading_spinner"
-            style="?android:attr/progressBarStyle"
+            android:id="@+id/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="invisible" />
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/centerLine"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/login_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_login"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Login"
+                    android:layout_toEndOf="@+id/login_image"
+                    android:layout_centerVertical="true"
+                    android:textSize="18sp"
+                    android:textColor="?attr/colorOnPrimary"
+                    />
+
+
+            </RelativeLayout>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <View
+            android:id="@+id/centerLine"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/centerLine"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/logout_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_login"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Logout"
+                    android:layout_toEndOf="@+id/logout_image"
+                    android:layout_centerVertical="true"
+                    android:textSize="18sp"
+                    android:textColor="?attr/colorOnPrimary"
+                    />
+
+
+            </RelativeLayout>
+
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
 
     </RelativeLayout>
 
 
 
-</androidx.cardview.widget.CardView>
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/cs_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="?attr/colorPrimaryVariant"-->
+<!--        android:padding="8dp">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/log_out_text"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="8dp"-->
+
+<!--            android:text="logout"-->
+<!--            android:textSize="20sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/btn_logout"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/login_text"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:text="login/signup"-->
+<!--            android:textSize="20sp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/btn_login"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/btn_login"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:src="@drawable/ic_login"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/btn_logout"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:src="@drawable/ic_logout"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+    <!--        auto backup card-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/back_up_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="16dp"
+        android:layout_below="@+id/top_layout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:padding="8dp"
+            android:text="auto_backup"
+            android:textSize="20sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/back_up_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <!--        enable dark theme card-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/black_theme_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/back_up_row"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:padding="8dp"
+            android:text="dark_theme"
+            android:textSize="20sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/dark_theme_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <!--        enable notification card-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/enable_notifications_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/black_theme_row"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:padding="8dp"
+            android:text="enable expense notifications"
+            android:textSize="20sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/enable_notifications_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <!--        import db card-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/import_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enable_notifications_row"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:text="import db"
+            android:textSize="20sp" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <!--        backup db card-->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/manual_backup_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/import_row"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:text="backup db"
+
+            android:textSize="20sp" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

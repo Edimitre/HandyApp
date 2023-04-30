@@ -8,8 +8,9 @@
     <RelativeLayout
         android:id="@+id/mini_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimaryVariant">
+        android:layout_height="50dp"
+        android:background="?attr/colorPrimaryVariant"
+        android:layout_alignParentTop="true">
 
         <Button
             android:id="@+id/btn_generate_file"
@@ -20,7 +21,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             tools:ignore="SmallSp" />
     </RelativeLayout>
 
@@ -28,7 +29,6 @@
         android:id="@+id/files_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/mini_toolbar"
-        android:paddingTop="3dp"/>
+        android:layout_below="@+id/mini_toolbar" />
 
 </RelativeLayout>

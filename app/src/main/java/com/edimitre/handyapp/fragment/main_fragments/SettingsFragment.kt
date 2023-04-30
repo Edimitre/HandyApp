@@ -71,8 +71,6 @@ class SettingsFragment : BottomSheetDialogFragment() {
                         "You need to be logged in to use this feature",
                         Toast.LENGTH_SHORT
                     ).show()
-
-                    setBackupWorker(false)
                 }
                 else -> {
 
@@ -83,12 +81,6 @@ class SettingsFragment : BottomSheetDialogFragment() {
                             authModel!!.isBackupEnabled = isChecked
 
                             mainViewModel.saveAuth(authModel)
-
-                            when {
-                                isChecked -> {
-                                    askForImportBackupStart()
-                                }
-                            }
 
                         }
 
@@ -124,7 +116,8 @@ class SettingsFragment : BottomSheetDialogFragment() {
         }
 
         binding.importRow.setOnClickListener {
-            listener.importDb()
+            askForImportBackupStart()
+            dismiss()
         }
 
         binding.enableNotificationsSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
@@ -175,7 +168,8 @@ class SettingsFragment : BottomSheetDialogFragment() {
         })
 
         binding.manualBackupRow.setOnClickListener {
-            systemService.startOneTimeBackupWork()
+            listener.backupDb()
+            dismiss()
         }
     }
 
@@ -194,9 +188,7 @@ class SettingsFragment : BottomSheetDialogFragment() {
         dialog.setPositiveButton("Yes") { dlg, _ ->
 
 
-            listener.importDb().also {
-                setBackupWorker(true)
-            }
+            listener.importDb()
 
             dlg.dismiss()
             dismiss()
@@ -204,7 +196,6 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
         dialog.setNegativeButton("No") { _, _ ->
 
-            setBackupWorker(true)
             dismiss()
         }
 
@@ -215,14 +206,14 @@ class SettingsFragment : BottomSheetDialogFragment() {
     private fun setButtonVisibility() {
 
         if (!mainViewModel.isAuthenticated()) {
-            binding.logOutText.visibility = View.GONE
+//            binding.logOutText.visibility = View.GONE
             binding.btnLogout.visibility = View.GONE
             binding.backUpRow.visibility = View.GONE
             binding.importRow.visibility = View.GONE
             binding.manualBackupRow.visibility = View.GONE
         } else {
             binding.btnLogin.visibility = View.GONE
-            binding.loginText.visibility = View.GONE
+//            binding.loginText.visibility = View.GONE
         }
 
 
@@ -251,40 +242,11 @@ class SettingsFragment : BottomSheetDialogFragment() {
 
     }
 
-    private fun setBackupWorker(active: Boolean) {
-
-        val backupWorkList =
-            WorkManager.getInstance(requireContext()).getWorkInfosByTag("backup_worker").get()
-
-        when (active) {
-            true -> {
-                if (backupWorkList.isNotEmpty()) {
-                    val workInfo = backupWorkList[0]
-                    val status = workInfo.state.name
-                    Log.e(TAG, "status of backup work $status")
-                    if (status != "ENQUEUED") {
-                        systemService.startBackupWorker()
-                    }
-                } else {
-                    systemService.startBackupWorker()
-                }
-            }
-            false -> {
-                if (backupWorkList.isNotEmpty()) {
-                    val workInfo = backupWorkList[0]
-                    val status = workInfo.state.name
-                    if (status == "ENQUEUED") {
-                        systemService.stopBackupWorker()
-                    }
-                }
-            }
-        }
-
-    }
 
 
     interface ImportDbListener {
         fun importDb()
+        fun backupDb()
     }
 
     override fun onAttach(context: Context) {

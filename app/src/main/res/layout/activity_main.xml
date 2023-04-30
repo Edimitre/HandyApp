@@ -34,4 +34,32 @@
         app:layout_constraintEnd_toEndOf="parent">
     </FrameLayout>
 
+
+    <RelativeLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="invisible">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:visibility="visible"
+            android:tooltipText="loading"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Working..please wait"
+            android:textSize="15sp"
+            android:layout_below="@+id/progress_bar"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
 </RelativeLayout>
