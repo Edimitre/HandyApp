@@ -64,10 +64,14 @@
         </activity>
         <activity
             android:name=".activity.WorkActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
         <activity
             android:name=".activity.NewsActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

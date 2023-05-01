@@ -28,9 +28,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReminderNotesActivity : AppCompatActivity(), AddReminderForm.AddReminderListener {
+
+
     @Inject
     lateinit var systemService: SystemService
-
 
     private lateinit var tabs: TabLayout
 
@@ -55,7 +56,6 @@ class ReminderNotesActivity : AppCompatActivity(), AddReminderForm.AddReminderLi
 
         setListeners()
     }
-
 
     private fun loadPageNavigation() {
         // get adapter

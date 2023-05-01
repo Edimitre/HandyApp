@@ -63,6 +63,19 @@ object HandyAppModule {
         return db.getNewsDao()
     }
 
+    @Singleton
+    @Provides
+    fun provideCigarDao(db: HandyDb): CigarDao {
+
+        return db.getCigarDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCigarGameTableDao(db: HandyDb): CigarGameTableDao {
+
+        return db.getCigarGameTableDao()
+    }
 
     @Singleton
     @Provides

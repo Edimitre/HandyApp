@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.smoking_fragment.CigarsFragment"
+    android:background="?attr/colorPrimary">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select time difference"
+            android:textColor="?attr/colorOnPrimary"
+            android:textStyle="bold"
+            android:layout_gravity="center|left"
+            android:textSize="17sp"
+            tools:ignore="RtlHardcoded" />
+
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/time_distance_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            tools:ignore="RtlHardcoded" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>
