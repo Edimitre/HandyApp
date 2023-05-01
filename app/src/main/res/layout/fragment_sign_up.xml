@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.main_fragments.SignUpFragment">
+    tools:context=".fragment.main_fragments.SignUpFragment"
+    android:background="?attr/colorPrimary">
 
 
     <TextView
@@ -67,7 +68,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/input_confirm_password"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:backgroundTint="?attr/colorSecondary"/>
 
 
     <TextView
@@ -79,7 +81,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_sign_up"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:textColor="?attr/colorSecondary"/>
 
 
 

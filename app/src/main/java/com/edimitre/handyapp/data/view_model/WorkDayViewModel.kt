@@ -35,19 +35,19 @@ class WorkDayViewModel @Inject constructor(private val workDayService: WorkDaySe
 
     }
 
-
-    fun getAllWorkDaysPagedByYear(year: Int): Flow<PagingData<WorkDay>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                maxSize = 100,
-                enablePlaceholders = false,
-                initialLoadSize = 20
-            ),
-            pagingSourceFactory = { workDayService.getAllWorkDaysPagedByYear(year)!! })
-            .flow
-            .cachedIn(viewModelScope)
-    }
+//
+//    fun getAllWorkDaysPagedByYear(year: Int): Flow<PagingData<WorkDay>> {
+//        return Pager(
+//            config = PagingConfig(
+//                pageSize = 20,
+//                maxSize = 100,
+//                enablePlaceholders = false,
+//                initialLoadSize = 20
+//            ),
+//            pagingSourceFactory = { workDayService.getAllWorkDaysPagedByYear(year)!! })
+//            .flow
+//            .cachedIn(viewModelScope)
+//    }
 
     fun getAllWorkDaysPagedByYearAndMonth(year: Int, month: Int): Flow<PagingData<WorkDay>> {
         return Pager(

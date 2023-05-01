@@ -2,15 +2,15 @@
     <!-- Base application theme. -->
     <style name="Theme.HandyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/sky_blue</item>
-        <item name="colorPrimaryVariant">@color/open_purple</item>
-        <item name="colorTertiary">#D2C1F1</item>
+        <item name="colorPrimary">@color/alice_blue</item>
+        <item name="colorPrimaryVariant">#F89E52</item>
+
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/open_orange</item>
+        <item name="colorSecondary">#C62828</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" >?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
     </style>
 

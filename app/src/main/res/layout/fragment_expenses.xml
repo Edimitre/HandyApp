@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.shops_expenses.ExpensesFragment"
-    android:padding="8dp">
+
+    android:background="?attr/colorPrimary">
 
 
     <!--TOOLBAR-->
@@ -25,7 +26,8 @@
         android:id="@+id/checkbox_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:background="?attr/colorPrimaryVariant">
 
         <CheckBox
             android:id="@+id/today_check_box"
@@ -34,7 +36,7 @@
             android:text="today"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
+            android:textColor="?attr/colorOnPrimary" />
         <CheckBox
             android:id="@+id/this_month_check_box"
             android:layout_width="wrap_content"
@@ -43,7 +45,7 @@
             app:layout_constraintStart_toEndOf="@+id/today_check_box"
             app:layout_constraintEnd_toStartOf="@+id/this_year_check_box"
             app:layout_constraintTop_toTopOf="parent"
-            />
+            android:textColor="?attr/colorOnPrimary"/>
 
         <CheckBox
             android:id="@+id/this_year_check_box"
@@ -52,7 +54,7 @@
             android:text="this year"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
+            android:textColor="?attr/colorOnPrimary"/>
 
         <TextView
             android:id="@+id/spent_value_text"
@@ -63,18 +65,20 @@
             app:layout_constraintTop_toBottomOf="@+id/today_check_box"
             app:layout_constraintStart_toStartOf="@+id/today_check_box"
             android:textSize="17sp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="16dp"
+            android:textColor="?attr/colorOnPrimary"/>
 
         <TextView
             android:id="@+id/nr_of_expenses_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginEnd="16dp"
             android:text="nr of expenses"
             android:textSize="17sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/this_year_check_box"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textColor="?attr/colorOnPrimary"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

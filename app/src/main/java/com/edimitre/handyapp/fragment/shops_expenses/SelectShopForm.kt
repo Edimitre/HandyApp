@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.edimitre.handyapp.R
@@ -27,7 +27,7 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
 
     private lateinit var myAdapter: ShopAdapter
 
-    private lateinit var _shopViewModel: ShopsViewModel
+    private val _shopViewModel: ShopsViewModel by activityViewModels()
 
     private var binding: SelectShopFormBinding? = null
 
@@ -42,8 +42,6 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initViewModel()
 
         initAdapterAndRecyclerView()
 
@@ -86,11 +84,6 @@ class SelectShopForm : BottomSheetDialogFragment(), ShopAdapter.OnShopClickListe
                 return false
             }
         })
-    }
-
-    private fun initViewModel() {
-        _shopViewModel = ViewModelProvider(this)[ShopsViewModel::class.java]
-
     }
 
     private fun initAdapterAndRecyclerView() {

@@ -7,17 +7,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.activity.WorkActivity
 import com.edimitre.handyapp.data.service.FileService
+import java.io.File
 
-class PermissionUtil(private val activity: AppCompatActivity) {
+class CommonUtil(private val activity: AppCompatActivity) {
 
     fun hasPermission(): Boolean {
 
@@ -116,4 +119,32 @@ class PermissionUtil(private val activity: AppCompatActivity) {
         }
 
 
+    fun shareOnOtherApp(file: File) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+
+            val uri = FileProvider.getUriForFile(activity, activity.packageName + ".provider", file)
+            putExtra(Intent.EXTRA_STREAM, uri)
+            type = activity.contentResolver.getType(uri)
+        }
+
+        activity.startActivity(sendIntent)
+
+    }
+
+
+    fun openOnOtherApp(file: File) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+
+            val myMime: MimeTypeMap = MimeTypeMap.getSingleton()
+            val fileMime = myMime.getMimeTypeFromExtension(file.extension).toString()
+            val uri = FileProvider.getUriForFile(activity, activity.packageName + ".provider", file)
+            setDataAndType(uri, fileMime)
+            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+
+        activity.startActivity(sendIntent)
+
+    }
 }

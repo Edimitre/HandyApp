@@ -17,7 +17,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
 
-
     @Inject
     lateinit var systemService: SystemService
 
@@ -29,9 +28,6 @@ class NewsActivity : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager2
 
-
-//    private val newsViewModel: NewsViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,12 +35,7 @@ class NewsActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
-
-
-
         initFragmentTabs()
-
 
     }
 

@@ -28,7 +28,8 @@
                 android:textStyle="bold"
                 android:textSize="45sp"
                 android:layout_marginTop="8dp"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:textColor="?attr/colorOnPrimary"/>
 
 
 
@@ -41,7 +42,10 @@
                 android:layout_below="@+id/form_banner"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                android:maxLength="1"/>
+                android:maxLength="1"
+                android:textColor="?attr/colorOnPrimary"
+                android:ems="10"
+                android:backgroundTint="?attr/colorPrimary"/>
 
 
 
@@ -50,37 +54,49 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/input_hours"
-                android:padding="8dp"
                 android:inputType="text|textMultiLine"
                 android:hint="work description"
                 android:lines="20"
                 android:minLines="3"
                 android:scrollHorizontally="false"
                 android:scrollbars="vertical"
-                android:layout_marginTop="16dp"/>
-
-
-            <Button
-                android:id="@+id/btn_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="cancel"
-                android:layout_below="@+id/input_activity"
-                android:layout_alignParentStart="true"
-                android:backgroundTint="@color/red"
                 android:layout_marginTop="32dp"
-                android:layout_marginStart="32dp"/>
+                android:background="?attr/colorPrimary"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
 
-            <Button
+
+
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_add_workday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/dark_purple"
-                android:text="save"
+                android:backgroundTint="?attr/colorSecondary"
                 android:layout_below="@+id/input_activity"
-                android:layout_alignParentEnd="true"
                 android:layout_marginTop="32dp"
-                android:layout_marginEnd="32dp"/>
+                android:layout_marginEnd="32dp"
+                android:layout_alignParentEnd="true"
+                android:clickable="true"
+                app:srcCompat="@drawable/ic_check" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="32dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:clickable="true"
+                android:layout_below="@+id/input_activity"
+                android:layout_alignParentStart="true"
+                app:srcCompat="@drawable/ic_close"
+                android:layout_marginBottom="16dp"/>
+
+
 
         </RelativeLayout>
 

@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.WorkManager
-import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.adapters.recycler_adapter.ObjectFileAdapter
 import com.edimitre.handyapp.data.model.FileObject
 import com.edimitre.handyapp.data.util.SystemService
@@ -31,14 +30,12 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private lateinit var myAdapter: ObjectFileAdapter
 
-    private lateinit var _fileViewModel: FilesViewModel
-
+    private val _fileViewModel: FilesViewModel by activityViewModels()
 
     private lateinit var binding: FragmentFilesBinding
 
     @Inject
-    lateinit var systemService:SystemService
-
+    lateinit var systemService: SystemService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +48,7 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
+
         initAdapterAndRecyclerView()
 
         setListeners()
@@ -59,7 +56,7 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private fun setListeners() {
 
-        if(!TimeUtils().isFriday()){
+        if (!TimeUtils().isFriday()) {
             binding.btnGenerateFile.isEnabled = false
         }
         binding.btnGenerateFile.setOnClickListener {
@@ -67,15 +64,11 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
         }
     }
 
-    private fun initViewModel() {
-
-        _fileViewModel = ViewModelProvider(this)[FilesViewModel::class.java]
-    }
 
     private fun initAdapterAndRecyclerView() {
 
 
-        myAdapter = ObjectFileAdapter( this)
+        myAdapter = ObjectFileAdapter(this)
         myAdapter.setContent(_fileViewModel.getAllFiles())
 
         val dividerItemDecoration =
@@ -98,7 +91,9 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
     override fun onFileShareClicked(fileObject: FileObject) {
 
         shareOnOtherApp(fileObject.actualFile!!)
+
     }
+
     override fun onFileOpenClicked(fileObject: FileObject) {
 
         openOnOtherApp(fileObject.actualFile!!)
@@ -108,7 +103,11 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
 
-            val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".provider", file)
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().packageName + ".provider",
+                file
+            )
             putExtra(Intent.EXTRA_STREAM, uri)
             type = requireContext().contentResolver.getType(uri)
         }
@@ -126,7 +125,11 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
             val myMime: MimeTypeMap = MimeTypeMap.getSingleton()
             val fileMime = myMime.getMimeTypeFromExtension(file.extension).toString()
-            val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".provider", file)
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                requireContext().packageName + ".provider",
+                file
+            )
             setDataAndType(uri, fileMime)
             flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
@@ -137,21 +140,31 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     }
 
-    private fun createXlsFile(){
+    private fun createXlsFile() {
+
 
         val uuid = systemService.startCreateFileWorker()
 
+        setLoading(true)
 
-         WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(uuid).observe(viewLifecycleOwner) {
+        WorkManager.getInstance(requireContext()).getWorkInfoByIdLiveData(uuid)
+            .observe(viewLifecycleOwner) {
 
-             if (it.state.name === "SUCCEEDED") {
+                if (it.state.name === "SUCCEEDED") {
 
-                 val list = _fileViewModel.getAllFiles()
-                 myAdapter.setContent(list)
-                 myAdapter.notifyDataSetChanged()
-             }
-         }
+                    val list = _fileViewModel.getAllFiles()
+                    myAdapter.setContent(list)
+                    myAdapter.notifyDataSetChanged()
 
+                    setLoading(false)
+                }
+            }
+
+    }
+
+
+    private fun setLoading(value: Boolean) {
+        _fileViewModel.setIsFilesFragmentRefreshing(value)
     }
 
 }

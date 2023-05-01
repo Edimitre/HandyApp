@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="?attr/colorPrimary">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -17,10 +17,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select shop"
-        android:textColor="?attr/colorOnSecondary"
-        android:textSize="25sp"
+        android:textColor="?attr/colorPrimaryVariant"
+        android:textSize="22sp"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/myToolbar"/>
+        android:layout_below="@+id/myToolbar"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/select_shop_recycler_view"

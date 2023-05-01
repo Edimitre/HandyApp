@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ShopsExpensesActivity">
+    tools:context=".activity.ShopsExpensesActivity"
+    android:background="?attr/colorPrimary">
 
 
     <com.google.android.material.tabs.TabLayout
@@ -57,7 +58,7 @@
             android:contentDescription="TODO"
             app:layout_anchor="@id/bottomAppBar"
             app:srcCompat="@drawable/ic_plus"
-            android:backgroundTint="?attr/colorPrimary"
+            android:backgroundTint="?attr/colorSecondary"
             tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 
 

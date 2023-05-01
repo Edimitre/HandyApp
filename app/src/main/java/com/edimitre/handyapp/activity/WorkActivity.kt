@@ -1,14 +1,17 @@
 package com.edimitre.handyapp.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.WorkDay
-import com.edimitre.handyapp.data.util.PermissionUtil
+import com.edimitre.handyapp.data.util.CommonUtil
 import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.view_model.FilesViewModel
 import com.edimitre.handyapp.data.view_model.WorkDayViewModel
 import com.edimitre.handyapp.databinding.ActivityWorkBinding
 import com.edimitre.handyapp.fragment.work_related.AddWorkDayForm
@@ -25,6 +28,9 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
     private lateinit var _workDayViewModel: WorkDayViewModel
 
+    private val _filesViewModel: FilesViewModel by viewModels()
+
+    private lateinit var commonUtil: CommonUtil
 
     @Inject
     lateinit var systemService: SystemService
@@ -48,11 +54,13 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
         setListeners()
 
-        val permissionUtil = PermissionUtil(this@WorkActivity)
+        observeForLoading()
 
-        if (!permissionUtil.hasPermission()) {
+        commonUtil = CommonUtil(this@WorkActivity)
 
-            permissionUtil.requestStoragePermission()
+        if (!commonUtil.hasPermission()) {
+
+            commonUtil.requestStoragePermission()
 
         }
     }
@@ -61,7 +69,15 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
         _workDayViewModel = ViewModelProvider(this)[WorkDayViewModel::class.java]
 
+    }
 
+
+    private fun observeForLoading(){
+
+        _filesViewModel.isFilesFragmentRefreshing.observe(this){
+
+            setLoading(it)
+        }
     }
 
     private fun setListeners() {
@@ -85,39 +101,21 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
     }
 
+    @SuppressLint("ResourceType")
     private fun setActiveButton(value: String) {
 
         when (value) {
 
             "WORKDAYS" -> {
 
-                binding.btnWorkdaysFragment.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.purple_200
-                    )
-                )
-                binding.btnFilesFragment.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.open_purple
-                    )
-                )
+                binding.btnWorkdaysFragment.cameraDistance = 10F
+
+                binding.btnFilesFragment.cameraDistance = 0F
             }
 
             "FILES" -> {
-                binding.btnWorkdaysFragment.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.open_purple
-                    )
-                )
-                binding.btnFilesFragment.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.purple_200
-                    )
-                )
+                binding.btnWorkdaysFragment.cameraDistance = 0F
+                binding.btnFilesFragment.cameraDistance = 10F
 
             }
         }
@@ -136,24 +134,24 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
         _workDayViewModel.saveWorkDay(workDay)
     }
 
-//    private fun createFolder() {
-//
-//        val folderName = HandyAppEnvironment.FILES_STORAGE_DIRECTORY
-//
-//        val file = File("${Environment.getExternalStorageDirectory()}/$folderName")
-//
-//        var folderCreated = false
-//
-//        if (!file.exists()) {
-//            folderCreated = file.mkdir()
-//        }
-//        if (folderCreated) {
-//            Log.e(TAG, "folder created")
-//        } else {
-//
-//            Log.e(TAG, "folder not created because it exists")
-//        }
-//    }
+
+    private fun setLoading(value: Boolean) {
+
+        if (value) {
+            binding.progressLayout.visibility = View.VISIBLE
+            binding.fragContainer.visibility = View.INVISIBLE
+            binding.coorLayout.visibility = View.INVISIBLE
+
+        } else {
+
+            binding.progressLayout.visibility = View.INVISIBLE
+            binding.fragContainer.visibility = View.VISIBLE
+            binding.coorLayout.visibility = View.VISIBLE
+
+
+        }
+
+    }
 
 
 }

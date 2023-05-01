@@ -1,14 +1,9 @@
 package com.edimitre.handyapp.data.worker
 
-import android.app.Notification
 import android.content.Context
-import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.room_database.HandyDb
@@ -26,23 +21,22 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
     var systemService = SystemService(ctx)
 
 
-    private lateinit var notifBuilder: NotificationCompat.Builder
-
-
     override suspend fun doWork(): Result {
 
+        setProgress(workDataOf("isRunning" to true))
         delay(2000)
 
         val backUpData = inputData.getString("backup_data")
         val backUpDto = Gson().fromJson(backUpData, BackUpDto::class.java)
 
-        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("BACKUP DATA FOUND", 10, true)))
-        setProgress(workDataOf("isRunning" to true))
+        systemService.setNotification("BACKUP DATA FOUND", 10, true)
+
 
         delay(2000)
         importDto(backUpDto)
 
-        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORT FINISHED", 100, false)))
+        systemService.setNotification("IMPORT FINISHED", 100, false)
+
         setProgress(workDataOf("isRunning" to false))
 
         return Result.success()
@@ -56,7 +50,8 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
         val newsDao = HandyDb.getInstance(ctx).getNewsDao()
         val workDayDao = HandyDb.getInstance(ctx).getWorkDayDao()
 
-        setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("STARTING IMPORT", 20, true)))
+        systemService.setNotification("STARTING IMPORT", 20, true)
+
 
         if (backUpDto.shopList.isNotEmpty()) {
 
@@ -66,8 +61,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
             }
 
 
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED SHOPS", 30, true)))
-
+            systemService.setNotification("IMPORTED SHOPS", 30, true)
             delay(1000)
 
         }
@@ -77,7 +71,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
             }
 
 
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED EXPENSES", 40, true)))
+            systemService.setNotification("IMPORTED EXPENSES", 40, true)
 
             delay(1000)
         }
@@ -87,7 +81,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
                 noteDao.save(note)
             }
 
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED NOTES", 50, true)))
+            systemService.setNotification("IMPORTED NOTES", 50, true)
 
             delay(1000)
 
@@ -100,7 +94,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
             }
 
 
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED REMINDERS", 60, true)))
+            systemService.setNotification("IMPORTED REMINDERS", 60, true)
 
             delay(1000)
 
@@ -114,8 +108,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
             }
 
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED NEWS", 70, true)))
-
+            systemService.setNotification("IMPORTED NEWS", 70, true)
             delay(1000)
         }
 
@@ -126,11 +119,10 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
             }
 
-            setForeground(ForegroundInfo(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, getNotification("IMPORTED WORKDAYS", 90, true)))
+            systemService.setNotification("IMPORTED WORKDAYS", 90, true)
 
             delay(1000)
         }
-
 
 
     }
@@ -155,23 +147,4 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
     }
 
-    // Creates an instance of ForegroundInfo which can be used to update the
-    // ongoing notification.
-
-    private fun getNotification(text:String, progress:Int, onGoing:Boolean): Notification {
-
-        val maxProgress = 100
-
-        notifBuilder =
-            NotificationCompat.Builder(ctx, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_reminder)
-                .setContentTitle(HandyAppEnvironment.TITLE)
-                .setContentText(text)
-                .setOngoing(onGoing)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setProgress(maxProgress, progress, false)
-                .setOnlyAlertOnce(true)
-
-        return notifBuilder.build()
-    }
 }

@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.edimitre.handyapp.HandyAppEnvironment
@@ -25,7 +25,7 @@ class ShopDetailsFragment : BottomSheetDialogFragment(), ExpenseAdapter.OnExpens
 
     private lateinit var myAdapter: ExpenseAdapter
 
-    private lateinit var expenseViewModel: ExpenseViewModel
+    private val expenseViewModel: ExpenseViewModel by activityViewModels()
 
     private lateinit var binding: FragmentShopDetailsBinding
 
@@ -48,17 +48,12 @@ class ShopDetailsFragment : BottomSheetDialogFragment(), ExpenseAdapter.OnExpens
     }
 
     private fun initFragment() {
-        initViewModel()
 
         initAdapterAndRecyclerView()
 
         getSelectedShop()
 
         showShopExpenses(shop!!)
-    }
-
-    private fun initViewModel() {
-        expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
     }
 
 

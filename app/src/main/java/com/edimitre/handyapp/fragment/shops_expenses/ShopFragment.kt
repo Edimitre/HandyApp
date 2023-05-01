@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +27,7 @@ class ShopFragment : Fragment(), ShopAdapter.OnShopClickListener {
 
     private lateinit var myAdapter: ShopAdapter
 
-    private lateinit var shopsViewModel: ShopsViewModel
+    private val shopsViewModel: ShopsViewModel by activityViewModels()
 
     private lateinit var binding: FragmentShopBinding
 
@@ -49,7 +49,6 @@ class ShopFragment : Fragment(), ShopAdapter.OnShopClickListener {
     }
 
     private fun initFragment() {
-        initViewModel()
         initToolbar()
         setToolbarItems()
         initAdapterAndRecyclerView()
@@ -57,9 +56,6 @@ class ShopFragment : Fragment(), ShopAdapter.OnShopClickListener {
         enableTouchFunctions()
     }
 
-    private fun initViewModel() {
-        shopsViewModel = ViewModelProvider(this)[ShopsViewModel::class.java]
-    }
 
     private fun initAdapterAndRecyclerView() {
 

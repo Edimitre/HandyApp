@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +32,7 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
 
     private lateinit var myAdapter: ExpenseAdapter
 
-    private lateinit var expenseViewModel: ExpenseViewModel
+    private val expenseViewModel: ExpenseViewModel by activityViewModels()
 
     private lateinit var binding: FragmentExpensesBinding
 
@@ -54,16 +54,11 @@ class ExpensesFragment : Fragment(), ExpenseAdapter.OnExpenseClickListener {
     }
 
     private fun initFragment() {
-        initViewModel()
         initAdapterAndRecyclerView()
         setCheckBoxListener()
         initToolbar()
         showCloseButton(false)
         enableTouchFunctions()
-    }
-
-    private fun initViewModel() {
-        expenseViewModel = ViewModelProvider(this)[ExpenseViewModel::class.java]
     }
 
     private fun setCheckBoxListener() {

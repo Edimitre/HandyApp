@@ -194,7 +194,8 @@
             android:layout_marginStart="16dp"
             android:padding="8dp"
             android:text="auto_backup"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimary"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/back_up_switch"
@@ -224,7 +225,8 @@
             android:layout_marginStart="16dp"
             android:padding="8dp"
             android:text="dark_theme"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimary"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/dark_theme_switch"
@@ -254,7 +256,8 @@
             android:layout_marginStart="16dp"
             android:padding="8dp"
             android:text="enable expense notifications"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimary"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/enable_notifications_switch"
@@ -283,7 +286,8 @@
             android:layout_marginStart="16dp"
             android:padding="8dp"
             android:text="enable workdays notifications"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimary"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/enable_work_notifications_switch"
@@ -311,7 +315,8 @@
             android:layout_gravity="center"
             android:padding="8dp"
             android:text="import db"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimary"/>
 
 
     </androidx.cardview.widget.CardView>
@@ -333,8 +338,8 @@
             android:layout_gravity="center"
             android:padding="8dp"
             android:text="backup db"
-
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="?attr/colorOnPrimary"/>
 
 
     </androidx.cardview.widget.CardView>

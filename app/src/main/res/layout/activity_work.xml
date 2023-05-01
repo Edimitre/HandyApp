@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,17 +8,16 @@
 
     <!--TOOLBAR-->
     <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        app:title="HandyApp"
+        android:background="?attr/colorPrimary"
         android:elevation="12dp"
-        android:background="?attr/colorPrimaryVariant"
         android:minHeight="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-    </com.google.android.material.appbar.MaterialToolbar>
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="HandyApp"></com.google.android.material.appbar.MaterialToolbar>
     <!--TOOLBAR END-->
 
 
@@ -28,29 +26,26 @@
         android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
         android:layout_below="@+id/toolbar"
-        android:background="?attr/colorPrimaryVariant">
+        android:background="?attr/colorPrimary">
 
         <View
             android:id="@+id/centerLine"
-            android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:visibility="invisible"
-            android:layout_centerHorizontal="true" />
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible" />
 
 
         <Button
             android:id="@+id/btn_workdays_fragment"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/centerLine"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:text="WORKDAYS">
-
 
 
         </Button>
@@ -60,74 +55,66 @@
             android:id="@+id/btn_files_fragment"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_toEndOf="@+id/centerLine"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:text="FILES">
-
 
 
         </Button>
 
     </RelativeLayout>
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_below="@+id/tab_view"-->
-<!--        android:layout_marginBottom="?attr/actionBarSize"-->
-<!--        android:padding="8dp">-->
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_below="@+id/tab_view"-->
+    <!--        android:layout_marginBottom="?attr/actionBarSize"-->
+    <!--        android:padding="8dp">-->
 
 
-<!--        <View-->
-<!--            android:id="@+id/centerShim"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:visibility="invisible"-->
-<!--            android:layout_centerVertical="true"/>-->
+    <!--        <View-->
+    <!--            android:id="@+id/centerShim"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:visibility="invisible"-->
+    <!--            android:layout_centerVertical="true"/>-->
 
 
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_workdays_fragment"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_alignParentTop="true"-->
+    <!--            android:text="WORKDAYS"-->
+    <!--            android:layout_alignTop="@+id/centerShim"-->
+    <!--            android:layout_alignBottom="@+id/centerShim"/>-->
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_workdays_fragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            android:text="WORKDAYS"-->
-<!--            android:layout_alignTop="@+id/centerShim"-->
-<!--            android:layout_alignBottom="@+id/centerShim"/>-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btn_files_fragment"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_below="@+id/centerShim"-->
-<!--            android:text="FILES"-->
-<!--            android:layout_alignBottom="@+id/centerShim"/>-->
-
-
-<!--    </RelativeLayout>-->
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_files_fragment"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_below="@+id/centerShim"-->
+    <!--            android:text="FILES"-->
+    <!--            android:layout_alignBottom="@+id/centerShim"/>-->
 
 
-
+    <!--    </RelativeLayout>-->
 
 
     <FrameLayout
         android:id="@+id/frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:layout_below="@+id/tab_view"
-        android:layout_marginBottom="?attr/actionBarSize">
-    </FrameLayout>
+        android:layout_marginBottom="?attr/actionBarSize"></FrameLayout>
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coor_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -143,15 +130,38 @@
             android:id="@+id/btn_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimary"
+            android:backgroundTint="?attr/colorSecondary"
             app:layout_anchor="@id/bottomAppBar"
             app:srcCompat="@drawable/ic_plus" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <RelativeLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="invisible">
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:visibility="visible"
+            android:tooltipText="loading"/>
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Working..please wait"
+            android:textSize="15sp"
+            android:layout_below="@+id/progress_bar"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
 
 </RelativeLayout>

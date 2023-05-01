@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -37,9 +38,9 @@ class ReminderNotesActivity : AppCompatActivity(), AddReminderForm.AddReminderLi
 
     private lateinit var viewPager: ViewPager2
 
-    private lateinit var _reminderViewModel: ReminderViewModel
+    private val _reminderViewModel: ReminderViewModel by viewModels()
 
-    private lateinit var _noteViewModel: NoteViewModel
+    private val _noteViewModel: NoteViewModel by viewModels()
 
     private lateinit var binding: ActivityReminderNotesBinding
 
@@ -50,18 +51,11 @@ class ReminderNotesActivity : AppCompatActivity(), AddReminderForm.AddReminderLi
 
         setContentView(binding.root)
 
-        initViewModel()
-
         loadPageNavigation()
 
         setListeners()
     }
 
-    private fun initViewModel() {
-        _reminderViewModel = ViewModelProvider(this)[ReminderViewModel::class.java]
-        _noteViewModel = ViewModelProvider(this)[NoteViewModel::class.java]
-
-    }
 
     private fun loadPageNavigation() {
         // get adapter

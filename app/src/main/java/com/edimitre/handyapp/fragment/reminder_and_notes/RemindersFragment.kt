@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,7 @@ class RemindersFragment : Fragment(), AddReminderForm.AddReminderListener {
 
     private lateinit var adapter: ReminderAdapter
 
-    private lateinit var _reminderViewModel: ReminderViewModel
+    private val _reminderViewModel: ReminderViewModel by activityViewModels()
 
     private lateinit var binding: FragmentRemindersBinding
 
@@ -42,8 +43,6 @@ class RemindersFragment : Fragment(), AddReminderForm.AddReminderListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
-
         initAdapterAndRecyclerView()
 
         observeProducts()
@@ -51,10 +50,6 @@ class RemindersFragment : Fragment(), AddReminderForm.AddReminderListener {
         enableTouchFunctions()
     }
 
-    private fun initViewModel() {
-
-        _reminderViewModel = ViewModelProvider(this)[ReminderViewModel::class.java]
-    }
 
     private fun initAdapterAndRecyclerView() {
 

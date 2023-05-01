@@ -90,4 +90,5 @@ object HandyAppModule {
         return FirebaseFirestore.getInstance()
 
     }
+
 }

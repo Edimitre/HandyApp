@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,7 +18,6 @@ import com.edimitre.handyapp.adapters.recycler_adapter.NoteAdapter
 import com.edimitre.handyapp.data.model.Note
 import com.edimitre.handyapp.data.view_model.NoteViewModel
 import com.edimitre.handyapp.databinding.FragmentNotesBinding
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,7 +28,7 @@ class NotesFragment : Fragment() {
 
     private lateinit var myAdapter: NoteAdapter
 
-    private lateinit var _noteVieModel: NoteViewModel
+    private val _noteVieModel: NoteViewModel by activityViewModels()
 
     private lateinit var itemTouchHelper: ItemTouchHelper
 
@@ -49,8 +48,6 @@ class NotesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        initViewModel()
-
         initAdapterAndRecyclerView()
 
         initToolbar()
@@ -60,11 +57,6 @@ class NotesFragment : Fragment() {
         enableTouchFunctions()
     }
 
-
-    private fun initViewModel() {
-
-        _noteVieModel = ViewModelProvider(this)[NoteViewModel::class.java]
-    }
 
     private fun initAdapterAndRecyclerView() {
 

@@ -1,14 +1,11 @@
 package com.edimitre.handyapp.data.worker
 
-import android.app.Notification
 import android.content.Context
 import android.os.Environment
-import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.WorkDay
 import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.util.SystemService
@@ -28,13 +25,10 @@ class FileWorker(context: Context, params: WorkerParameters) :
 
     var systemService = SystemService(ctx)
 
-    private lateinit var notifBuilder: NotificationCompat.Builder
 
     private val storageDirectory =
         File("${Environment.getExternalStorageDirectory()}/${HandyAppEnvironment.FILES_STORAGE_DIRECTORY}")
 
-
-//    var progress = MutableLiveData<Int>(0)
 
     override suspend fun doWork(): Result {
 
@@ -45,14 +39,10 @@ class FileWorker(context: Context, params: WorkerParameters) :
 
     private suspend fun doWorkFromDb(): Result {
 
+        setProgress(workDataOf("isRunning" to true))
         delay(1000)
 
-        setForeground(
-            ForegroundInfo(
-                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
-                getNotification("STARTING", 0, true)
-            )
-        )
+        systemService.setNotification("STARTING", 0, true)
 
 
         delay(2000)
@@ -72,40 +62,31 @@ class FileWorker(context: Context, params: WorkerParameters) :
         return if (workDayList != null && workDayList.isNotEmpty() && storageDirectory.exists()) {
 
             val workBook = getXmlSheet(workDayList)
-            setForeground(
-                ForegroundInfo(
-                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
-                    getNotification("SHEET CREATED", 30, true)
-                )
-            )
+
+            systemService.setNotification("SHEET CREATED", 30, true)
 
             delay(2000)
             createFile(workBook, storageDirectory, fileName)
-            setForeground(
-                ForegroundInfo(
-                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
-                    getNotification("FILE CREATED", 70, true)
-                )
-            )
+
+            systemService.setNotification("FILE CREATED", 70, true)
+
 
             delay(2000)
-            setForeground(
-                ForegroundInfo(
-                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
-                    getNotification("SUCCESS", 100, false)
-                )
-            )
+
+            systemService.setNotification("SUCCESS", 100, false)
+
             delay(2000)
 
+            setProgress(workDataOf("isRunning" to false))
             Result.success()
+
+
         } else {
 
-            setForeground(
-                ForegroundInfo(
-                    HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
-                    getNotification("FAILURE", 100, false)
-                )
-            )
+            systemService.setNotification("FAILURE", 100, false)
+
+
+            setProgress(workDataOf("isRunning" to false))
             Result.failure()
         }
 
@@ -160,23 +141,6 @@ class FileWorker(context: Context, params: WorkerParameters) :
         fso.flush()
         fso.close()
 
-    }
-
-    private fun getNotification(text: String, progress: Int, onGoing: Boolean): Notification {
-
-        val maxProgress = 100
-
-        notifBuilder =
-            NotificationCompat.Builder(ctx, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_reminder)
-                .setContentTitle(HandyAppEnvironment.TITLE)
-                .setContentText(text)
-                .setOngoing(onGoing)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setProgress(maxProgress, progress, false)
-                .setOnlyAlertOnce(true)
-
-        return notifBuilder.build()
     }
 
 

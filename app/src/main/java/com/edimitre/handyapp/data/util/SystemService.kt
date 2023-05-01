@@ -2,10 +2,7 @@ package com.edimitre.handyapp.data.util
 
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
@@ -13,6 +10,7 @@ import android.content.Intent
 import android.graphics.Color
 
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
@@ -36,6 +34,8 @@ class SystemService(private val context: Context) {
 
     @Inject
     lateinit var auth: FirebaseAuth
+
+    lateinit var mBuilder: NotificationCompat.Builder
 
     fun createNotificationChannel() {
         // Create the NotificationChannel
@@ -240,6 +240,27 @@ class SystemService(private val context: Context) {
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(reminderWork)
 
+    }
+
+    fun setNotification(text:String, progress:Int, onGoing:Boolean): Notification {
+
+        val maxProgress = 100
+
+        mBuilder =
+            NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_reminder)
+                .setContentTitle(HandyAppEnvironment.TITLE)
+                .setContentText(text)
+                .setOngoing(onGoing)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setProgress(maxProgress, progress, false)
+                .setOnlyAlertOnce(true)
+
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, mBuilder.build())
+        }
+        return mBuilder.build()
     }
 
 //    private fun addOneDayToTimeInMillis(millis: Long): Long {
