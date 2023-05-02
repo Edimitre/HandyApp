@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.adapters.recycler_adapter.CigaretteAdapter
 import com.edimitre.handyapp.data.model.Cigar
+import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.CigaretteViewModel
 import com.edimitre.handyapp.databinding.FragmentCigarsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -35,6 +37,9 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
     private val items = arrayOf("", "30m", "60m", "1h/30m", "2h", "2h/30m", "3h")
 
     lateinit var adapter: ArrayAdapter<String>
+
+    @Inject
+    lateinit var systemService:SystemService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,6 +99,7 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
         binding.btnClearCigars.setOnClickListener {
             _cigarViewModel.deleteAllCigars()
+            systemService.cancelAllCigarAlarms()
             myAdapter.notifyDataSetChanged()
         }
     }

@@ -52,6 +52,8 @@ class CigaretteReminderActivity : AppCompatActivity(){
         setListeners()
 
         observeSelectedMinutes()
+
+        observeCigars()
     }
 
     private fun loadPageNavigation() {
@@ -120,6 +122,18 @@ class CigaretteReminderActivity : AppCompatActivity(){
 
     // todo deactivate add button when there are cigarettes
 
+    private fun observeCigars(){
 
+        _cigarViewModel.allCigars?.observe(this){
+
+            activateAddButton(it)
+        }
+
+    }
+
+    private fun activateAddButton(listCigars:List<Cigar>){
+
+        binding.btnAdd.isEnabled = listCigars.isEmpty()
+    }
 
 }

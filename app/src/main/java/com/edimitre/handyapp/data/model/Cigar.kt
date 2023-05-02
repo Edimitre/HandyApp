@@ -10,7 +10,7 @@ data class Cigar(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
-    val isActive:Boolean,
+    var isActive:Boolean,
 
     val isWin:Boolean,
 

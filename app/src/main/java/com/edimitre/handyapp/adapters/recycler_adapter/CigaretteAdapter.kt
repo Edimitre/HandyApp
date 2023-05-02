@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.Cigar
+import com.edimitre.handyapp.data.util.TimeUtils
 
 
 class CigaretteAdapter(private val onFileClickListener: OnCigarClickListener) :
@@ -33,13 +34,33 @@ class CigaretteAdapter(private val onFileClickListener: OnCigarClickListener) :
         RecyclerView.ViewHolder(itemView) {
 
 
-        private val cigarText: TextView = itemView.findViewById(R.id.cigar_text)
+        private val cigarText: TextView = itemView.findViewById(R.id.cigar_active_text)
 
+        private val cigarAlarmDateText: TextView = itemView.findViewById(R.id.cigar_alarm_text)
+
+        private val isWinText: TextView = itemView.findViewById(R.id.is_win_text)
 
         fun bind(cigar: Cigar, onCigarClickListener: OnCigarClickListener) {
 
-            cigarText.text = cigar.id.toString()
+            if(cigar.isActive){
 
+                cigarText.text = "Active"
+
+            }else{
+                cigarText.text = "Not active"
+
+            }
+
+            cigarAlarmDateText.text = TimeUtils().getHourStringFromDateInMillis(cigar.alarmInMillis).replace("/", ":")
+
+            if(cigar.isWin){
+
+                isWinText.text = "WIN"
+
+            }else{
+                isWinText.text = "LOSE"
+
+            }
         }
     }
 

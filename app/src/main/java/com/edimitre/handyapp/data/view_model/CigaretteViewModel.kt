@@ -1,6 +1,7 @@
 package com.edimitre.handyapp.data.view_model
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,10 +10,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.model.Note
 import com.edimitre.handyapp.data.service.CigaretteService
 import com.edimitre.handyapp.data.service.NoteService
+import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.util.TimeUtils
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -22,7 +26,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class CigaretteViewModel @Inject constructor(private val cigaretteService: CigaretteService) : ViewModel() {
+class CigaretteViewModel @Inject constructor(private val cigaretteService: CigaretteService, private val systemService: SystemService) : ViewModel() {
 
     var allCigars = cigaretteService.allCigars
 
@@ -47,6 +51,16 @@ class CigaretteViewModel @Inject constructor(private val cigaretteService: Cigar
 
 
         cigaretteService.distributeCigars(minutes)
+
+        activateCigarsAlarm()
+
+    }
+
+    private fun activateCigarsAlarm(): Job = viewModelScope.launch {
+
+        val firstCigar = cigaretteService.getFirstCigarByAlarmTimeInMills()
+        Log.e(TAG, "set cigar alarm: ${TimeUtils().getHourStringFromDateInMillis(firstCigar?.alarmInMillis!!)}", )
+        systemService.setCigarAlarm(firstCigar?.alarmInMillis!!)
 
     }
 

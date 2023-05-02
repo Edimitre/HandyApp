@@ -74,10 +74,34 @@ class SystemService(private val context: Context) {
 
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
+    fun setCigarAlarm(alarmTime: Long) {
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, CigarAlarmReceiver::class.java)
+        val pendingIntent =
+            PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC,
+            alarmTime,
+            pendingIntent
+        )
+
+    }
 
     fun cancelAllAlarms() {
 
         val i = Intent(context, ReminderReceiver::class.java)
+
+        @SuppressLint("UnspecifiedImmutableFlag")
+        val pi = PendingIntent.getBroadcast(context, 0, i, FLAG_IMMUTABLE)
+        val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarm.cancel(pi)
+    }
+
+    fun cancelAllCigarAlarms() {
+
+        val i = Intent(context, CigarAlarmReceiver::class.java)
 
         @SuppressLint("UnspecifiedImmutableFlag")
         val pi = PendingIntent.getBroadcast(context, 0, i, FLAG_IMMUTABLE)
@@ -239,6 +263,18 @@ class SystemService(private val context: Context) {
 
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(reminderWork)
+
+    }
+
+    fun startCigarAlarmWorker() {
+
+        val cigarAlarmWork = OneTimeWorkRequest.Builder(CigarAlarmWorker::class.java)
+            .addTag("cigar_alarm_work")
+            .build()
+
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueue(cigarAlarmWork)
 
     }
 

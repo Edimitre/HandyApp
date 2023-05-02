@@ -47,6 +47,10 @@
             android:enabled="true"
             android:exported="false" />
 
+        <receiver
+            android:name=".data.util.CigarAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
         <activity
             android:name=".activity.ReminderNotesActivity"
             android:exported="false" />

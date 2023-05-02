@@ -12,15 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:backgroundTint="?attr/colorPrimaryVariant"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        android:padding="8dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select time difference"
+            android:text="Set time difference"
             android:textColor="?attr/colorOnPrimary"
             android:textStyle="bold"
-            android:layout_gravity="center|left"
+            android:layout_gravity="start"
             android:textSize="17sp"
             tools:ignore="RtlHardcoded" />
 
@@ -29,7 +30,7 @@
             android:id="@+id/time_distance_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="end"
             tools:ignore="RtlHardcoded" />
 
         <Button
@@ -37,8 +38,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="clear all"
-            android:layout_gravity="center|right"
-            android:backgroundTint="?attr/colorPrimaryVariant"/>
+            android:layout_gravity="center|bottom"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_marginTop="20dp"/>
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView

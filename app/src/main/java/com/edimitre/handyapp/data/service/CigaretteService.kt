@@ -39,9 +39,8 @@ class CigaretteService @Inject constructor(private val cigarDao: CigarDao) {
             saveCigar(cigar)
             timeNow += timeToAdd
 
-//            val alarmTime = "${TimeUtils().getDateStringFromMilliSeconds(timeNow)} :: ${TimeUtils().getHourStringFromDateInMillis(timeNow)}"
-
         }
+
 
     }
 
