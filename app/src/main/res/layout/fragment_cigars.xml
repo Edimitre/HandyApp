@@ -8,6 +8,7 @@
     android:background="?attr/colorPrimary">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:backgroundTint="?attr/colorPrimaryVariant"
@@ -28,10 +29,23 @@
             android:id="@+id/time_distance_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
+            android:layout_gravity="center"
             tools:ignore="RtlHardcoded" />
 
+        <Button
+            android:id="@+id/btn_clear_cigars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="clear all"
+            android:layout_gravity="center|right"
+            android:backgroundTint="?attr/colorPrimaryVariant"/>
     </com.google.android.material.card.MaterialCardView>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cigars_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top"
+        android:layout_marginBottom="?attr/actionBarSize"/>
 
 </RelativeLayout>

@@ -3,13 +3,18 @@ package com.edimitre.handyapp.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.tabs_adapter.RemindersAndNotesPagerAdapter
+import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.model.Shop
 import com.edimitre.handyapp.data.util.TimeUtils
+import com.edimitre.handyapp.data.view_model.CigaretteViewModel
+import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.ActivityCigaretteReminderBinding
 import com.edimitre.handyapp.databinding.ActivityReminderNotesBinding
 import com.edimitre.handyapp.fragment.reminder_and_notes.NotesFragment
@@ -21,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.sql.Time
 
 @AndroidEntryPoint
-class CigaretteReminderActivity : AppCompatActivity(),CigarsFragment.TimeDistanceSetListener {
+class CigaretteReminderActivity : AppCompatActivity(){
 
     private lateinit var tabs: TabLayout
 
@@ -31,6 +36,9 @@ class CigaretteReminderActivity : AppCompatActivity(),CigarsFragment.TimeDistanc
 
     private lateinit var binding: ActivityCigaretteReminderBinding
 
+    private val _cigarViewModel: CigaretteViewModel by viewModels()
+
+    var minutes: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +50,8 @@ class CigaretteReminderActivity : AppCompatActivity(),CigarsFragment.TimeDistanc
         loadPageNavigation()
 
         setListeners()
+
+        observeSelectedMinutes()
     }
 
     private fun loadPageNavigation() {
@@ -79,11 +89,26 @@ class CigaretteReminderActivity : AppCompatActivity(),CigarsFragment.TimeDistanc
         )
     }
 
+    private fun observeSelectedMinutes(){
+        _cigarViewModel.timeSelected.observe(this){
+            if(it != 0L){
+                this.minutes = it
+            }
+        }
+    }
+
     private fun setListeners() {
 
         binding.btnAdd.setOnClickListener {
             when (viewPager.currentItem) {
                 0 -> {
+
+                    if(this.minutes != null){
+
+                        _cigarViewModel.distributeCigars(this.minutes!!)
+                    }else{
+                        Toast.makeText(this, "distance time cant be null", Toast.LENGTH_SHORT).show()
+                    }
 
                 }
                 1 -> {
@@ -93,27 +118,8 @@ class CigaretteReminderActivity : AppCompatActivity(),CigarsFragment.TimeDistanc
         }
     }
 
-    override fun onTimeDistanceSet(timeInMillis:Int) {
-
-        distributeCigars(timeInMillis)
-
-    }
-
-    private fun distributeCigars(minutes: Int) {
-
-        // todo get time now
-        var timeNow = TimeUtils().getTimeInMilliSeconds(TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth(),TimeUtils().getCurrentDate())
-        val timeToAdd = timeNow + 60 * 1000 * minutes
-
-        for (i in 0..20){
+    // todo deactivate add button when there are cigarettes
 
 
-            timeNow += timeToAdd
-
-            val date = TimeUtils().getDateStringFromMilliSeconds(timeNow)
-            Log.e(TAG, "distributeCigars: $date", )
-        }
-        // function that ad that time
-    }
 
 }

@@ -3,6 +3,7 @@ package com.edimitre.handyapp.data.util
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class TimeUtils {
 
@@ -94,6 +95,33 @@ class TimeUtils {
         return cal.timeInMillis
     }
 
+    fun getCurrentTimeInMilliSeconds(): Long {
+
+        val cal = Calendar.getInstance()
+
+        cal.set(Calendar.YEAR, getCurrentYear())
+        cal.set(Calendar.MONTH, getCurrentMonth())
+        cal.set(Calendar.DAY_OF_MONTH, getCurrentDate())
+
+        return cal.timeInMillis
+    }
+
+    fun addMinutesToCurrentDate(currentDateInMillis:Long, minutes:Long): Long {
+
+        return currentDateInMillis + TimeUnit.MINUTES.toMillis(minutes)
+    }
+
+    fun getMillisFromMinutes(minutes:Long): Long {
+
+
+        return TimeUnit.MINUTES.toMillis(minutes)
+    }
+
+    fun getMinutesFromMillis(millis:Long): Long {
+
+        return TimeUnit.MILLISECONDS.toMinutes(millis)
+    }
+
 //    private fun getNrOfDaysOfActualMonth(): Int {
 //        val date = Date()
 //        val cal = Calendar.getInstance()
@@ -124,6 +152,15 @@ class TimeUtils {
 
         return formatter.format(getDateFromMilliseconds(dateTimeInMillis))
 
+    }
+
+    fun getHourStringFromDateInMillis(millis:Long):String{
+
+        val cal = Calendar.getInstance()
+        cal.timeInMillis = millis
+
+
+        return "hour ${cal[Calendar.HOUR_OF_DAY]}/${cal[Calendar.MINUTE]}"
     }
 
     private fun getDateFromMilliseconds(millis: Long): Date {
