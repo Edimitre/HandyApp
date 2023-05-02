@@ -8,12 +8,12 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
-
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
+import com.edimitre.handyapp.activity.CigaretteReminderActivity
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.scraper.BotaAlScrapper
@@ -122,9 +122,7 @@ class SystemService(private val context: Context) {
         )
 
 
-        val mBuilder: NotificationCompat.Builder =
-            NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
-
+        mBuilder = NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
         mBuilder.setSmallIcon(R.drawable.ic_reminder)
         mBuilder.setContentIntent(pi)
         mBuilder.setContentTitle(title)
@@ -299,15 +297,47 @@ class SystemService(private val context: Context) {
         return mBuilder.build()
     }
 
-//    private fun addOneDayToTimeInMillis(millis: Long): Long {
-//
-//        val cal = Calendar.getInstance()
-//        cal.timeInMillis = millis
-//        cal.add(Calendar.DAY_OF_YEAR, 1)
-//
-//        return cal.timeInMillis
-//    }
-//
+    fun notifyCigarAlarm(title: String?, message: String?,id:Int) {
+
+        val activityIntent = Intent(context, CigaretteReminderActivity::class.java)
+
+
+        @SuppressLint("UnspecifiedImmutableFlag")
+        val openActivity = PendingIntent.getActivity(context, HandyAppEnvironment.NOTIFICATION_NUMBER_ID, activityIntent, FLAG_IMMUTABLE)
+
+
+        val isWinIntent = Intent(context, NotificationActionReceiver::class.java)
+        isWinIntent.putExtra("IS_WIN",true)
+        isWinIntent.putExtra("CIGAR_ID", id.toString())
+        val isWinClick = PendingIntent.getBroadcast(context, 2, isWinIntent, FLAG_IMMUTABLE)
+
+
+        val isNotWinIntent = Intent(context, NotificationActionReceiver::class.java)
+        isNotWinIntent.putExtra("IS_WIN",false)
+        isNotWinIntent.putExtra("CIGAR_ID", id.toString())
+        val isNotWin = PendingIntent.getBroadcast(context, 3, isNotWinIntent, FLAG_IMMUTABLE)
+
+
+
+
+        mBuilder = NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
+        mBuilder.setSmallIcon(R.drawable.ic_reminder)
+        mBuilder.setContentIntent(openActivity)
+        mBuilder.setContentTitle(title)
+        mBuilder.setContentText(message)
+        mBuilder.priority = NotificationCompat.PRIORITY_DEFAULT
+        mBuilder.setAutoCancel(false)
+        mBuilder.setOnlyAlertOnce(true)
+        mBuilder.addAction(R.drawable.ic_check, "ON TIME", isWinClick)
+        mBuilder.addAction(R.drawable.ic_close,"NOT ON TIME", isNotWin)
+
+
+
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, mBuilder.build())
+        }
+    }
 
 
     fun startScrapBotaAl() {

@@ -84,6 +84,7 @@ object HandyAppModule {
     }
 
 
+
     @Singleton
     @Provides
     fun provideFirebaseProvider(): Firebase {

@@ -14,11 +14,11 @@ data class CigarGameTable(
 
     val month:Int,
 
-    val pointsWon:Int,
+    var pointsWon:Int,
 
-    val pointsLose:Int,
+    var pointsLose:Int,
 
-    val isWinning: Boolean
+    var isWinning: Boolean
 
 
 ): Serializable {

@@ -30,6 +30,8 @@ class CigaretteViewModel @Inject constructor(private val cigaretteService: Cigar
 
     var allCigars = cigaretteService.allCigars
 
+    var gameTable = cigaretteService.gameTable
+
     private val mutableTimeSelected: MutableLiveData<Long> = MutableLiveData<Long>(0L)
     val timeSelected: LiveData<Long> get() = mutableTimeSelected
 
@@ -60,9 +62,17 @@ class CigaretteViewModel @Inject constructor(private val cigaretteService: Cigar
 
         val firstCigar = cigaretteService.getFirstCigarByAlarmTimeInMills()
         Log.e(TAG, "set cigar alarm: ${TimeUtils().getHourStringFromDateInMillis(firstCigar?.alarmInMillis!!)}", )
-        systemService.setCigarAlarm(firstCigar?.alarmInMillis!!)
+        systemService.setCigarAlarm(firstCigar.alarmInMillis)
 
     }
+
+    fun setCigarIsWin(isWin:Boolean,cigarId:String): Job = viewModelScope.launch {
+
+
+        cigaretteService.setCigarWin(isWin,cigarId)
+
+    }
+
 
     fun getFirstCigarByAlarmTimeInMills(): Cigar?{
 

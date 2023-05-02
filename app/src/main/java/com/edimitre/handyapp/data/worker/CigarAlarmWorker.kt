@@ -1,8 +1,10 @@
 package com.edimitre.handyapp.data.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.room_database.HandyDb
@@ -25,15 +27,14 @@ class CigarAlarmWorker(context: Context, params: WorkerParameters) :
 
         if (cigar != null) {
 
-            systemService.notify("cigar alarm of hour  : ",
-                TimeUtils().getHourStringFromDateInMillis(cigar.alarmInMillis).replace("/", ":")
-            )
-
             // todo show a notification with button action to get what happened with that cigar is a win or a lose
 
             cigar.isActive = false
-
             cigarDao.saveCigar(cigar)
+
+            Log.e(TAG, "on cigar worker id cigar ${cigar.id}", )
+
+            systemService.notifyCigarAlarm("cigar alarm : ", TimeUtils().getHourStringFromDateInMillis(cigar.alarmInMillis).replace("/", ":"), cigar.id)
 
 
             val nextCigar: Cigar? = cigarDao.getFirstCigarOnCoroutine()

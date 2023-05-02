@@ -1,6 +1,7 @@
 package com.edimitre.handyapp.adapters.recycler_adapter
 
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ class CigaretteAdapter(private val onFileClickListener: OnCigarClickListener) :
 
         private val isWinText: TextView = itemView.findViewById(R.id.is_win_text)
 
+        @SuppressLint("SetTextI18n")
         fun bind(cigar: Cigar, onCigarClickListener: OnCigarClickListener) {
 
             if(cigar.isActive){
@@ -53,13 +55,14 @@ class CigaretteAdapter(private val onFileClickListener: OnCigarClickListener) :
 
             cigarAlarmDateText.text = TimeUtils().getHourStringFromDateInMillis(cigar.alarmInMillis).replace("/", ":")
 
-            if(cigar.isWin){
+            if (cigar.isWin == null){
+                isWinText.text = "N/A"
+            }else if(cigar.isWin == true){
 
                 isWinText.text = "WIN"
 
             }else{
-                isWinText.text = "LOSE"
-
+                isWinText.text = "LOOSE"
             }
         }
     }

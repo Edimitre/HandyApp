@@ -1,29 +1,22 @@
 package com.edimitre.handyapp.activity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
-import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.tabs_adapter.RemindersAndNotesPagerAdapter
 import com.edimitre.handyapp.data.model.Cigar
-import com.edimitre.handyapp.data.model.Shop
-import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.CigaretteViewModel
-import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.ActivityCigaretteReminderBinding
-import com.edimitre.handyapp.databinding.ActivityReminderNotesBinding
-import com.edimitre.handyapp.fragment.reminder_and_notes.NotesFragment
-import com.edimitre.handyapp.fragment.reminder_and_notes.RemindersFragment
 import com.edimitre.handyapp.fragment.smoking_fragment.CigarsFragment
 import com.edimitre.handyapp.fragment.smoking_fragment.GameTableFragment
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
-import java.sql.Time
 
 @AndroidEntryPoint
 class CigaretteReminderActivity : AppCompatActivity(){
@@ -54,7 +47,44 @@ class CigaretteReminderActivity : AppCompatActivity(){
         observeSelectedMinutes()
 
         observeCigars()
+
+//        checkIfNotificationAction()
     }
+
+//    // if application is starting and receives notification intent
+//    private fun checkIfNotificationAction(){
+//
+//        val bundle:Bundle? = intent?.extras
+//
+//        if(bundle != null){
+//
+//            val isWin = bundle.getBoolean("IS_WIN")
+//            val cigarId = bundle.getString("CIGAR_ID")
+//
+//            Log.e(TAG, "onCreate intent is win: $isWin", )
+//            Log.e(TAG, "on create intent cigarId: $cigarId", )
+//
+////            _cigarViewModel.setCigarIsWin(isWin,cigarId!!)
+//
+////            Toast.makeText(this, "is win $isWin", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//
+//    // if application is open and receives notification intent
+//    override fun onNewIntent(intent: Intent?) {
+//        super.onNewIntent(intent)
+//
+//        val bundle:Bundle? = intent?.extras
+//
+//        if(bundle != null){
+//
+//            val isWin = bundle.getBoolean("IS_WIN")
+//            val cigarId = bundle.getString("CIGAR_ID")
+//            _cigarViewModel.setCigarIsWin(isWin,cigarId!!)
+//
+////            Toast.makeText(this, "is win $isWin", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     private fun loadPageNavigation() {
         // get adapter
@@ -119,8 +149,6 @@ class CigaretteReminderActivity : AppCompatActivity(){
             }
         }
     }
-
-    // todo deactivate add button when there are cigarettes
 
     private fun observeCigars(){
 

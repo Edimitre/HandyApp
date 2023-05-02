@@ -12,7 +12,7 @@ data class Cigar(
 
     var isActive:Boolean,
 
-    val isWin:Boolean,
+    var isWin:Boolean?,
 
     val alarmInMillis: Long
 
@@ -20,7 +20,7 @@ data class Cigar(
     constructor():this(
         0,
         false,
-        false,
+        null,
         0L
     )
 }

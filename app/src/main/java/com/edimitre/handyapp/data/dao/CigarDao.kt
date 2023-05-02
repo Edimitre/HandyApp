@@ -14,6 +14,9 @@ interface CigarDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveCigar(cigar:Cigar)
 
+    @Query("SELECT * FROM cigar_table where id =:id")
+    suspend fun getCigarById(id:Int):Cigar?
+
     @Query("SELECT * FROM cigar_table where isActive like 1 ORDER BY alarmInMillis ASC LIMIT 1")
     fun getFirstCigarAlarmOnThread(): Cigar?
 
