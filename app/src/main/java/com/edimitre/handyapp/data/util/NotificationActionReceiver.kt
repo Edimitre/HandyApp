@@ -30,9 +30,11 @@ class NotificationActionReceiver : BroadcastReceiver() {
         val isWin = bundle?.getBoolean("IS_WIN")
         val cigarId = bundle?.getString("CIGAR_ID")
 
+        val sharedPrefUtil = SharedPrefUtil(context)
         runBlocking {
 
-            val cigar = cigarDao.getCigarById(cigarId!!.toInt())
+            val id = sharedPrefUtil.getCigarId()
+            val cigar = cigarDao.getCigarById(id)
             cigar?.isWin = isWin
 
             cigarDao.saveCigar(cigar!!)

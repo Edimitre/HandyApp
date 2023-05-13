@@ -8,6 +8,7 @@ import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.room_database.HandyDb
+import com.edimitre.handyapp.data.util.SharedPrefUtil
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.util.TimeUtils
 
@@ -19,6 +20,7 @@ class CigarAlarmWorker(context: Context, params: WorkerParameters) :
 
     var systemService = SystemService(ctx)
 
+    var sharedPref = SharedPrefUtil(ctx)
     override suspend fun doWork(): Result {
 
         val cigarDao = HandyDb.getInstance(ctx).getCigarDao()
@@ -34,6 +36,7 @@ class CigarAlarmWorker(context: Context, params: WorkerParameters) :
 
             systemService.notifyCigarAlarm("cigar alarm : ", TimeUtils().getHourStringFromDateInMillis(cigar.alarmInMillis).replace("/", ":"), cigar.id)
 
+            sharedPref.setCigarId(cigar.id)
 
             val nextCigar: Cigar? = cigarDao.getFirstCigarOnCoroutine()
 

@@ -18,7 +18,7 @@ data class CigarGameTable(
 
     var pointsLose:Int,
 
-    var isWinning: Boolean
+    var isWinning: Boolean ?
 
 
 ): Serializable {
@@ -28,6 +28,6 @@ data class CigarGameTable(
         0,
         0,
         0,
-        false
+        null
     )
 }

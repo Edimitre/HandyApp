@@ -23,11 +23,9 @@ class CigaretteService @Inject constructor(private val cigarDao: CigarDao,privat
         cigarDao.deleteAllCigars()
     }
 
-
     suspend fun getFirstCigarByAlarmTimeInMills(): Cigar? {
         return cigarDao.getFirstCigarOnCoroutine()
     }
-
 
     suspend fun distributeCigars(minutes: Long,nrOfCigars:Int) {
 
@@ -56,6 +54,15 @@ class CigaretteService @Inject constructor(private val cigarDao: CigarDao,privat
 
     }
 
+    suspend fun clearGamePoints(){
+
+        val gameTable = cigarGameTableDao.getCigarGameTableByYearAndMonthOnCoroutine(TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth())
+        gameTable?.pointsWon = 0
+        gameTable?.pointsLose = 0
+        gameTable?.isWinning = null
+
+        cigarGameTableDao.saveCigarGameTable(gameTable!!)
+    }
 
 
 }

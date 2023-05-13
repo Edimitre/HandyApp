@@ -76,6 +76,10 @@ class CigaretteViewModel @Inject constructor(private val cigaretteService: Cigar
 
     }
 
+    fun clearGamePoints():Job = viewModelScope.launch{
+
+        cigaretteService.clearGamePoints()
+    }
 
     fun getFirstCigarByAlarmTimeInMills(): Cigar?{
 

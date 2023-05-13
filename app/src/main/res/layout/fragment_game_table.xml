@@ -1,14 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.smoking_fragment.GameTableFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.smoking_fragment.GameTableFragment"
+    android:padding="8dp"
+    android:layout_marginBottom="?attr/actionBarSize">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/options_card"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:layout_alignParentTop="true">
+
+
+        <Button
+            android:id="@+id/btn_clear_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear all"
+            android:layout_gravity="center|right"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"/>
+
+        <TextView
+            android:id="@+id/winning_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Winning"
+            android:textSize="25sp"
+            android:textStyle="bold|italic"
+            android:layout_gravity="center|left"
+            android:layout_marginStart="16dp"
+            android:textColor="?attr/colorOnPrimary"/>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:rowCount="2"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:layout_below="@+id/options_card">
 
-</FrameLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_rowWeight="1"
+            android:layout_gravity="fill_horizontal|fill_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/win_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tile1"
+                android:layout_gravity="center"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnPrimary"/>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layout_rowWeight="1"
+            android:layout_gravity="fill_horizontal|fill_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/lose_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tile1"
+                android:layout_gravity="center"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnPrimary"/>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+
+    </GridLayout>
+
+
+
+
+</RelativeLayout>

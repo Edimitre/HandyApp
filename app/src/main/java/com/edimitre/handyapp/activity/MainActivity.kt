@@ -193,7 +193,6 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
             }
     }
 
-
     private fun getBackUpDataFromFirebase() {
 
         var uuid: UUID?
@@ -244,6 +243,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
         }
 
     }
+
 
 
 }

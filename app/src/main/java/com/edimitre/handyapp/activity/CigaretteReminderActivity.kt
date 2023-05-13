@@ -2,6 +2,7 @@ package com.edimitre.handyapp.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -108,6 +109,12 @@ class CigaretteReminderActivity : AppCompatActivity(){
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
+
+                if(viewPager.currentItem == 0){
+                    binding.btnAdd.visibility = View.VISIBLE
+                }else{
+                    binding.btnAdd.visibility = View.INVISIBLE
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
