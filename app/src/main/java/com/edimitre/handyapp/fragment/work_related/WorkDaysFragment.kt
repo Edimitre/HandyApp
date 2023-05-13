@@ -1,6 +1,7 @@
 package com.edimitre.handyapp.fragment.work_related
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.adapters.recycler_adapter.WorkDayAdapter
 import com.edimitre.handyapp.data.model.WorkDay
 import com.edimitre.handyapp.data.util.TimeUtils
@@ -52,6 +54,8 @@ class WorkDaysFragment : Fragment() {
         showAllWorkDaysByYearAndMonth(TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth())
 
         enableTouchFunctions()
+
+
     }
 
     private fun initAdapterAndRecyclerView() {

@@ -2,13 +2,11 @@ package com.edimitre.handyapp.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.adapters.tabs_adapter.RemindersAndNotesPagerAdapter
 import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.view_model.CigaretteViewModel
@@ -33,6 +31,8 @@ class CigaretteReminderActivity : AppCompatActivity(){
 
     var minutes: Long? = null
 
+    var nrOfCigars:Int ? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,9 +44,12 @@ class CigaretteReminderActivity : AppCompatActivity(){
 
         setListeners()
 
-        observeSelectedMinutes()
+        observeUserSelection()
 
         observeCigars()
+
+
+
 
 //        checkIfNotificationAction()
     }
@@ -71,20 +74,20 @@ class CigaretteReminderActivity : AppCompatActivity(){
 //    }
 //
 //    // if application is open and receives notification intent
-//    override fun onNewIntent(intent: Intent?) {
-//        super.onNewIntent(intent)
-//
-//        val bundle:Bundle? = intent?.extras
-//
-//        if(bundle != null){
-//
-//            val isWin = bundle.getBoolean("IS_WIN")
-//            val cigarId = bundle.getString("CIGAR_ID")
-//            _cigarViewModel.setCigarIsWin(isWin,cigarId!!)
-//
-////            Toast.makeText(this, "is win $isWin", Toast.LENGTH_SHORT).show()
-//        }
-//    }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        val bundle:Bundle? = intent?.extras
+
+        if(bundle != null){
+
+            val isWin = bundle.getBoolean("IS_WIN")
+            val cigarId = bundle.getString("CIGAR_ID")
+            _cigarViewModel.setCigarIsWin(isWin,cigarId!!)
+
+            Toast.makeText(this, "is win $isWin", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun loadPageNavigation() {
         // get adapter
@@ -121,10 +124,17 @@ class CigaretteReminderActivity : AppCompatActivity(){
         )
     }
 
-    private fun observeSelectedMinutes(){
+    private fun observeUserSelection(){
         _cigarViewModel.timeSelected.observe(this){
             if(it != 0L){
                 this.minutes = it
+            }
+        }
+
+        _cigarViewModel.nrOfCigars.observe(this){
+            if(it != 0 ){
+                this.nrOfCigars = it
+
             }
         }
     }
@@ -135,11 +145,21 @@ class CigaretteReminderActivity : AppCompatActivity(){
             when (viewPager.currentItem) {
                 0 -> {
 
-                    if(this.minutes != null){
+                    if(this.minutes != null && this.nrOfCigars != null){
 
-                        _cigarViewModel.distributeCigars(this.minutes!!)
+                        _cigarViewModel.distributeCigars(this.minutes!!, this.nrOfCigars!!)
                     }else{
-                        Toast.makeText(this, "distance time cant be null", Toast.LENGTH_SHORT).show()
+
+                        if(this.minutes == null){
+                            Toast.makeText(this, "distance time cant be empty", Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        if(this.nrOfCigars == null){
+
+                            Toast.makeText(this, "nr of cigars cant be empty", Toast.LENGTH_SHORT).show()
+
+                        }
                     }
 
                 }

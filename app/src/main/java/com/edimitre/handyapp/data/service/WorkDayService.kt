@@ -36,6 +36,12 @@ class WorkDayService @Inject constructor(private val workDayDao: WorkDayDao) {
 
     }
 
+    suspend fun getAllWorkDays(): List<WorkDay>? {
+
+        return workDayDao.getAllWorkDaysForBackUp()
+
+    }
+
 //    suspend fun getWorkDayByYearMonthDay(year: Int, month: Int, day: Int): WorkDay? {
 //
 //        return workDayDao.getWorkDayByYearMonthDay(year, month, day)

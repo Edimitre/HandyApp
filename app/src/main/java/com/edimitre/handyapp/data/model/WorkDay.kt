@@ -10,11 +10,11 @@ data class WorkDay(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
-    val year: Int,
-    val month: Int,
-    val day: Int,
-    val workHours: Int,
-    val activity: String,
+    var year: Int,
+    var month: Int,
+    var day: Int,
+    var workHours: Int,
+    var activity: String,
 
 
     ) : Serializable {

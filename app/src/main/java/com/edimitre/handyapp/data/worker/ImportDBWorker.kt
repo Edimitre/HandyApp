@@ -35,7 +35,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
         delay(2000)
         importDto(backUpDto)
 
-        systemService.setNotification("IMPORT FINISHED", 100, false)
+        systemService.setNotification("IMPORT SUCCESS", 100, false)
 
         setProgress(workDataOf("isRunning" to false))
 

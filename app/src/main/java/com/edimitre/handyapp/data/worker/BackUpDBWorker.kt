@@ -64,7 +64,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
         when {
             auth != null -> {
 
-                systemService.setNotification("DATA GATHERED", 30, true)
+                systemService.setNotification("WORKING...", 30, true)
 
 
                 delay(2000)
@@ -122,14 +122,14 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
         return if (!failed) {
 
-            systemService.setNotification("SUCCESS", 100, false)
+            systemService.setNotification("BACKUP SUCCESS", 100, false)
             delay(2000)
             setProgress(workDataOf("isRunning" to false))
             Result.success()
         } else {
 
 
-            systemService.setNotification("FAILED", 100, false)
+            systemService.setNotification("BACKUP FAILED", 100, false)
 
             delay(2000)
             setProgress(workDataOf("isRunning" to false))

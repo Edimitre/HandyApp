@@ -23,13 +23,11 @@ class WorkDayViewModel @Inject constructor(private val workDayService: WorkDaySe
 
     fun saveWorkDay(workDay: WorkDay): Job = viewModelScope.launch {
 
-
         workDayService.saveWorkDay(workDay)
 
     }
 
     fun deleteWorkDay(workDay: WorkDay): Job = viewModelScope.launch {
-
 
         workDayService.deleteWorkDay(workDay)
 
@@ -67,10 +65,6 @@ class WorkDayViewModel @Inject constructor(private val workDayService: WorkDaySe
             .cachedIn(viewModelScope)
     }
 
-//    private suspend fun getAllWorkDays(year: Int, month: Int): List<WorkDay>? {
-//
-//        return workDayService.getAllWorkDaysByYearAndMonth(year, month)
-//    }
 
 
 }

@@ -27,8 +27,6 @@ class CigarAlarmWorker(context: Context, params: WorkerParameters) :
 
         if (cigar != null) {
 
-            // todo show a notification with button action to get what happened with that cigar is a win or a lose
-
             cigar.isActive = false
             cigarDao.saveCigar(cigar)
 

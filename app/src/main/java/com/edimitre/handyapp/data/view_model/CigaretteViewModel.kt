@@ -35,6 +35,9 @@ class CigaretteViewModel @Inject constructor(private val cigaretteService: Cigar
     private val mutableTimeSelected: MutableLiveData<Long> = MutableLiveData<Long>(0L)
     val timeSelected: LiveData<Long> get() = mutableTimeSelected
 
+    private val mutableNrOfCigarsSelected: MutableLiveData<Int> = MutableLiveData<Int>(0)
+    val nrOfCigars: LiveData<Int> get() = mutableNrOfCigarsSelected
+
     fun saveCigarette(cigar: Cigar): Job = viewModelScope.launch {
 
 
@@ -49,10 +52,10 @@ class CigaretteViewModel @Inject constructor(private val cigaretteService: Cigar
 
     }
 
-    fun distributeCigars(minutes:Long): Job = viewModelScope.launch {
+    fun distributeCigars(minutes:Long,nrOfCigars:Int): Job = viewModelScope.launch {
 
 
-        cigaretteService.distributeCigars(minutes)
+        cigaretteService.distributeCigars(minutes,nrOfCigars)
 
         activateCigarsAlarm()
 
@@ -90,4 +93,9 @@ class CigaretteViewModel @Inject constructor(private val cigaretteService: Cigar
         mutableTimeSelected.value = minutes
     }
 
+    fun setNrOfCigars(nr:Int){
+
+        mutableNrOfCigarsSelected.value = nr
+
+    }
 }

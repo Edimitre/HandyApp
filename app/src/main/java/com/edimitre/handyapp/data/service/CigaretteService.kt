@@ -29,13 +29,13 @@ class CigaretteService @Inject constructor(private val cigarDao: CigarDao,privat
     }
 
 
-    suspend fun distributeCigars(minutes: Long) {
+    suspend fun distributeCigars(minutes: Long,nrOfCigars:Int) {
 
         var timeNow = TimeUtils().getCurrentTimeInMilliSeconds()
 
         val timeToAdd = TimeUtils().getMillisFromMinutes(minutes)
 
-        for (i in 1..20) {
+        for (i in 1..nrOfCigars) {
 
             val cigar = Cigar(i, isActive = true, isWin = null, alarmInMillis = timeNow)
 

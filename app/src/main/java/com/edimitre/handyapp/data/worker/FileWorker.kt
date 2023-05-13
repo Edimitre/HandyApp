@@ -42,7 +42,7 @@ class FileWorker(context: Context, params: WorkerParameters) :
         setProgress(workDataOf("isRunning" to true))
         delay(1000)
 
-        systemService.setNotification("STARTING", 0, true)
+        systemService.setNotification("STARTED", 0, true)
 
 
         delay(2000)
@@ -63,17 +63,17 @@ class FileWorker(context: Context, params: WorkerParameters) :
 
             val workBook = getXmlSheet(workDayList)
 
-            systemService.setNotification("SHEET CREATED", 30, true)
+            systemService.setNotification("WORKING...", 30, true)
 
             delay(2000)
             createFile(workBook, storageDirectory, fileName)
 
-            systemService.setNotification("FILE CREATED", 70, true)
+            systemService.setNotification("CREATING FILE", 70, true)
 
 
             delay(2000)
 
-            systemService.setNotification("SUCCESS", 100, false)
+            systemService.setNotification("FILE CREATED WITH SUCCESS", 100, false)
 
             delay(2000)
 

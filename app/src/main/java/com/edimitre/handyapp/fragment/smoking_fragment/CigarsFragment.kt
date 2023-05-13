@@ -1,6 +1,8 @@
 package com.edimitre.handyapp.fragment.smoking_fragment
 
-import android.R
+
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -32,14 +35,18 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
     private lateinit var binding: FragmentCigarsBinding
 
-    lateinit var dropdown: Spinner
+    private lateinit var dropdown: Spinner
 
     private val items = arrayOf("", "30m", "60m", "1h/30m", "2h", "2h/30m", "3h")
 
     lateinit var adapter: ArrayAdapter<String>
 
+    var minutesSelected: Long? = null
+
+    var numberOfCigars:Int? = null
+
     @Inject
-    lateinit var systemService:SystemService
+    lateinit var systemService: SystemService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,15 +63,20 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
         loadSpinner()
 
+        setView()
+
         showAllCigars()
 
+        showSelectedOptions()
+
         setListeners()
+
     }
 
 
     private fun loadSpinner() {
 
-        adapter = ArrayAdapter(requireActivity(), R.layout.simple_spinner_dropdown_item, items)
+        adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_dropdown_item, items)
         dropdown = binding.timeDistanceSpinner
 
         dropdown.adapter = adapter
@@ -74,7 +86,8 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
     }
 
-    private fun setListeners(){
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setListeners() {
 
         dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -86,8 +99,7 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
                 val millisFromSelection = getMillisFromSelection(items[position])
                 if (millisFromSelection != null) {
-                    val minutesSelected = TimeUtils().getMinutesFromMillis(millisFromSelection)
-                    _cigarViewModel.setSelectedTime(minutesSelected)
+                    minutesSelected = TimeUtils().getMinutesFromMillis(millisFromSelection)
                 }
 
             }
@@ -102,6 +114,20 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
             systemService.cancelAllCigarAlarms()
             myAdapter.notifyDataSetChanged()
         }
+
+        binding.btnSetCigars.setOnClickListener {
+
+            if (areInputsOk()){
+
+                _cigarViewModel.setSelectedTime(minutesSelected!!)
+               numberOfCigars = binding.numberOfCigarsInput.text.toString().toInt()
+                _cigarViewModel.setNrOfCigars(numberOfCigars!!)
+
+            }
+
+
+        }
+
     }
 
     private fun initAdapterAndRecyclerView() {
@@ -119,7 +145,7 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
         }
     }
 
-
+    @SuppressLint("NotifyDataSetChanged")
     private fun showAllCigars() {
 
 
@@ -129,6 +155,70 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
         }
 
 
+    }
+
+    private fun areInputsOk():Boolean{
+        if(binding.numberOfCigarsInput.text.toString().isEmpty()){
+
+            binding.numberOfCigarsInput.error = "you need at least 1 cigar"
+            return false
+        }else if(minutesSelected == 0L){
+
+            val errorText:TextView = binding.timeDistanceSpinner.selectedView as TextView
+            errorText.error = ""
+            errorText.setTextColor(Color.RED) //just to highlight that this is an error
+            errorText.text = "time distance can't be empty" //changes the selected item text to this
+
+            return false
+
+
+        }else{
+
+            return true
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun showSelectedOptions(){
+
+
+        _cigarViewModel.timeSelected.observe(viewLifecycleOwner){
+
+
+            binding.differenceText.text = "time difference : ${TimeUtils().getMinutesFromMillis(it)} min"
+
+
+
+        }
+
+
+        _cigarViewModel.nrOfCigars.observe(viewLifecycleOwner) {
+
+          binding.cgNumberText.text = "number of cigars : $it"
+        }
+
+    }
+    private fun setView() {
+
+        _cigarViewModel.nrOfCigars.observe(viewLifecycleOwner){
+
+
+
+        }
+
+
+        _cigarViewModel.allCigars!!.observe(viewLifecycleOwner) {
+
+            if (it.isEmpty()){
+                binding.top.visibility = View.VISIBLE
+                binding.clearCard.visibility = View.INVISIBLE
+            }else{
+                binding.top.visibility = View.INVISIBLE
+                binding.clearCard.visibility = View.VISIBLE
+
+            }
+
+        }
     }
 
     private fun getMillisFromSelection(selection: String): Long? {
@@ -158,7 +248,6 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
             }
         }
     }
-
 
     override fun onCigarClicked(cigar: Cigar) {
         TODO("Not yet implemented")

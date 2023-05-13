@@ -6,11 +6,11 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.WorkDay
 import com.edimitre.handyapp.data.util.CommonUtil
 import com.edimitre.handyapp.data.util.SystemService
+import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.FilesViewModel
 import com.edimitre.handyapp.data.view_model.WorkDayViewModel
 import com.edimitre.handyapp.databinding.ActivityWorkBinding
@@ -26,7 +26,7 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
     lateinit var binding: ActivityWorkBinding
 
-    private lateinit var _workDayViewModel: WorkDayViewModel
+    private val _workDayViewModel: WorkDayViewModel by viewModels()
 
     private val _filesViewModel: FilesViewModel by viewModels()
 
@@ -46,7 +46,6 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
         binding = ActivityWorkBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initViewModel()
 
         displayFragment(WorkDaysFragment())
 
@@ -63,13 +62,11 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
             commonUtil.requestStoragePermission()
 
         }
-    }
 
-    private fun initViewModel() {
 
-        _workDayViewModel = ViewModelProvider(this)[WorkDayViewModel::class.java]
 
     }
+
 
 
     private fun observeForLoading(){

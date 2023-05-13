@@ -10,44 +10,127 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/top"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:backgroundTint="?attr/colorPrimaryVariant"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
         app:cardCornerRadius="8dp"
         android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Set time difference"
-            android:textColor="?attr/colorOnPrimary"
-            android:textStyle="bold"
-            android:layout_gravity="start"
-            android:textSize="17sp"
-            tools:ignore="RtlHardcoded" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/difference_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set time difference"
+                android:textColor="?attr/colorOnPrimary"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:textSize="17sp"
+                tools:ignore="RtlHardcoded" />
 
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/time_distance_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            tools:ignore="RtlHardcoded" />
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/time_distance_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/difference_text"
+                android:layout_centerHorizontal="true"
+                tools:ignore="RtlHardcoded" />
 
-        <Button
-            android:id="@+id/btn_clear_cigars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="clear all"
-            android:layout_gravity="center|bottom"
-            android:backgroundTint="?attr/colorPrimaryVariant"
-            android:layout_marginTop="20dp"/>
+            <EditText
+                android:id="@+id/number_of_cigars_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="2"
+                android:hint="number of cigars"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/time_distance_spinner"
+                android:layout_marginTop="8dp"/>
+
+
+            <Button
+                android:id="@+id/btn_set_cigars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="set"
+                android:backgroundTint="?attr/colorPrimaryVariant"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/number_of_cigars_input"
+                android:layout_centerHorizontal="true"/>
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/clear_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="8dp"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="time difference : 15 min"
+                android:textStyle="italic"
+                android:layout_centerHorizontal="true"
+                android:textColor="?attr/colorOnPrimary"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/cg_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="nr of cigars : 15 min"
+                android:textStyle="italic"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/time_text"
+                android:textColor="?attr/colorOnPrimary"
+                android:layout_marginTop="8dp"/>
+
+
+            <Button
+                android:id="@+id/btn_clear_cigars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="clear all"
+                android:backgroundTint="?attr/colorPrimaryVariant"
+                android:layout_marginTop="8dp"
+                android:layout_below="@+id/cg_number_text"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cigars_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/top"
+        android:layout_below="@+id/clear_card"
         android:layout_marginBottom="?attr/actionBarSize"/>
 
 </RelativeLayout>

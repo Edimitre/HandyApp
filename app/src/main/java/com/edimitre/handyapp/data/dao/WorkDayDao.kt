@@ -21,16 +21,16 @@ interface WorkDayDao {
 //    @Query("SELECT * FROM news_table where source = :source LIMIT 1")
 //    suspend fun getOneBySource(source: String): News?
 
-    @Query("SELECT * FROM workday_table where year =:year")
+    @Query("SELECT * FROM workday_table where year = :year")
     fun getAllWorkDaysPagedByYear(year: Int): PagingSource<Int, WorkDay>?
 
-    @Query("SELECT * FROM workday_table where year =:year and month = :month")
+    @Query("SELECT * FROM workday_table where year = :year and month = :month order by day asc")
     fun getAllWorkDaysPagedByYearAndMonth(year: Int, month: Int): PagingSource<Int, WorkDay>?
 
     @Query("SELECT * FROM workday_table")
     suspend fun getAllWorkDaysForBackUp(): List<WorkDay>?
 
-    @Query("SELECT * FROM workday_table where year =:year and month = :month")
+    @Query("SELECT * FROM workday_table where year = :year and month = :month")
     suspend fun getAllWorkDaysByYearMonth(year: Int, month: Int): List<WorkDay>?
 
     @Query("SELECT * FROM workday_table where year = :year and month = :month and day = :day")
