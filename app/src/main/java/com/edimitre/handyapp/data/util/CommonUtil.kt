@@ -147,4 +147,6 @@ class CommonUtil(private val activity: AppCompatActivity) {
         activity.startActivity(sendIntent)
 
     }
+
+
 }

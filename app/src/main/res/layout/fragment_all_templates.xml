@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.meme_templates.AllTemplatesFragment">
+
+
+
+    <!--TOOLBAR-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/templates_toolbar"
+        android:elevation="12dp"
+        android:background="?attr/colorPrimaryVariant"
+        android:minHeight="?attr/actionBarSize">
+    </com.google.android.material.appbar.MaterialToolbar>
+    <!--TOOLBAR END-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/templates_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/templates_toolbar"
+        android:layout_marginBottom="?attr/actionBarSize"/>
+
+
+
+</RelativeLayout>

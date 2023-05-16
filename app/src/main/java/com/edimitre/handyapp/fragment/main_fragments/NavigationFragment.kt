@@ -67,6 +67,13 @@ class NavigationFragment : Fragment() {
                 it.startActivity(Intent(it, CigaretteReminderActivity::class.java))
             }
         }
+
+        binding.memeTemplatesCard.setOnClickListener {
+
+            activity?.let {
+                it.startActivity(Intent(it, MemeTemplatesActivity::class.java))
+            }
+        }
     }
 
 

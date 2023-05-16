@@ -27,10 +27,16 @@
         android:theme="@style/Theme.HandyApp"
         tools:targetApi="33">
         <activity
+            android:name=".activity.MemeTemplatesActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.CigaretteReminderActivity"
             android:exported="true"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop" />
 
         <receiver
             android:name=".data.util.BootReceiver"
@@ -44,7 +50,6 @@
             android:name=".data.util.ReminderReceiver"
             android:enabled="true"
             android:exported="false" />
-
         <receiver
             android:name=".data.util.NotificationActionReceiver"
             android:enabled="true"
@@ -53,6 +58,7 @@
             android:name=".data.util.CigarAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
+
         <activity
             android:name=".activity.ReminderNotesActivity"
             android:exported="false" />
@@ -70,14 +76,16 @@
         </activity>
         <activity
             android:name=".activity.WorkActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".activity.NewsActivity"
-            android:exported="false">
+            android:exported="false" />
 
-        </activity>
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"
+            />
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -89,5 +97,12 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
 
 </manifest>

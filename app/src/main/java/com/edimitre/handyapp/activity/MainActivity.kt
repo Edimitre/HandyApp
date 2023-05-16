@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkManager
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
+import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.ActivityMainBinding
@@ -245,5 +246,9 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        FileService().clearTempFile()
+    }
 
 }

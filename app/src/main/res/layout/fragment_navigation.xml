@@ -168,6 +168,35 @@
 
         </androidx.cardview.widget.CardView>
 
+        <!--MEME TEMPLATES CARD-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/meme_templates_card"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8sp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="16dp">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_meme"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:text="Templates"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+
+        </androidx.cardview.widget.CardView>
+
     </GridLayout>
 
 </RelativeLayout>

@@ -56,9 +56,11 @@ class FilesFragment : Fragment(), ObjectFileAdapter.OnObjectFileClickListener {
 
     private fun setListeners() {
 
-//        if (!TimeUtils().isFriday()) {
-//            binding.btnGenerateFile.isEnabled = false
-//        }
+        if (!TimeUtils().isFriday()) {
+            binding.btnGenerateFile.visibility = View.GONE
+        }else{
+            binding.btnGenerateFile.visibility = View.VISIBLE
+        }
         binding.btnGenerateFile.setOnClickListener {
             createXlsFile()
         }

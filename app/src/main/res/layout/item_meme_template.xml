@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:padding="8dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="16dp">
+
+
+            <ImageView
+                android:id="@+id/template_img_view"
+                android:layout_width="640px"
+                android:layout_height="480px"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/cigar"/>
+
+
+            <TextView
+                android:id="@+id/template_name_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name test"
+                android:textSize="15sp"
+                android:textColor="?attr/colorOnPrimary"
+                android:layout_below="@+id/template_img_view"
+                android:layout_centerHorizontal="true"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btn_open_template"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimaryVariant"
+                android:elevation="10dp"
+                app:cardCornerRadius="16dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/template_name_view"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="open in meme editor"
+                    android:textColor="?attr/colorOnPrimary"/>
+
+
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
+
+
+
+
+

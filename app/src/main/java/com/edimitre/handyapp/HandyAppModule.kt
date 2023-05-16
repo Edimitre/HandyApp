@@ -77,6 +77,14 @@ object HandyAppModule {
         return db.getCigarGameTableDao()
     }
 
+
+    @Singleton
+    @Provides
+    fun provideMemeTemplateDao(db: HandyDb): MemeTemplateDao {
+
+        return db.getMemeTemplateDao()
+    }
+
     @Singleton
     @Provides
     fun provideSystemService(context: Application): SystemService {

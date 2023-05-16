@@ -11,7 +11,7 @@ import com.edimitre.handyapp.data.model.firebase.AuthModel
 
 
 @Database(
-    entities = [Shop::class, Expense::class, Note::class, Reminder::class, AuthModel::class, News::class, WorkDay::class,Cigar::class,CigarGameTable::class],
+    entities = [Shop::class, Expense::class, Note::class, Reminder::class, AuthModel::class, News::class, WorkDay::class,Cigar::class,CigarGameTable::class, MemeTemplate::class],
     version = 1,
     exportSchema = false
 )
@@ -31,6 +31,8 @@ abstract class HandyDb : RoomDatabase() {
     abstract fun getCigarDao(): CigarDao
 
     abstract fun getCigarGameTableDao(): CigarGameTableDao
+
+    abstract fun getMemeTemplateDao():MemeTemplateDao
 
     companion object {
 

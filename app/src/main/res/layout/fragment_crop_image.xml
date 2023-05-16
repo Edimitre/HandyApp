@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.meme_templates.CropImageFragment"
+    android:background="?attr/colorPrimaryVariant">
+
+
+
+    <RelativeLayout
+        android:id="@+id/options_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true">
+
+        <Button
+            android:id="@+id/btn_save_crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:elevation="10dp"/>
+
+        <Button
+            android:id="@+id/btn_restore_crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="restore"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"/>
+
+
+        <Button
+            android:id="@+id/btn_dismiss"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="close"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"/>
+
+    </RelativeLayout>
+
+
+
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="640dp"
+        android:layout_height="480dp"
+        android:layout_below="@+id/options_bar"/>
+
+</RelativeLayout>
