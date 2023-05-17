@@ -14,7 +14,7 @@
         android:id="@+id/toolbar"
         app:title="HandyApp"
         android:elevation="12dp"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/colorPrimaryVariant"
         android:minHeight="?attr/actionBarSize">
     </com.google.android.material.appbar.MaterialToolbar>
     <!--TOOLBAR END-->

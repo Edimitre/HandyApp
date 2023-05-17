@@ -75,20 +75,20 @@ class CigaretteReminderActivity : AppCompatActivity(){
 //    }
 //
 //    // if application is open and receives notification intent
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-
-        val bundle:Bundle? = intent?.extras
-
-        if(bundle != null){
-
-            val isWin = bundle.getBoolean("IS_WIN")
-            val cigarId = bundle.getString("CIGAR_ID")
-            _cigarViewModel.setCigarIsWin(isWin,cigarId!!)
-
-            Toast.makeText(this, "is win $isWin", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    override fun onNewIntent(intent: Intent?) {
+//        super.onNewIntent(intent)
+//
+//        val bundle:Bundle? = intent?.extras
+//
+//        if(bundle != null){
+//
+//            val isWin = bundle.getBoolean("IS_WIN")
+//            val cigarId = bundle.getString("CIGAR_ID")
+//            _cigarViewModel.setCigarIsWin(isWin,cigarId!!)
+//
+//            Toast.makeText(this, "is win $isWin", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     private fun loadPageNavigation() {
         // get adapter
@@ -111,9 +111,11 @@ class CigaretteReminderActivity : AppCompatActivity(){
                 viewPager.currentItem = tab.position
 
                 if(viewPager.currentItem == 0){
+                    binding.bottomAppBar.visibility = View.VISIBLE
                     binding.btnAdd.visibility = View.VISIBLE
                 }else{
-                    binding.btnAdd.visibility = View.INVISIBLE
+                    binding.bottomAppBar.visibility = View.GONE
+                    binding.btnAdd.visibility = View.GONE
                 }
             }
 

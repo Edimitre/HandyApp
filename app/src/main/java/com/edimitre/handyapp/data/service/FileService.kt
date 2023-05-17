@@ -71,14 +71,10 @@ class FileService {
         if (files != null) {
             for (i in files.indices) {
 
-                listFile.add(FileObject(files[i].name, files[i]))
+                if(!files[i].isDirectory){
+                    listFile.add(FileObject(files[i].name, files[i]))
+                }
 
-            }
-        }
-
-        listFile.forEach { file ->
-            if(file.actualFile!!.isDirectory){
-                listFile.remove(file)
             }
         }
 

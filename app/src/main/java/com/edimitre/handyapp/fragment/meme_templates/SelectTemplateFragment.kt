@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
+import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.MemeTemplate
 import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.view_model.MemeTemplateViewModel
@@ -56,9 +57,20 @@ class SelectTemplateFragment : Fragment() {
 
     private fun setListeners() {
 
+        binding.imgView.setOnClickListener {
+
+            if(croppedUri == null && this.uri == null){
+                pickImageFromGallery()
+            }
+
+        }
+
         binding.btnLoadTemplate.setOnClickListener {
 
-            pickImageFromGallery()
+            if(croppedUri == null && this.uri == null){
+                pickImageFromGallery()
+            }
+
         }
 
         binding.btnSaveTemplate.setOnClickListener {
@@ -75,7 +87,7 @@ class SelectTemplateFragment : Fragment() {
                 val bitmap = FileService().getBitmap(
                     requireContext().contentResolver,
                     uri
-                )//imageUtil.getBitmapFromUri(this.uri!!)
+                )
                 val croppedBitmap = FileService().getResizedBitmap(
                     bitmap!!,
                     640,
@@ -89,8 +101,13 @@ class SelectTemplateFragment : Fragment() {
                 val memeTemplate = MemeTemplate(0, name, string64Bitmap!!)
                 memeTemplateViewModel.saveMemeTemplate(memeTemplate)
 
+                // photo process finished -> clear files in temp folder if there are any
                 FileService().clearTempFile()
-//                Log.e(TAG, "base 64 from bitmap $string64Bitmap", )
+
+                restoreUris()
+
+
+                Toast.makeText(requireContext(), "template with name ${memeTemplate.name} saved successfully", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -102,6 +119,13 @@ class SelectTemplateFragment : Fragment() {
         }
     }
 
+    private fun restoreUris() {
+        this.uri = null
+        this.croppedUri = null
+        showOptions(this.uri, this.croppedUri)
+
+    }
+
     private fun observeSelectedImage() {
 
         uriSelected.observe(viewLifecycleOwner) {
@@ -111,12 +135,12 @@ class SelectTemplateFragment : Fragment() {
                 setImage(this.uri!!)
             }
 
-            showSaveOptions(this.uri)
+            showOptions(this.uri,croppedUri)
 
         }
     }
 
-    private fun setImage(uri: Uri) {
+    private fun setImage(uri: Uri?) {
 
         binding.imgView.setImageURI(uri)
     }
@@ -135,14 +159,19 @@ class SelectTemplateFragment : Fragment() {
         }
     }
 
-    private fun showSaveOptions(uri: Uri?) {
-        if (uri != null) {
+    private fun showOptions(uri: Uri?,croppedUri: Uri?) {
+        if (uri != null || croppedUri != null) {
+            binding.btnCrop.visibility = View.VISIBLE
             binding.inputTemplateName.visibility = View.VISIBLE
             binding.btnSaveTemplate.visibility = View.VISIBLE
+            binding.btnLoadTemplate.visibility = View.INVISIBLE
         } else {
 
+
+            binding.btnCrop.visibility = View.INVISIBLE
             binding.inputTemplateName.visibility = View.INVISIBLE
             binding.btnSaveTemplate.visibility = View.INVISIBLE
+            binding.btnLoadTemplate.visibility = View.VISIBLE
         }
     }
 

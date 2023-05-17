@@ -4,73 +4,223 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_marginTop="8dp">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/top_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
         android:backgroundTint="?attr/colorPrimaryVariant"
-        android:padding="8dp"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:strokeWidth="1dp"
+        app:strokeColor="?attr/colorPrimary">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="16dp">
-
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/template_img_view"
-                android:layout_width="640px"
-                android:layout_height="480px"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/cigar"/>
-
+                android:layout_width="match_parent"
+                android:layout_height="640px"
+                android:layout_alignParentTop="true"
+                android:src="@drawable/ic_plus" />
 
             <TextView
-                android:id="@+id/template_name_view"
+                android:id="@+id/template_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="name test"
-                android:textSize="15sp"
+                android:text="he is the mesiah"
+                android:textStyle="italic|bold"
                 android:textColor="?attr/colorOnPrimary"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/template_img_view"
-                android:layout_centerHorizontal="true"/>
+                android:layout_marginTop="16dp"
+                android:textSize="18sp"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btn_open_template"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimaryVariant"
-                android:elevation="10dp"
-                app:cardCornerRadius="16dp"
+                android:layout_height="40dp"
+                android:backgroundTint="?attr/colorSecondary"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="10dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/template_name_view"
-                android:layout_marginTop="16dp">
+                android:layout_below="@+id/template_name"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="64dp"
+                android:layout_marginEnd="64dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorPrimary">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="open in meme editor"
-                    android:textColor="?attr/colorOnPrimary"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center">
 
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Open in meme editor"
+                        android:maxLines="1"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:textStyle="italic|bold"
+                        android:textColor="?attr/colorOnPrimary"/>
+
+
+                </RelativeLayout>
 
 
             </com.google.android.material.card.MaterialCardView>
 
 
-
         </RelativeLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        android:layout_below="@+id/top_card"
+        android:backgroundTint="?attr/colorPrimaryVariant">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_open_template"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom|center"-->
+<!--                android:text="Open in meme editor"-->
+<!--                android:backgroundTint="?attr/colorPrimaryVariant"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:textColor="?attr/colorOnPrimary"/>-->
+
+
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/top_card"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:backgroundTint="?attr/colorPrimaryVariant"-->
+<!--        android:padding="8dp"-->
+<!--        app:cardCornerRadius="12dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingBottom="16dp">-->
+
+
+
+<!--            <com.google.android.material.card.MaterialCardView-->
+<!--                android:id="@+id/topCard"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:backgroundTint="?attr/colorPrimaryVariant"-->
+<!--                app:cardCornerRadius="16dp"-->
+<!--                android:layout_alignParentTop="true"-->
+<!--                android:padding="16dp">-->
+
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/template_img_view"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_alignBottom="@+id/divider_line"-->
+<!--                        android:layout_marginBottom="64dp"-->
+<!--                        android:layout_centerInParent="true"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:src="@drawable/ic_plus" />-->
+
+<!--                    <View-->
+<!--                        android:id="@+id/divider_line"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:layout_alignParentBottom="true"-->
+<!--                        android:layout_marginBottom="64dp"-->
+<!--                        android:paddingTop="8dp"/>-->
+
+<!--                </RelativeLayout>-->
+
+
+
+
+
+<!--                <EditText-->
+<!--                    android:id="@+id/input_template_name"-->
+<!--                    android:layout_width="150dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="bottom|center"-->
+<!--                    android:hint="filename"-->
+<!--                    android:textColorHint="?attr/colorOnPrimary"-->
+<!--                    android:inputType="text"-->
+<!--                    android:layout_marginBottom="8dp"/>-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/btn_open_template"-->
+<!--                    android:layout_width="150dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="bottom|center"-->
+<!--                    android:text="Open in meme editor"-->
+<!--                    android:backgroundTint="?attr/colorPrimaryVariant"-->
+<!--                    android:layout_marginBottom="8dp"-->
+<!--                    android:textColor="?attr/colorOnPrimary"/>-->
+
+
+
+
+<!--            </com.google.android.material.card.MaterialCardView>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--        </RelativeLayout>-->
+
+
+<!--    </androidx.cardview.widget.CardView>-->
+
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="64dp"/>
 
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ package com.edimitre.handyapp.adapters.recycler_adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
@@ -51,7 +52,7 @@ class MemeTemplateAdapter(private val templateOpenListener:OnTemplateOpenListene
 
 
         private val templateImg: ImageView = itemView.findViewById(R.id.template_img_view)
-        private val templateName: TextView = itemView.findViewById(R.id.template_name_view)
+        private val templateName: TextView = itemView.findViewById(R.id.template_name)
         private val btnOpenTemplate:MaterialCardView = itemView.findViewById(R.id.btn_open_template)
 
         fun bind(memeTemplate: MemeTemplate,onTemplateOpenListener: OnTemplateOpenListener) {

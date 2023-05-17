@@ -6,7 +6,10 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.edimitre.handyapp.R
+import com.edimitre.handyapp.adapters.tabs_adapter.RemindersAndNotesPagerAdapter
+import com.edimitre.handyapp.adapters.tabs_adapter.WorkFragmentsAdapter
 import com.edimitre.handyapp.data.model.WorkDay
 import com.edimitre.handyapp.data.util.CommonUtil
 import com.edimitre.handyapp.data.util.SystemService
@@ -14,9 +17,12 @@ import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.FilesViewModel
 import com.edimitre.handyapp.data.view_model.WorkDayViewModel
 import com.edimitre.handyapp.databinding.ActivityWorkBinding
+import com.edimitre.handyapp.fragment.reminder_and_notes.NotesFragment
+import com.edimitre.handyapp.fragment.reminder_and_notes.RemindersFragment
 import com.edimitre.handyapp.fragment.work_related.AddWorkDayForm
 import com.edimitre.handyapp.fragment.work_related.FilesFragment
 import com.edimitre.handyapp.fragment.work_related.WorkDaysFragment
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,6 +31,12 @@ import javax.inject.Inject
 class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
     lateinit var binding: ActivityWorkBinding
+
+    private lateinit var tabs: TabLayout
+
+    private lateinit var pagerAdapter: WorkFragmentsAdapter
+
+    private lateinit var viewPager: ViewPager2
 
     private val _workDayViewModel: WorkDayViewModel by viewModels()
 
@@ -47,9 +59,7 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
         setContentView(binding.root)
 
 
-        displayFragment(WorkDaysFragment())
-
-        setActiveButton("WORKDAYS")
+        loadPageNavigation()
 
         setListeners()
 
@@ -64,7 +74,6 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
         }
 
 
-
     }
 
 
@@ -77,6 +86,41 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
         }
     }
 
+    private fun loadPageNavigation() {
+        // get adapter
+        pagerAdapter = WorkFragmentsAdapter(getWorkFragments(), this)
+        // get tabs
+        tabs = binding.workFragmentsTabs
+
+        // get viewPager
+        viewPager = binding.workFragmentsViewPager
+
+        // remove slide functionality
+        viewPager.isUserInputEnabled = false
+        // set view pager adapter
+        viewPager.adapter = pagerAdapter
+
+
+        //
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
+
+    }
+
+    private fun getWorkFragments(): ArrayList<Fragment> {
+        return arrayListOf(
+            WorkDaysFragment(),
+            FilesFragment()
+        )
+    }
+
     private fun setListeners() {
 
         binding.btnAdd.setOnClickListener {
@@ -85,45 +129,9 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
             reminderForm.show(supportFragmentManager, "add reminder")
         }
 
-        binding.btnWorkdaysFragment.setOnClickListener {
-            displayFragment(WorkDaysFragment())
-            setActiveButton("WORKDAYS")
-
-        }
-
-        binding.btnFilesFragment.setOnClickListener {
-            displayFragment(FilesFragment())
-            setActiveButton("FILES")
-        }
 
     }
 
-    @SuppressLint("ResourceType")
-    private fun setActiveButton(value: String) {
-
-        when (value) {
-
-            "WORKDAYS" -> {
-
-                binding.btnWorkdaysFragment.cameraDistance = 10F
-
-                binding.btnFilesFragment.cameraDistance = 0F
-            }
-
-            "FILES" -> {
-                binding.btnWorkdaysFragment.cameraDistance = 0F
-                binding.btnFilesFragment.cameraDistance = 10F
-
-            }
-        }
-    }
-
-    private fun displayFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frag_container, fragment)
-        transaction.disallowAddToBackStack()
-        transaction.commit()
-    }
 
     override fun addWorkDay(workDay: WorkDay) {
 
@@ -134,19 +142,17 @@ class WorkActivity : AppCompatActivity(), AddWorkDayForm.AddWorkDayListener {
 
     private fun setLoading(value: Boolean) {
 
-        if (value) {
-            binding.progressLayout.visibility = View.VISIBLE
-            binding.fragContainer.visibility = View.INVISIBLE
-            binding.coorLayout.visibility = View.INVISIBLE
-
-        } else {
-
-            binding.progressLayout.visibility = View.INVISIBLE
-            binding.fragContainer.visibility = View.VISIBLE
-            binding.coorLayout.visibility = View.VISIBLE
-
-
-        }
+//        if (value) {
+//            binding.progressLayout.visibility = View.VISIBLE
+//            binding.fragContainer.visibility = View.INVISIBLE
+//            binding.coorLayout.visibility = View.INVISIBLE
+//
+//        } else {
+//
+//            binding.progressLayout.visibility = View.INVISIBLE
+//            binding.coorLayout.visibility = View.VISIBLE
+//
+//        }
 
     }
 

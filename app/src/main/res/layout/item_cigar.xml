@@ -28,7 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/img"
             android:text="Note"
-            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:backgroundTint="?attr/colorSecondary"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"

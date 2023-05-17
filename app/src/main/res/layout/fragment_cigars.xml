@@ -51,6 +51,7 @@
                 android:inputType="number"
                 android:maxLength="2"
                 android:hint="number of cigars"
+                android:textColorHint="?attr/colorOnPrimary"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/time_distance_spinner"
                 android:layout_marginTop="8dp"/>
@@ -61,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="set"
-                android:backgroundTint="?attr/colorPrimaryVariant"
+                android:backgroundTint="?attr/colorSecondary"
                 android:layout_marginTop="8dp"
                 android:layout_below="@+id/number_of_cigars_input"
                 android:layout_centerHorizontal="true"/>

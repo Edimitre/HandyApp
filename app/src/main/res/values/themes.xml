@@ -3,11 +3,12 @@
     <style name="Theme.HandyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/alice_blue</item>
-        <item name="colorPrimaryVariant">#F89E52</item>
+        <item name="colorPrimaryVariant">@color/light_sky_blue</item>
 
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#C62828</item>
+        <item name="colorSecondary">@color/cornflower_blue</item>
+
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimary</item>

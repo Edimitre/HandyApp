@@ -78,7 +78,7 @@
             app:contentPadding="8dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
-            android:backgroundTint="?attr/colorPrimaryVariant">
+            android:backgroundTint="?attr/colorSecondary">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
