@@ -1,11 +1,13 @@
 package com.edimitre.handyapp.fragment.main_fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +36,8 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initFragment()
+
+        observeSignUpException()
     }
 
     private fun initFragment() {
@@ -59,6 +63,35 @@ class SignUpFragment : Fragment() {
         }
     }
 
+    private fun observeSignUpException() {
+
+        mainViewModel.registerException.observe(viewLifecycleOwner) {
+
+            if (it != null) {
+
+                handleException(it)
+
+                mainViewModel.setRegisterException(null)
+            }
+        }
+    }
+
+    private fun handleException(exception: Exception) {
+
+        when (exception.localizedMessage) {
+
+            "The email address is already in use by another account." -> {
+                binding.inputEmail.error = "email already exist please login"
+
+            }
+            "The given password is invalid. [ Password should be at least 6 characters ]" -> {
+                binding.inputPassword.error = "password must at least be 6 characters"
+
+            }
+        }
+
+    }
+
     private fun observeData() {
 
 
@@ -67,10 +100,13 @@ class SignUpFragment : Fragment() {
                 when {
                     doingWork -> {
 
+                        // todo set loading
                     }
                 }
             }
         }
+
+
     }
 
     private fun inputsAreOk(): Boolean {

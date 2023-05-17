@@ -1,7 +1,6 @@
 package com.edimitre.handyapp.data.service
 
 import android.content.ContentResolver
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -9,17 +8,18 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.FileAsByte
 import com.edimitre.handyapp.data.model.FileObject
+import com.edimitre.handyapp.data.model.MemeTemplate
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.nio.file.Files
-import java.nio.file.Paths
 
 
 class FileService {
@@ -28,9 +28,11 @@ class FileService {
     private val storageDirectory =
         File("${Environment.getExternalStorageDirectory()}/${HandyAppEnvironment.FILES_STORAGE_DIRECTORY}")
 
-    private val memeStorageDirectory = File("$storageDirectory/${HandyAppEnvironment.MEME_STORAGE_DIRECTORY}")
+    private val memeStorageDirectory =
+        File("$storageDirectory/${HandyAppEnvironment.MEME_STORAGE_DIRECTORY}")
 
-    private val tempStorageDirectory = File("$storageDirectory/${HandyAppEnvironment.TEMP_STORAGE_DIRECTORY}")
+    private val tempStorageDirectory =
+        File("$storageDirectory/${HandyAppEnvironment.TEMP_STORAGE_DIRECTORY}")
 
     fun createStorageDirectory() {
 
@@ -51,12 +53,17 @@ class FileService {
         }
     }
 
+    private fun convertToBase64(attachment: File): String {
+        return Base64.encodeToString(attachment.readBytes(), Base64.NO_WRAP)
+    }
+
     fun getAllFiles(): ArrayList<FileObject> {
 
         val folderName = HandyAppEnvironment.FILES_STORAGE_DIRECTORY
         val directory = File("${Environment.getExternalStorageDirectory()}/$folderName")
 
         val files = directory.listFiles()
+
 
         val listFile = arrayListOf<FileObject>()
 
@@ -66,6 +73,12 @@ class FileService {
 
                 listFile.add(FileObject(files[i].name, files[i]))
 
+            }
+        }
+
+        listFile.forEach { file ->
+            if(file.actualFile!!.isDirectory){
+                listFile.remove(file)
             }
         }
 
@@ -79,15 +92,16 @@ class FileService {
         val filesAsBytesList = arrayListOf<FileAsByte>()
 
         allFiles.forEach { file ->
-            run {
 
 
-                val fileBytes = Files.readAllBytes(Paths.get(file.actualFile!!.path))
-
-                val fileAsByte = FileAsByte(file.name, fileBytes)
+            if (!file.actualFile!!.isDirectory) {
+                val fileAsByte = FileAsByte(file.name, convertToBase64(file.actualFile))
 
                 filesAsBytesList.add(fileAsByte)
+
+
             }
+//
         }
 
         return filesAsBytesList
@@ -100,12 +114,15 @@ class FileService {
             val localFile = File("${storageDirectory}/${file.name}")
 
             if (!localFile.exists()) {
-                FileOutputStream("${storageDirectory}/${file.name}").use { fos -> fos.flush() }
+                val bytes = Base64.decode(file.fileStringBase64 , Base64.NO_WRAP)
+                localFile.writeBytes(bytes)
+
             }
 
         }
 
     }
+
 
     fun getBitmap(contentResolver: ContentResolver, fileUri: Uri?): Bitmap? {
         return try {
@@ -114,12 +131,12 @@ class FileService {
             } else {
                 MediaStore.Images.Media.getBitmap(contentResolver, fileUri)
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             null
         }
     }
 
-    private fun saveMemeTemplate(finalBitmap: Bitmap,templateName:String) {
+    private fun saveMemeTemplate(finalBitmap: Bitmap, templateName: String) {
         if (!memeStorageDirectory.exists()) {
             memeStorageDirectory.mkdirs()
         }
@@ -148,7 +165,7 @@ class FileService {
 
     fun getBase64FromBitmap(bitmap: Bitmap): String? {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
     }
 
@@ -169,8 +186,7 @@ class FileService {
     }
 
 
-
-    fun createTempFile(bitmap: Bitmap){
+    fun createTempFile(bitmap: Bitmap) {
 
         if (!tempStorageDirectory.exists()) {
             tempStorageDirectory.mkdirs()
@@ -184,7 +200,8 @@ class FileService {
         out.flush()
         out.close()
     }
-    fun getUriFromTempFile(finalBitmap: Bitmap):Uri?{
+
+    fun getUriFromTempFile(finalBitmap: Bitmap): Uri? {
 
         if (!tempStorageDirectory.exists()) {
             tempStorageDirectory.mkdirs()
@@ -205,19 +222,19 @@ class FileService {
         }
     }
 
-    fun getTempFile(): File ? {
+    fun getTempFile(): File? {
 
         val file = File(tempStorageDirectory, "temp_file.jpeg")
 
-        return if (file.exists()){
+        return if (file.exists()) {
             file
-        }else{
+        } else {
             null
         }
 
     }
 
-    fun clearTempFile(){
+    fun clearTempFile() {
         val file = File(tempStorageDirectory, "temp_file.jpeg")
         if (file.exists()) {
             file.delete()

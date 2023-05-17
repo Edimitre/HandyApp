@@ -8,13 +8,16 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.CigaretteReminderActivity
 import com.edimitre.handyapp.activity.MainActivity
+import com.edimitre.handyapp.data.model.MemeTemplate
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.scraper.BotaAlScrapper
 import com.edimitre.handyapp.data.scraper.JoqScrapper
@@ -147,7 +150,7 @@ class SystemService(private val context: Context) {
 
         val backupWorker = PeriodicWorkRequest.Builder(
             BackUpDBWorker::class.java,
-            6,
+            10,
             TimeUnit.HOURS,
         )
 //            .setInitialDelay(60, TimeUnit.MINUTES)
@@ -174,8 +177,13 @@ class SystemService(private val context: Context) {
 
     fun startOneTimeBackupWork(): UUID {
 
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
         val backUpWork = OneTimeWorkRequest.Builder(BackUpDBWorker::class.java)
             .addTag("backup_worker")
+            .setConstraints(constraints)
             .build()
 
 
@@ -189,7 +197,6 @@ class SystemService(private val context: Context) {
 
         val createFileWork = OneTimeWorkRequest.Builder(FileWorker::class.java)
             .addTag("file_worker")
-
             .build()
 
         val workManager = WorkManager.getInstance(context)
@@ -204,19 +211,17 @@ class SystemService(private val context: Context) {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val backUpDto = Gson().fromJson(importData, BackUpDto::class.java)
+        var backUpDto = Gson().fromJson(importData, BackUpDto::class.java)
+
+        // because data cant be larger than 10240 bytes...so the files needs separate work
+        backUpDto =  clearDtoFromFiles(backUpDto)
 
 
-        // because cant serialize files because they are more than 10240 bytes so we save them first and then remove from backup dto
-        val fileService = FileService()
-        fileService.createLocalFiles(backUpDto.filesAsBytesList)
-        backUpDto.filesAsBytesList = emptyList()
-
-        val data: Data = Data.Builder().putString("backup_data", Gson().toJson(backUpDto)).build()
-
+        val data = Data.Builder()
+        data.putString("backup_data", Gson().toJson(backUpDto))
         val importWork = OneTimeWorkRequest.Builder(ImportDBWorker::class.java)
             .setConstraints(constraints)
-            .setInputData(data)
+            .setInputData(data.build())
             .addTag("import_work")
             .build()
         val workManager = WorkManager.getInstance(context)
@@ -226,6 +231,47 @@ class SystemService(private val context: Context) {
         return importWork.id
     }
 
+    private fun clearDtoFromFiles(backUpDto: BackUpDto):BackUpDto{
+
+        val sharedPrefUtil = SharedPrefUtil(context)
+
+        sharedPrefUtil.setWorkFilesList(backUpDto.filesAsBytesList)
+        startWorkFileWorker()
+        backUpDto.filesAsBytesList = emptyList()
+
+
+        sharedPrefUtil.setMemeTemplateList(backUpDto.memeTemplatesList)
+        startMemeTemplateWorker()
+        backUpDto.memeTemplatesList = emptyList()
+
+        return backUpDto
+    }
+
+    private fun startMemeTemplateWorker(): UUID {
+
+        val importTemplatesWork = OneTimeWorkRequest.Builder(MemeTemplateWorker::class.java)
+            .addTag("import_meme_templates_work")
+            .build()
+        val workManager = WorkManager.getInstance(context)
+
+        workManager.enqueue(importTemplatesWork)
+
+        return importTemplatesWork.id
+
+    }
+
+    private fun startWorkFileWorker(): UUID {
+
+        val workFilesWork = OneTimeWorkRequest.Builder(WorkFileWorker::class.java)
+            .addTag("work_files_work")
+            .build()
+        val workManager = WorkManager.getInstance(context)
+
+        workManager.enqueue(workFilesWork)
+
+        return workFilesWork.id
+
+    }
     fun startNotificationWorker() {
 
         val workManager = WorkManager.getInstance(context)
@@ -338,7 +384,6 @@ class SystemService(private val context: Context) {
             notify(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, mBuilder.build())
         }
     }
-
 
     fun startScrapBotaAl() {
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.edimitre.handyapp.data.model.MemeTemplate
+import com.edimitre.handyapp.data.model.WorkDay
 
 
 @Dao
@@ -23,6 +24,9 @@ interface MemeTemplateDao {
     @Query("SELECT * FROM meme_template_table WHERE name LIKE '%' || :name || '%'")
     fun getByNamePaged(name: String): PagingSource<Int, MemeTemplate>?
 
+
+    @Query("SELECT * FROM meme_template_table")
+    suspend fun getAllTemplatesForBackUp(): List<MemeTemplate>?
 
     //    @Query("SELECT * FROM image WHERE name IN (:arg0)")
 //    fun findByNameContaining(imageTestIds: List<Int>): LiveData<List<MemeTemplate>>

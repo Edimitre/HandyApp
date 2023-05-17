@@ -1,9 +1,11 @@
 package com.edimitre.handyapp.data.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.service.FileService
@@ -60,14 +62,16 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
         val workDaysList = HandyDb.getInstance(ctx).getWorkDayDao().getAllWorkDaysForBackUp()
 
-        delay(2000)
+        val memeTemplates = HandyDb.getInstance(ctx).getMemeTemplateDao().getAllTemplatesForBackUp()
+
+        delay(1000)
         when {
             auth != null -> {
 
                 systemService.setNotification("WORKING...", 30, true)
 
 
-                delay(2000)
+                delay(1000)
                 // set dto uid
                 backUpDto.uid = auth.uid
 
@@ -86,6 +90,10 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
                 backUpDto.likedNewsList = likedNewsList!!
 
                 backUpDto.workDaysList = workDaysList!!
+
+                backUpDto.memeTemplatesList = memeTemplates!!
+
+
 
                 val fileService = FileService()
                 val filesAsBytesList = fileService.getFilesAsBytesList()
@@ -123,7 +131,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
         return if (!failed) {
 
             systemService.setNotification("BACKUP SUCCESS", 100, false)
-            delay(2000)
+            delay(1000)
             setProgress(workDataOf("isRunning" to false))
             Result.success()
         } else {
@@ -131,7 +139,7 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
 
             systemService.setNotification("BACKUP FAILED", 100, false)
 
-            delay(2000)
+            delay(1000)
             setProgress(workDataOf("isRunning" to false))
             Result.failure()
         }
@@ -150,8 +158,10 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
             "likedNewsList" to Gson().toJson(backUpDto.likedNewsList),
             "workDaysList" to Gson().toJson(backUpDto.workDaysList),
             "filesAsBytesList" to Gson().toJson(backUpDto.filesAsBytesList),
+            "memeTemplatesList" to Gson().toJson(backUpDto.memeTemplatesList),
             "backupDate" to backUpDto.backUpDate
         )
+
 
 
     }

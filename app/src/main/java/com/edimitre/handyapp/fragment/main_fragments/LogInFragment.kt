@@ -34,9 +34,9 @@ class LogInFragment : Fragment() {
 
         setListeners()
 
-        observeData()
-
         observeLoading()
+
+        observeLoginException()
     }
 
     private fun setListeners() {
@@ -79,18 +79,37 @@ class LogInFragment : Fragment() {
 
     }
 
-    private fun observeData() {
+    private fun observeLoginException() {
 
-        activity?.let {
-            mainViewModel.isDoingWork.observe(it) { doingWork ->
-                when {
-                    doingWork -> {
+        mainViewModel.registerException.observe(viewLifecycleOwner) {
 
-                    }
-                }
+            if (it != null) {
+
+                handleException(it)
+
+                mainViewModel.setRegisterException(null)
             }
         }
     }
+
+    private fun handleException(exception: Exception) {
+
+
+        when (exception.localizedMessage) {
+
+
+            "There is no user record corresponding to this identifier. The user may have been deleted." -> {
+                binding.inputLoginEmail.error = "email is wrong or the user doesn't exist"
+//
+            }
+            "The password is invalid or the user does not have a password." -> {
+                binding.inputLoginPassword.error = "password is invalid"
+
+            }
+        }
+
+    }
+
 
     private fun observeLoading() {
 

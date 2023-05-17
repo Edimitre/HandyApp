@@ -21,11 +21,14 @@ data class BackUpDto(
 
     var filesAsBytesList:List<FileAsByte>,
 
+    var memeTemplatesList:List<MemeTemplate>,
+
     var backUpDate: Long
 ) : Serializable {
 
     constructor():this(
         "",
+        ArrayList(),
         ArrayList(),
         ArrayList(),
         ArrayList(),

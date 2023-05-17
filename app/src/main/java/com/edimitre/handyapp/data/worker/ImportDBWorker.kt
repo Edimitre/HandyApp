@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import com.edimitre.handyapp.data.dao.MemeTemplateDao
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.room_database.HandyDb
+import com.edimitre.handyapp.data.service.FileService
+import com.edimitre.handyapp.data.util.SharedPrefUtil
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.google.gson.Gson
@@ -24,15 +27,16 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
 
         setProgress(workDataOf("isRunning" to true))
-        delay(2000)
+        delay(1000)
 
         val backUpData = inputData.getString("backup_data")
         val backUpDto = Gson().fromJson(backUpData, BackUpDto::class.java)
 
+
         systemService.setNotification("BACKUP DATA FOUND", 10, true)
 
 
-        delay(2000)
+        delay(1000)
         importDto(backUpDto)
 
         systemService.setNotification("IMPORT SUCCESS", 100, false)
@@ -49,6 +53,7 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
         val noteDao = HandyDb.getInstance(ctx).getReminderNotesDao()
         val newsDao = HandyDb.getInstance(ctx).getNewsDao()
         val workDayDao = HandyDb.getInstance(ctx).getWorkDayDao()
+//        val memeTemplateDao = HandyDb.getInstance(ctx).getMemeTemplateDao()
 
         systemService.setNotification("STARTING IMPORT", 20, true)
 
@@ -123,6 +128,21 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
 
             delay(1000)
         }
+
+
+
+
+//        if (backUpDto.memeTemplatesList.isNotEmpty()) {
+//
+//            backUpDto.memeTemplatesList.forEach { memeTemplate ->
+//                memeTemplateDao.save(memeTemplate)
+//
+//            }
+//
+//            systemService.setNotification("IMPORTED MEME TEMPLATES", 90, true)
+//
+//            delay(1000)
+//        }
 
 
     }

@@ -10,6 +10,7 @@ import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.data.dao.AuthDao
 import com.edimitre.handyapp.data.model.firebase.AuthModel
 import com.edimitre.handyapp.fragment.main_fragments.NavigationFragment
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -51,6 +52,10 @@ class MainViewModel @Inject constructor(
     private val mutableIsWorkNotificationEnabled: MutableLiveData<Boolean> =
         MutableLiveData<Boolean>(false)
     val isWorkNotificationEnabled: LiveData<Boolean> get() = mutableIsWorkNotificationEnabled
+
+
+    private val mutableRegisterException: MutableLiveData<Exception?> = MutableLiveData<Exception?>()
+    val registerException: LiveData<Exception?> get() = mutableRegisterException
 
 
     init {
@@ -145,6 +150,7 @@ class MainViewModel @Inject constructor(
 
                         Log.e(HandyAppEnvironment.TAG, "exception happened : ${it.exception}")
 
+                        setRegisterException(it.exception)
                         setDoingWork(false)
                     }
 
@@ -178,14 +184,11 @@ class MainViewModel @Inject constructor(
                     setDoingWork(false)
 
                     setActiveFragment(NavigationFragment())
-                    Log.e(
-                        HandyAppEnvironment.TAG,
-                        "sign up success for user with email : ${auth.currentUser!!.email}"
-                    )
 
 
                 } else {
-                    Log.e(HandyAppEnvironment.TAG, "signup error reason : ${task.exception} ")
+
+                    setRegisterException(task.exception)
                 }
             }
 
@@ -223,5 +226,10 @@ class MainViewModel @Inject constructor(
         return auth.currentUser != null
     }
 
+
+    fun setRegisterException(exception:Exception?){
+
+        mutableRegisterException.value = exception
+    }
 
 }
