@@ -19,29 +19,27 @@ class MemeTemplateWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
 
-        try{
+        try {
             val sharedPrefUtil = SharedPrefUtil(ctx)
 
             val memeTemplateList = sharedPrefUtil.getMemeTemplateList()
 
-            if(memeTemplateList != null && memeTemplateList.isNotEmpty()){
+            if (memeTemplateList != null && memeTemplateList.isNotEmpty()) {
 
-                memeTemplateList.forEach {
-                        memeTemplate ->  memeTemplateDao.save(memeTemplate)
+                memeTemplateList.forEach { memeTemplate ->
+                    memeTemplateDao.save(memeTemplate)
                 }
             }
 
 
             return Result.success()
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
             return Result.failure()
         }
 
 
-
     }
-
 
 
 }

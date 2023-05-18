@@ -20,12 +20,12 @@ class WorkFileWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
 
-        try{
+        try {
             val sharedPrefUtil = SharedPrefUtil(ctx)
 
             val workFileList = sharedPrefUtil.getWorkFileList()
 
-            if(workFileList != null && workFileList.isNotEmpty()){
+            if (workFileList != null && workFileList.isNotEmpty()) {
 
                 FileService().createLocalFiles(workFileList)
 
@@ -33,15 +33,13 @@ class WorkFileWorker(context: Context, params: WorkerParameters) :
 
 
             return Result.success()
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
             return Result.failure()
         }
 
 
-
     }
-
 
 
 }

@@ -92,7 +92,6 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
                 backUpDto.memeTemplatesList = memeTemplates!!
 
 
-
                 val fileService = FileService()
                 val filesAsBytesList = fileService.getFilesAsBytesList()
                 backUpDto.filesAsBytesList = filesAsBytesList
@@ -159,7 +158,6 @@ class BackUpDBWorker(context: Context, params: WorkerParameters) :
             "memeTemplatesList" to Gson().toJson(backUpDto.memeTemplatesList),
             "backupDate" to backUpDto.backUpDate
         )
-
 
 
     }

@@ -8,14 +8,11 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
-import com.edimitre.handyapp.activity.AlarmActivity
-import com.edimitre.handyapp.activity.CigaretteReminderActivity
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.scraper.BotaAlScrapper
@@ -36,7 +33,7 @@ class SystemService(private val context: Context) {
     @Inject
     lateinit var auth: FirebaseAuth
 
-    lateinit var mBuilder: NotificationCompat.Builder
+    private lateinit var mBuilder: NotificationCompat.Builder
 
     fun createNotificationChannel() {
         // Create the NotificationChannel
@@ -308,17 +305,6 @@ class SystemService(private val context: Context) {
 
     }
 
-    fun startCigarAlarmWorker() {
-
-        val cigarAlarmWork = OneTimeWorkRequest.Builder(CigarAlarmWorker::class.java)
-            .addTag("cigar_alarm_work")
-            .build()
-
-
-        val workManager = WorkManager.getInstance(context)
-        workManager.enqueue(cigarAlarmWork)
-
-    }
 
     fun setNotification(text:String, progress:Int, onGoing:Boolean): Notification {
 
@@ -341,91 +327,6 @@ class SystemService(private val context: Context) {
         return mBuilder.build()
     }
 
-    fun getCigarAlarmNotification(title: String?, message: String?,id:Int): Notification {
-
-
-
-
-        val fullScreenIntent = Intent(context, AlarmActivity::class.java)
-        val fullScreen = PendingIntent.getActivity(context, HandyAppEnvironment.NOTIFICATION_NUMBER_ID, fullScreenIntent, FLAG_IMMUTABLE)
-
-
-        val activityIntent = Intent(context, CigaretteReminderActivity::class.java)
-        val openActivity = PendingIntent.getActivity(context, HandyAppEnvironment.NOTIFICATION_NUMBER_ID, activityIntent, FLAG_IMMUTABLE)
-
-
-        val bundleTrue = Bundle()
-        bundleTrue.putInt("CIGAR_ID", id)
-        bundleTrue.putBoolean("IS_WIN", true)
-
-        val isWinIntent = Intent(context, NotificationActionReceiver::class.java)
-        isWinIntent.putExtra("bundle", bundleTrue)
-        val isWinClick = PendingIntent.getBroadcast(context, 2, isWinIntent, FLAG_IMMUTABLE)
-
-
-        val bundleFalse = Bundle()
-        bundleFalse.putInt("CIGAR_ID", id)
-        bundleFalse.putBoolean("IS_WIN", false)
-
-        val isNotWinIntent = Intent(context, NotificationActionReceiver::class.java)
-        isWinIntent.putExtra("bundle", bundleFalse)
-        val isNotWin = PendingIntent.getBroadcast(context, 3, isNotWinIntent, FLAG_IMMUTABLE)
-
-
-
-
-        mBuilder = NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
-        mBuilder.setSmallIcon(R.drawable.ic_reminder)
-        mBuilder.setContentIntent(openActivity)
-        mBuilder.setFullScreenIntent(fullScreen, true)
-        mBuilder.setContentTitle(title)
-        mBuilder.setContentText(message)
-        mBuilder.priority = NotificationCompat.PRIORITY_MAX
-        mBuilder.setAutoCancel(false)
-//        mBuilder.setOnlyAlertOnce(true)
-        mBuilder.addAction(R.drawable.ic_check, "ON TIME", isWinClick)
-        mBuilder.addAction(R.drawable.ic_close,"NOT ON TIME", isNotWin)
-
-
-
-//        val activityIntent = Intent(context, CigaretteReminderActivity::class.java)
-//        val openActivity = PendingIntent.getActivity(context, HandyAppEnvironment.NOTIFICATION_NUMBER_ID, activityIntent, FLAG_IMMUTABLE)
-//
-//
-//        val fullScreenIntent = Intent(context, AlarmActivity::class.java)
-//        val fullScreenPendingIntent = PendingIntent.getActivity(
-//            context, 0,
-//            fullScreenIntent, FLAG_IMMUTABLE
-//        )
-//
-//        val notBuilder: NotificationCompat.Builder =
-//            NotificationCompat.Builder(context, HandyAppEnvironment.NOTIFICATION_CHANNEL_ID)
-//                .setSmallIcon(R.drawable.ic_reminder)
-//                .setContentTitle(title)
-//                .setContentText(message)
-//                .setContentIntent(openActivity)
-//                .setPriority(NotificationCompat.PRIORITY_MAX)
-//                .setCategory(NotificationCompat.CATEGORY_ALARM)
-//                .setFullScreenIntent(fullScreenPendingIntent, true)
-//                .setAutoCancel(true)
-
-//
-//        with(NotificationManagerCompat.from(context)) {
-//            // notificationId is a unique int for each notification that you must define
-//            notify(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, notBuilder.build())
-//        }
-
-        return mBuilder.build()
-    }
-
-//    fun aquireWake() {
-//        val mPowerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-//        val mWakeLock: PowerManager.WakeLock = mPowerManager.newWakeLock(
-//            PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-//            "YourApp:Whatever"
-//        )
-//        mWakeLock.acquire()
-//    }
 
     fun startScrapBotaAl() {
 

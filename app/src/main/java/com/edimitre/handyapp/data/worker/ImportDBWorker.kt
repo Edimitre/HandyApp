@@ -127,8 +127,6 @@ class ImportDBWorker(context: Context, params: WorkerParameters) :
         }
 
 
-
-
 //        if (backUpDto.memeTemplatesList.isNotEmpty()) {
 //
 //            backUpDto.memeTemplatesList.forEach { memeTemplate ->
