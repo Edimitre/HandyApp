@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +14,6 @@ import com.edimitre.handyapp.adapters.recycler_adapter.ReminderAdapter
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.view_model.ReminderViewModel
 import com.edimitre.handyapp.databinding.FragmentRemindersBinding
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,24 +1,17 @@
 package com.edimitre.handyapp.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.edimitre.handyapp.R
-import com.edimitre.handyapp.adapters.tabs_adapter.RemindersAndNotesPagerAdapter
 import com.edimitre.handyapp.adapters.tabs_adapter.WorkFragmentsAdapter
 import com.edimitre.handyapp.data.model.WorkDay
 import com.edimitre.handyapp.data.util.CommonUtil
 import com.edimitre.handyapp.data.util.SystemService
-import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.data.view_model.FilesViewModel
 import com.edimitre.handyapp.data.view_model.WorkDayViewModel
 import com.edimitre.handyapp.databinding.ActivityWorkBinding
-import com.edimitre.handyapp.fragment.reminder_and_notes.NotesFragment
-import com.edimitre.handyapp.fragment.reminder_and_notes.RemindersFragment
 import com.edimitre.handyapp.fragment.work_related.AddWorkDayForm
 import com.edimitre.handyapp.fragment.work_related.FilesFragment
 import com.edimitre.handyapp.fragment.work_related.WorkDaysFragment

@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.adapters.tabs_adapter.RemindersAndNotesPagerAdapter

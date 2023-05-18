@@ -6,21 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.Cigar
-import com.edimitre.handyapp.data.model.Note
 import com.edimitre.handyapp.data.service.CigaretteService
-import com.edimitre.handyapp.data.service.NoteService
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.util.TimeUtils
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

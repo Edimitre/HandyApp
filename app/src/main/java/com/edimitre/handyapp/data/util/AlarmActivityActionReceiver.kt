@@ -10,8 +10,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class NotificationActionReceiver : BroadcastReceiver() {
+class AlarmActivityActionReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var cigarDao: CigarDao
@@ -26,10 +27,11 @@ class NotificationActionReceiver : BroadcastReceiver() {
 
         context.stopService(Intent(context, ShowCigarAlarmService::class.java))
 
+
         runBlocking {
 
-            val id = cigarId
-            val cigar = cigarDao.getCigarById(id!!.toInt())
+//            val id = cigarId
+            val cigar = cigarDao.getCigarById(cigarId!!)
             cigar?.isWin = isWin
             cigar?.isActive = false
             cigarDao.saveCigar(cigar!!)

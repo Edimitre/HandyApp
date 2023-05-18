@@ -1,13 +1,11 @@
 package com.edimitre.handyapp.fragment.main_fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.view_model.MainViewModel
 import com.edimitre.handyapp.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint

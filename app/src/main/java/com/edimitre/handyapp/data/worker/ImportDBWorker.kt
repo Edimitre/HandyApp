@@ -4,12 +4,9 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.edimitre.handyapp.data.dao.MemeTemplateDao
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.room_database.HandyDb
-import com.edimitre.handyapp.data.service.FileService
-import com.edimitre.handyapp.data.util.SharedPrefUtil
 import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.google.gson.Gson

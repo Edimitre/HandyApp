@@ -3,10 +3,7 @@ package com.edimitre.handyapp.data.service
 
 import androidx.paging.PagingSource
 import com.edimitre.handyapp.data.dao.MemeTemplateDao
-import com.edimitre.handyapp.data.dao.ReminderNotesDao
 import com.edimitre.handyapp.data.model.MemeTemplate
-import com.edimitre.handyapp.data.model.Note
-
 import javax.inject.Inject
 
 class MemeTemplateService @Inject constructor(private val memeTemplateDao: MemeTemplateDao) {

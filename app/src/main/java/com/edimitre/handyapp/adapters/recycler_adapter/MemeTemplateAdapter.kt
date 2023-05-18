@@ -4,7 +4,6 @@ package com.edimitre.handyapp.adapters.recycler_adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.paging.PagingDataAdapter
@@ -12,10 +11,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.MemeTemplate
-import com.edimitre.handyapp.data.model.Shop
 import com.edimitre.handyapp.data.service.FileService
 import com.google.android.material.card.MaterialCardView
-import java.io.File
 
 
 class MemeTemplateAdapter(private val templateOpenListener:OnTemplateOpenListener) :

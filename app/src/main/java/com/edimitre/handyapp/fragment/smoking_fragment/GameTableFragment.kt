@@ -2,13 +2,11 @@ package com.edimitre.handyapp.fragment.smoking_fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.view_model.CigaretteViewModel
 import com.edimitre.handyapp.databinding.FragmentGameTableBinding
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,11 +1,9 @@
 package com.edimitre.handyapp.data.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
 import com.edimitre.handyapp.data.room_database.HandyDb
 import com.edimitre.handyapp.data.service.FileService

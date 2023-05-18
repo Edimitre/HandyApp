@@ -8,15 +8,12 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.data.model.FileAsByte
 import com.edimitre.handyapp.data.model.FileObject
-import com.edimitre.handyapp.data.model.MemeTemplate
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

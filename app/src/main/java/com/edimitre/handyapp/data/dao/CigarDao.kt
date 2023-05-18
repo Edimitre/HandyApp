@@ -1,11 +1,8 @@
 package com.edimitre.handyapp.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagingSource
 import androidx.room.*
 import com.edimitre.handyapp.data.model.Cigar
-import com.edimitre.handyapp.data.model.Note
-import com.edimitre.handyapp.data.model.Reminder
 
 
 @Dao

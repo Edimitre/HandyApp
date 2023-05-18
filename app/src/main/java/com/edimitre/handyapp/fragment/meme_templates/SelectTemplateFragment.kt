@@ -14,7 +14,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.edimitre.handyapp.HandyAppEnvironment.TAG
-import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.MemeTemplate
 import com.edimitre.handyapp.data.service.FileService
 import com.edimitre.handyapp.data.view_model.MemeTemplateViewModel

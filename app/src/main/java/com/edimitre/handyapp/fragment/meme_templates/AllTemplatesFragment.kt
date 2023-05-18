@@ -1,9 +1,7 @@
 package com.edimitre.handyapp.fragment.meme_templates
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.edimitre.handyapp.HandyAppEnvironment
-import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.adapters.recycler_adapter.MemeTemplateAdapter
 import com.edimitre.handyapp.data.model.MemeTemplate

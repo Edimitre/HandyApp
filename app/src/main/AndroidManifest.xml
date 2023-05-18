@@ -7,6 +7,11 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -14,6 +19,14 @@
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
 
     <application
         android:name=".HandyApp"
@@ -26,17 +39,49 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HandyApp"
         tools:targetApi="33">
+
+
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.AlarmActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true">
+        </activity>
         <activity
             android:name=".activity.MemeTemplatesActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+
         </activity>
         <activity
             android:name=".activity.CigaretteReminderActivity"
-            android:exported="true"
-            android:launchMode="singleTop" />
+            android:exported="true" />
+        <activity
+            android:name=".activity.ReminderNotesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ShopsExpensesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.WorkActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.NewsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <receiver
             android:name=".data.util.BootReceiver"
@@ -53,39 +98,26 @@
         <receiver
             android:name=".data.util.NotificationActionReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true" />
+
         <receiver
             android:name=".data.util.CigarAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
-        <activity
-            android:name=".activity.ReminderNotesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.ShopsExpensesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <receiver android:name=".data.util.AlarmActivityActionReceiver"
+            android:exported="true"
+            android:enabled="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="MyAction" />-->
+<!--            </intent-filter>-->
+        </receiver>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.WorkActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.NewsActivity"
-            android:exported="false" />
 
-        <activity
-            android:name="com.canhub.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"
-            />
-
+        <service
+            android:name=".data.util.ShowCigarAlarmService"
+            android:enabled="true"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -97,12 +129,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.PICK" />
-            <data android:mimeType="*/*" />
-        </intent>
-    </queries>
 
 </manifest>

@@ -27,6 +27,22 @@ class SharedPrefUtil (private val context: Context){
 
     }
 
+    fun setIsWin(isWin:Boolean){
+
+        val sharedPreference = context.getSharedPreferences(HandyAppEnvironment.TITLE,Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
+        editor.putBoolean("isWin",isWin)
+        editor.apply()
+    }
+
+    fun getIsWin():Boolean{
+
+        val sharedPreference = context.getSharedPreferences(HandyAppEnvironment.TITLE,Context.MODE_PRIVATE)
+
+        return sharedPreference.getBoolean("isWin",false)
+
+    }
+
     fun setMemeTemplateList(memeTemplateList:List<MemeTemplate>){
 
         val sharedPreference = context.getSharedPreferences(HandyAppEnvironment.TITLE,Context.MODE_PRIVATE)

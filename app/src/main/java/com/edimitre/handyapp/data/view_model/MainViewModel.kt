@@ -10,7 +10,6 @@ import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.data.dao.AuthDao
 import com.edimitre.handyapp.data.model.firebase.AuthModel
 import com.edimitre.handyapp.fragment.main_fragments.NavigationFragment
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
