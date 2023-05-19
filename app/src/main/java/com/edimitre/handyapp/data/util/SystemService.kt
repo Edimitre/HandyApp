@@ -4,10 +4,19 @@ package com.edimitre.handyapp.data.util
 import android.annotation.SuppressLint
 import android.app.*
 import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
@@ -34,6 +43,20 @@ class SystemService(private val context: Context) {
     lateinit var auth: FirebaseAuth
 
     private lateinit var mBuilder: NotificationCompat.Builder
+
+    private var vibrator: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val vibratorManager: VibratorManager =
+            context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        vibratorManager.defaultVibrator
+
+    } else {
+        // backward compatibility for Android API < 31,
+        // VibratorManager was only added on API level 31 release.
+        // noinspection deprecation
+        context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+
+    private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     fun createNotificationChannel() {
         // Create the NotificationChannel
@@ -325,6 +348,67 @@ class SystemService(private val context: Context) {
             notify(HandyAppEnvironment.NOTIFICATION_NUMBER_ID, mBuilder.build())
         }
         return mBuilder.build()
+    }
+
+
+
+    fun startRingtone() {
+
+        val uriSound = Uri.Builder()
+            .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+            .authority(context.packageName)
+            .appendPath("${R.raw.alarm}")
+            .build()
+
+//        mediaPlayer = MediaPlayer()
+        mediaPlayer.apply {
+            reset()
+            setAudioAttributes( // Here is the important part
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM) // usage - alarm
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build()
+            )
+            setDataSource(
+                context,
+                uriSound
+            )
+            isLooping = true
+            prepare()
+            start()
+        }
+
+    }
+
+    fun stopRingtone() {
+        try {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+
+        } catch (e: Exception) {
+
+            Log.e(HandyAppEnvironment.TAG, "error stopping media player ${e.localizedMessage}")
+        }
+
+
+    }
+
+    @SuppressLint("ServiceCast")
+    fun startVibrator() {
+
+        val DELAY = 0
+        val VIBRATE = 1000
+        val SLEEP = 1000
+        val START = 0
+        val vibratePattern = longArrayOf(DELAY.toLong(), VIBRATE.toLong(), SLEEP.toLong())
+
+        vibrator.vibrate(VibrationEffect.createWaveform(vibratePattern, START))
+
+    }
+
+    fun stopVibrator() {
+
+        vibrator.cancel()
     }
 
 

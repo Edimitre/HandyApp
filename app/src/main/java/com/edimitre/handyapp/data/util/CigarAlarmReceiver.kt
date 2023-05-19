@@ -18,6 +18,7 @@ class CigarAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
+
         context.startForegroundService(Intent(context, ShowCigarAlarmService::class.java))
     }
 

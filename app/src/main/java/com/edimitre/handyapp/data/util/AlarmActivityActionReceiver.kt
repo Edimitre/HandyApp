@@ -20,6 +20,9 @@ class AlarmActivityActionReceiver : BroadcastReceiver() {
     @Inject
     lateinit var gameTableDao: CigarGameTableDao
 
+    @Inject
+    lateinit var systemService: SystemService
+
     override fun onReceive(context: Context, intent: Intent) {
 
         val isWin = intent.extras?.getBoolean("IS_WIN")
@@ -27,17 +30,18 @@ class AlarmActivityActionReceiver : BroadcastReceiver() {
 
         context.stopService(Intent(context, ShowCigarAlarmService::class.java))
 
+        systemService.stopVibrator()
+        systemService.stopRingtone()
 
         runBlocking {
 
-//            val id = cigarId
             val cigar = cigarDao.getCigarById(cigarId!!)
             cigar?.isWin = isWin
             cigar?.isActive = false
             cigarDao.saveCigar(cigar!!)
 
 
-            SystemService(context).notify("Handy app", "result saved")
+            systemService.notify("Handy app", "result saved")
 
 
             var gameTable = gameTableDao.getCigarGameTableByYearAndMonthOnCoroutine(

@@ -25,6 +25,7 @@ class ShowCigarAlarmService : Service() {
 
     var cigar: Cigar? = null
 
+
     @Inject
     lateinit var systemService: SystemService
 
@@ -36,6 +37,9 @@ class ShowCigarAlarmService : Service() {
 
 
         showCigarAlarmNotification()
+
+        systemService.startVibrator()
+        systemService.startRingtone()
 
         return START_STICKY
     }
