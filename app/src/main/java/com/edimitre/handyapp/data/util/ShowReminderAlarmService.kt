@@ -3,18 +3,13 @@ package com.edimitre.handyapp.data.util
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.os.Bundle
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.R
-import com.edimitre.handyapp.activity.AlarmActivity
-import com.edimitre.handyapp.activity.CigaretteReminderActivity
 import com.edimitre.handyapp.activity.ReminderAlarmActivity
 import com.edimitre.handyapp.activity.ReminderNotesActivity
-import com.edimitre.handyapp.data.dao.CigarDao
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
-import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
@@ -47,6 +42,7 @@ class ShowReminderAlarmService : Service() {
         systemService.startRingtone()
 
         runBlocking {
+            // todo comes null
             reminder = reminderNotesDao.getFirstReminderOnCoroutine()
         }
 

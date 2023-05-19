@@ -157,11 +157,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            } else {
-                TODO("VERSION.SDK_INT < M")
-            }
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities != null) {
             if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
 //                Log.e(HandyAppEnvironment.TAG, "Has cellular connection")

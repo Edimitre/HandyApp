@@ -3,10 +3,7 @@ package com.edimitre.handyapp.data.util
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.edimitre.handyapp.data.dao.CigarDao
-import com.edimitre.handyapp.data.dao.CigarGameTableDao
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
-import com.edimitre.handyapp.data.model.CigarGameTable
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject

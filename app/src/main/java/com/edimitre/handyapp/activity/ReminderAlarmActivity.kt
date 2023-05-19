@@ -5,13 +5,11 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
-import com.edimitre.handyapp.R
+import androidx.appcompat.app.AppCompatActivity
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
 import com.edimitre.handyapp.data.model.Reminder
-import com.edimitre.handyapp.data.util.AlarmActivityActionReceiver
 import com.edimitre.handyapp.data.util.ReminderActivityActionReceiver
 import com.edimitre.handyapp.databinding.ActivityReminderAlarmBinding
 import dagger.hilt.android.AndroidEntryPoint
