@@ -40,7 +40,6 @@
         android:theme="@style/Theme.HandyApp"
         tools:targetApi="33">
 
-
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">
@@ -50,20 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.AlarmActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:showForAllUsers="true"
-            android:showOnLockScreen="true"
-            android:showWhenLocked="true"
-            android:turnScreenOn="true">
-        </activity>
+
         <activity
             android:name=".activity.MemeTemplatesActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".activity.CigaretteReminderActivity"
             android:exported="true" />
@@ -83,6 +72,28 @@
             android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
+
+
+
+        <activity
+            android:name=".activity.AlarmActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+        <activity
+            android:name=".activity.ReminderAlarmActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+
+
+
         <receiver
             android:name=".data.util.BootReceiver"
             android:enabled="true"
@@ -99,23 +110,33 @@
             android:name=".data.util.NotificationActionReceiver"
             android:enabled="true"
             android:exported="true" />
-
         <receiver
             android:name=".data.util.CigarAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
+        <receiver
+            android:name=".data.util.AlarmActivityActionReceiver"
+            android:enabled="true"
+            android:exported="true"/>
 
-        <receiver android:name=".data.util.AlarmActivityActionReceiver"
-            android:exported="true"
-            android:enabled="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="MyAction" />-->
-<!--            </intent-filter>-->
-        </receiver>
+        <receiver
+            android:name=".data.util.ReminderActivityActionReceiver"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <receiver
+            android:name=".data.util.ReminderNotificationActionReceiver"
+            android:enabled="true"
+            android:exported="true" />
 
 
         <service
             android:name=".data.util.ShowCigarAlarmService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".data.util.ShowReminderAlarmService"
             android:enabled="true"
             android:exported="true" />
 

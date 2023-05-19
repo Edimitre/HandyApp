@@ -18,7 +18,10 @@ class ReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
-        systemService.startReminderWorker()
+
+        context.startForegroundService(Intent(context, ShowReminderAlarmService::class.java))
+
+//        systemService.startReminderWorker()
 
     }
 

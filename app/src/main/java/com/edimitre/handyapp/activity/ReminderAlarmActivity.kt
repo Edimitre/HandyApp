@@ -1,53 +1,50 @@
 package com.edimitre.handyapp.activity
 
+import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
-import com.edimitre.handyapp.data.dao.CigarDao
-import com.edimitre.handyapp.data.model.Cigar
+import com.edimitre.handyapp.R
+import com.edimitre.handyapp.data.dao.ReminderNotesDao
+import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.util.AlarmActivityActionReceiver
-import com.edimitre.handyapp.data.util.SystemService
-import com.edimitre.handyapp.databinding.ActivityAlarmBinding
+import com.edimitre.handyapp.data.util.ReminderActivityActionReceiver
+import com.edimitre.handyapp.databinding.ActivityReminderAlarmBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AlarmActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityAlarmBinding
+class ReminderAlarmActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var cigarDao: CigarDao
-
-    @Inject
-    lateinit var systemService: SystemService
+    lateinit var reminderNotesDao: ReminderNotesDao
 
 
-    var cigar: Cigar? = null
+    lateinit var binding :ActivityReminderAlarmBinding
 
+    var reminder:Reminder? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         dismissKeyguard()
-
-        binding = ActivityAlarmBinding.inflate(layoutInflater)
+        binding = ActivityReminderAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         runBlocking {
 
-            cigar = cigarDao.getFirstCigarOnCoroutine()
+            reminder = reminderNotesDao.getFirstReminderOnCoroutine()
 
         }
 
-
+        showReminder()
         setListeners()
-
     }
 
     private fun dismissKeyguard() {
@@ -70,25 +67,20 @@ class AlarmActivity : AppCompatActivity() {
         }
     }
 
-    private fun setListeners() {
+    private fun setListeners(){
+        binding.btnOk.setOnClickListener {
 
-        binding.btnWin.setOnClickListener {
-
-            val intent = Intent(this, AlarmActivityActionReceiver::class.java)
-            intent.putExtra("CIGAR_ID", this.cigar?.id)
-            intent.putExtra("IS_WIN", true)
+            val intent = Intent(this, ReminderActivityActionReceiver::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             sendBroadcast(intent)
         }
 
-        binding.btnLose.setOnClickListener {
 
-            val intent = Intent(this, AlarmActivityActionReceiver::class.java)
-            intent.putExtra("CIGAR_ID", this.cigar?.id)
-            intent.putExtra("IS_WIN", false)
-            sendBroadcast(intent)
-        }
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun showReminder(){
 
+        binding.reminderDescriptionText.text = "reminding you \n${reminder?.description}"
+    }
 }
