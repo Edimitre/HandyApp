@@ -3,16 +3,18 @@ package com.edimitre.handyapp.data.util
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.AlarmActivity
 import com.edimitre.handyapp.activity.CigaretteReminderActivity
 import com.edimitre.handyapp.data.dao.CigarDao
 import com.edimitre.handyapp.data.model.Cigar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 
@@ -41,18 +43,26 @@ class ShowCigarAlarmService : Service() {
         systemService.startVibrator()
         systemService.startRingtone()
 
+        runBlocking {
+            cigar = cigarDao.getFirstCigarOnCoroutine()
+
+        }
+
         return START_STICKY
     }
 
 
     private fun showCigarAlarmNotification() {
 
+
+        Log.e(TAG, "on show cigar alarm service ${cigar?.id}")
+
         try {
 
             val activityIntent = Intent(applicationContext, CigaretteReminderActivity::class.java)
             val openActivity = PendingIntent.getActivity(
                 applicationContext,
-                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                HandyAppEnvironment.NOTIFICATION_ALARM_NUMBER_ID,
                 activityIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
@@ -61,30 +71,26 @@ class ShowCigarAlarmService : Service() {
             val fullScreenIntent = Intent(applicationContext, AlarmActivity::class.java)
             val fullScreenPendingIntent = PendingIntent.getActivity(
                 applicationContext,
-                101,
+                1,
                 fullScreenIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
 
 
             val isWinIntent = Intent(applicationContext, NotificationActionReceiver::class.java)
-            isWinIntent.putExtra("CIGAR_ID", 1)
+            isWinIntent.putExtra("CIGAR_ID", cigar?.id)
             isWinIntent.putExtra("IS_WIN", true)
             val isWinClick = PendingIntent.getBroadcast(
-                applicationContext, 102, isWinIntent,
+                applicationContext, 2, isWinIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
 
 
-            val bundleFalse = Bundle()
-            bundleFalse.putInt("CIGAR_ID", 1)
-            bundleFalse.putBoolean("IS_WIN", false)
-
             val isNotWinIntent = Intent(applicationContext, NotificationActionReceiver::class.java)
-            isWinIntent.putExtra("CIGAR_ID", 1)
+            isWinIntent.putExtra("CIGAR_ID", cigar?.id)
             isWinIntent.putExtra("IS_WIN", false)
             val isNotWin = PendingIntent.getBroadcast(
-                applicationContext, 103, isNotWinIntent,
+                applicationContext, 3, isNotWinIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
 
@@ -92,7 +98,7 @@ class ShowCigarAlarmService : Service() {
             val mBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(
                     applicationContext,
-                    HandyAppEnvironment.NOTIFICATION_CHANNEL_ID
+                    HandyAppEnvironment.NOTIFICATION_ALARM_CHANNEL_ID
                 )
                     .setSmallIcon(R.drawable.ic_reminder)
                     .setContentTitle("title")
@@ -106,20 +112,20 @@ class ShowCigarAlarmService : Service() {
                     .addAction(R.drawable.ic_check, "Win", isWinClick)
                     .addAction(R.drawable.ic_close, "Lose", isNotWin)
 
-
-
-
-
-
-            startForeground(123, mBuilder.build())
+            startForeground(HandyAppEnvironment.NOTIFICATION_ALARM_NUMBER_ID, mBuilder.build())
 
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        systemService.stopRingtone()
+        systemService.stopVibrator()
+    }
 
 }

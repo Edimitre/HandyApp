@@ -4,9 +4,10 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.edimitre.handyapp.data.dao.CigarDao
 import com.edimitre.handyapp.data.dao.ReminderNotesDao
-import com.edimitre.handyapp.data.model.Reminder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -19,26 +20,31 @@ class BootReceiver : BroadcastReceiver() {
     @Inject
     lateinit var reminderDao: ReminderNotesDao
 
+    @Inject
+    lateinit var cigarDao: CigarDao
 
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent) {
 
         systemService.cancelAllAlarms()
 
-        Thread {
-            activateFirstReminder()
-        }.start()
+        activateAlarmsIfAny()
     }
 
-    private fun activateFirstReminder() {
+    private fun activateAlarmsIfAny() {
+
+        runBlocking {
+            val reminder = reminderDao.getFirstReminderOnCoroutine()
+
+            if (reminder != null) {
+                systemService.setAlarm(reminder.alarmTimeInMillis)
+            }
 
 
-        val reminder: Reminder? = reminderDao.getFirstReminderOnThread()
-
-
-        if (reminder != null) {
-
-            systemService.setAlarm(reminder.alarmTimeInMillis)
+            val cigar = cigarDao.getFirstCigarOnCoroutine()
+            if(cigar != null){
+                systemService.setCigarAlarm(cigar.alarmInMillis)
+            }
 
         }
 

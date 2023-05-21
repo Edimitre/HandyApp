@@ -125,7 +125,6 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
             }
 
-
         }
 
     }

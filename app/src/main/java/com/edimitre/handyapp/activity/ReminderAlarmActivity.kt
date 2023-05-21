@@ -27,20 +27,14 @@ class ReminderAlarmActivity : AppCompatActivity() {
     lateinit var binding :ActivityReminderAlarmBinding
 
     var reminder:Reminder? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dismissKeyguard()
         binding = ActivityReminderAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        runBlocking {
-
-            reminder = reminderNotesDao.getFirstReminderOnCoroutine()
-
-        }
-
+        dismissKeyguard()
         showReminder()
         setListeners()
     }
@@ -69,8 +63,9 @@ class ReminderAlarmActivity : AppCompatActivity() {
         binding.btnOk.setOnClickListener {
 
             val intent = Intent(this, ReminderActivityActionReceiver::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             sendBroadcast(intent)
+
+            finish()
         }
 
 
@@ -78,6 +73,13 @@ class ReminderAlarmActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showReminder(){
+
+        runBlocking {
+
+            reminder = reminderNotesDao.getFirstReminderOnCoroutine()
+
+        }
+
 
         binding.reminderDescriptionText.text = "reminding you \n${reminder?.description}"
     }

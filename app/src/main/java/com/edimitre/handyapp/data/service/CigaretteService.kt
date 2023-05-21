@@ -5,13 +5,20 @@ import com.edimitre.handyapp.data.dao.CigarDao
 import com.edimitre.handyapp.data.dao.CigarGameTableDao
 import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.util.TimeUtils
+import java.util.*
 import javax.inject.Inject
 
-class CigaretteService @Inject constructor(private val cigarDao: CigarDao,private val cigarGameTableDao: CigarGameTableDao) {
+class CigaretteService @Inject constructor(
+    private val cigarDao: CigarDao,
+    private val cigarGameTableDao: CigarGameTableDao
+) {
 
     var allCigars = cigarDao.getAllCigarsLiveData()
 
-    var gameTable = cigarGameTableDao.getCigarGameTableByYearAndMonthLiveData(TimeUtils().getCurrentYear(),TimeUtils().getCurrentMonth())
+    var gameTable = cigarGameTableDao.getCigarGameTableByYearAndMonthLiveData(
+        TimeUtils().getCurrentYear(),
+        TimeUtils().getCurrentMonth()
+    )
 
     suspend fun saveCigar(cigar: Cigar) {
         cigarDao.saveCigar(cigar)
@@ -27,23 +34,26 @@ class CigaretteService @Inject constructor(private val cigarDao: CigarDao,privat
         return cigarDao.getFirstCigarOnCoroutine()
     }
 
-    suspend fun distributeCigars(minutes: Long,nrOfCigars:Int) {
 
-        var timeNow = TimeUtils().getCurrentTimeInMilliSeconds()
+    suspend fun distributeCigars(minutes: Long, nrOfCigars: Int) {
 
-        val timeToAdd = TimeUtils().getMillisFromMinutes(minutes)
+        var currentDate = Date()
 
         for (i in 1..nrOfCigars) {
 
-            val cigar = Cigar(i, isActive = true, isWin = null, alarmInMillis = timeNow)
+            val timeInMillis = TimeUtils().getMillisFromDate(currentDate)
 
+            val cigar = Cigar(i, true,null,timeInMillis)
             saveCigar(cigar)
-            timeNow += timeToAdd
+
+            val nextDate = TimeUtils().addMinutesToDate(currentDate, minutes)
+            currentDate = nextDate
 
         }
 
 
     }
+
 
     suspend fun setCigarWin(value: Boolean, cigarId: String) {
 
@@ -54,9 +64,12 @@ class CigaretteService @Inject constructor(private val cigarDao: CigarDao,privat
 
     }
 
-    suspend fun clearGamePoints(){
+    suspend fun clearGamePoints() {
 
-        val gameTable = cigarGameTableDao.getCigarGameTableByYearAndMonthOnCoroutine(TimeUtils().getCurrentYear(), TimeUtils().getCurrentMonth())
+        val gameTable = cigarGameTableDao.getCigarGameTableByYearAndMonthOnCoroutine(
+            TimeUtils().getCurrentYear(),
+            TimeUtils().getCurrentMonth()
+        )
         gameTable?.pointsWon = 0
         gameTable?.pointsLose = 0
         gameTable?.isWinning = null

@@ -23,9 +23,6 @@ class ReminderActivityActionReceiver : BroadcastReceiver() {
 
         context.stopService(Intent(context, ShowReminderAlarmService::class.java))
 
-        systemService.stopVibrator()
-        systemService.stopRingtone()
-
         runBlocking {
 
             val reminder = reminderNotesDao.getFirstReminderOnCoroutine()

@@ -32,11 +32,42 @@ class LogInFragment : Fragment() {
 
     private fun initFragment() {
 
+        observeDeviceConnection()
+
         setListeners()
 
         observeLoading()
 
+        // because exception happens in view model  -> the login call is there
         observeLoginException()
+
+
+    }
+
+    private fun observeDeviceConnection(){
+
+        mainViewModel.hasConnection.observe(viewLifecycleOwner){
+
+            deactivateInputs(it)
+        }
+    }
+
+    private fun deactivateInputs(connection:Boolean){
+
+        if(connection){
+            binding.inputLoginEmail.isActivated = true
+            binding.inputLoginPassword.isActivated = true
+            binding.btnLogin.isActivated = true
+            binding.connectionText.visibility = View.GONE
+
+        }else{
+
+            binding.inputLoginEmail.isActivated = false
+            binding.inputLoginPassword.isActivated = false
+            binding.btnLogin.isActivated = false
+            binding.connectionText.visibility = View.VISIBLE
+
+        }
     }
 
     private fun setListeners() {

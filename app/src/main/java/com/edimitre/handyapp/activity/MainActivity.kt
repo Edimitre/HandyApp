@@ -4,7 +4,6 @@ package com.edimitre.handyapp.activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -49,9 +48,7 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
         // create app notification channel
         systemService.createNotificationChannel()
-
-        val connectStatus = hasConnection(this)
-        mainViewModel.setHasConnection(connectStatus)
+        systemService.createAlarmNotificationChannel()
 
         initToolBar()
 
@@ -154,6 +151,10 @@ class MainActivity : AppCompatActivity(), SettingsFragment.ImportDbListener {
 
     // return status of device internet connection
     private fun hasConnection(context: Context): Boolean {
+
+
+
+        // get from system service
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities =

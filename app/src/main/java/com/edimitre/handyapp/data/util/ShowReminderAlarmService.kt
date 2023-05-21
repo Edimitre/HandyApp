@@ -25,7 +25,6 @@ class ShowReminderAlarmService : Service() {
 
     var reminder: Reminder? = null
 
-
     @Inject
     lateinit var systemService: SystemService
 
@@ -35,16 +34,10 @@ class ShowReminderAlarmService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-
-        showReminderAlarmNotification()
-
         systemService.startVibrator()
         systemService.startRingtone()
 
-        runBlocking {
-            // todo comes null
-            reminder = reminderNotesDao.getFirstReminderOnCoroutine()
-        }
+        showReminderAlarmNotification()
 
         return START_STICKY
     }
@@ -52,12 +45,21 @@ class ShowReminderAlarmService : Service() {
 
     private fun showReminderAlarmNotification() {
 
+
+        runBlocking {
+            reminder = reminderNotesDao.getFirstReminderOnCoroutine()
+        }
+
+
+//        Log.e(TAG, "on reminder alarm service outside run blocking ${reminder?.id}", )
+
         try {
+
 
             val activityIntent = Intent(applicationContext, ReminderNotesActivity::class.java)
             val openActivity = PendingIntent.getActivity(
                 applicationContext,
-                HandyAppEnvironment.NOTIFICATION_NUMBER_ID,
+                1,
                 activityIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
@@ -66,15 +68,16 @@ class ShowReminderAlarmService : Service() {
             val fullScreenIntent = Intent(applicationContext, ReminderAlarmActivity::class.java)
             val fullScreenPendingIntent = PendingIntent.getActivity(
                 applicationContext,
-                112,
+                2,
                 fullScreenIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
 
 
-            val okIntent = Intent(applicationContext, ReminderNotificationActionReceiver::class.java)
+            val okIntent =
+                Intent(applicationContext, ReminderNotificationActionReceiver::class.java)
             val isWinClick = PendingIntent.getBroadcast(
-                applicationContext, 110, okIntent,
+                applicationContext, 3, okIntent,
                 PendingIntent.FLAG_IMMUTABLE
             )
 
@@ -82,7 +85,7 @@ class ShowReminderAlarmService : Service() {
             val mBuilder: NotificationCompat.Builder =
                 NotificationCompat.Builder(
                     applicationContext,
-                    HandyAppEnvironment.NOTIFICATION_CHANNEL_ID
+                    HandyAppEnvironment.NOTIFICATION_ALARM_CHANNEL_ID
                 )
                     .setSmallIcon(R.drawable.ic_reminder)
                     .setContentTitle(HandyAppEnvironment.TITLE)
@@ -93,16 +96,9 @@ class ShowReminderAlarmService : Service() {
                     .setFullScreenIntent(fullScreenPendingIntent, true)
                     .setAutoCancel(true)
                     .setOngoing(false)
-                    .addAction(R.drawable.ic_check, "Win", isWinClick)
+                    .addAction(R.drawable.ic_check, "Ok", isWinClick)
 
-
-
-
-
-
-
-            startForeground(111, mBuilder.build())
-
+            startForeground(HandyAppEnvironment.NOTIFICATION_ALARM_NUMBER_ID, mBuilder.build())
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -111,5 +107,12 @@ class ShowReminderAlarmService : Service() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        systemService.stopVibrator()
+        systemService.stopRingtone()
+
+    }
 
 }

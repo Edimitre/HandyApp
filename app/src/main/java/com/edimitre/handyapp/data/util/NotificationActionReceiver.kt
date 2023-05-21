@@ -29,19 +29,14 @@ class NotificationActionReceiver : BroadcastReceiver() {
         val cigarId = intent.extras?.getInt("CIGAR_ID")
 
         context.stopService(Intent(context, ShowCigarAlarmService::class.java))
-        systemService.stopVibrator()
-        systemService.stopRingtone()
 
         runBlocking {
 
             val cigar = cigarDao.getCigarById(cigarId!!)
+
             cigar?.isWin = isWin
             cigar?.isActive = false
             cigarDao.saveCigar(cigar!!)
-
-
-            systemService.notify("Handy app", "result saved")
-
 
             var gameTable = gameTableDao.getCigarGameTableByYearAndMonthOnCoroutine(
                 TimeUtils().getCurrentYear(),
@@ -74,6 +69,9 @@ class NotificationActionReceiver : BroadcastReceiver() {
             }
             gameTableDao.saveCigarGameTable(gameTable)
         }
+
+        systemService.notify("Handy app", "result saved")
+
     }
 
 }

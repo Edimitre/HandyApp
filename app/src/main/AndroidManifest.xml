@@ -78,19 +78,16 @@
         <activity
             android:name=".activity.AlarmActivity"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:showForAllUsers="true"
-            android:showOnLockScreen="true"
             android:showWhenLocked="true"
-            android:turnScreenOn="true" />
+            android:turnScreenOn="true"
+            android:theme="@style/Theme.HandyApp"/>
+
         <activity
             android:name=".activity.ReminderAlarmActivity"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:showForAllUsers="true"
-            android:showOnLockScreen="true"
             android:showWhenLocked="true"
-            android:turnScreenOn="true" />
+            android:turnScreenOn="true"
+            android:theme="@style/Theme.HandyApp"/>
 
 
 
@@ -113,7 +110,7 @@
         <receiver
             android:name=".data.util.CigarAlarmReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true" />
         <receiver
             android:name=".data.util.AlarmActivityActionReceiver"
             android:enabled="true"

@@ -2,6 +2,8 @@ package com.edimitre.handyapp.data.util
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -190,5 +192,46 @@ class TimeUtils {
         }
 
         return isNotWorkDay
+    }
+
+
+    fun getDate(year:Int, month:Int,date:Int,hour:Int, minute:Int): Date? {
+
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.YEAR] = year
+        calendar[Calendar.MONTH] = month
+        calendar[Calendar.DATE] = date
+        calendar[Calendar.HOUR_OF_DAY] = hour
+        calendar[Calendar.MINUTE] = minute
+
+        return calendar.time
+
+
+    }
+
+    fun addMinutesToDate(date: Date,minutesToAdd:Long): Date {
+
+        val localDateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault())
+        val requiredDateTime = localDateTime.plusMinutes(minutesToAdd)
+
+        val zoneDateTime = requiredDateTime.atZone(ZoneId.systemDefault());
+
+        return Date.from(zoneDateTime.toInstant())
+    }
+
+    fun getMillisFromDate(date:Date): Long {
+
+        val cal = Calendar.getInstance()
+        cal.time = date
+
+        return cal.timeInMillis
+    }
+
+    fun getDateFromMillis(timeInMillis:Long): Date? {
+
+        val cal = Calendar.getInstance()
+        cal.timeInMillis= timeInMillis
+
+        return cal.time
     }
 }

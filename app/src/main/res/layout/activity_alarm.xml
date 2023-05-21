@@ -11,6 +11,7 @@
 
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/tp_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="10dp"
@@ -33,6 +34,36 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tp_card"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorSecondary"
+        app:cardCornerRadius="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/cigar_nr_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cigar nr 2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textStyle="italic|bold"
+                android:textColor="?attr/colorOnPrimary"/>
+
+
+        </RelativeLayout>
+
+
 
     </com.google.android.material.card.MaterialCardView>
 

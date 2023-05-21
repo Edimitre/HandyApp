@@ -1,62 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.main_fragments.LogInFragment"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorPrimary"
+    android:padding="8dp">
 
 
-    <TextView
-        android:id="@+id/sample_text"
-        android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/top_card"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="Login"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:textSize="30sp"
-        style="@style/TextAppearance.Material3.BodyLarge"
-        android:textStyle="bold"/>
+        app:cardCornerRadius="16dp"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:strokeColor="?attr/colorSecondary"
+        app:strokeWidth="1dp"
+        app:cardElevation="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/sample_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="Login"
+                android:textColor="?attr/colorOnPrimary"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:textSize="30sp"
+                style="@style/TextAppearance.Material3.BodyLarge"
+                android:textStyle="bold"/>
 
 
-    <EditText
-        android:id="@+id/input_login_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="email"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sample_text"
-        android:layout_marginTop="30dp"/>
+            <EditText
+                android:id="@+id/input_login_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="email"
+                android:inputType="text"
+                android:textColorHint="?attr/colorOnPrimary"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/sample_text"
+                android:layout_marginTop="30dp"/>
 
-    <EditText
-        android:id="@+id/input_login_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="password"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_login_email"
-        android:layout_marginTop="30dp"/>
+            <EditText
+                android:id="@+id/input_login_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="password"
+                android:inputType="text"
+                android:textColorHint="?attr/colorOnPrimary"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/input_login_email"
+                android:layout_marginTop="30dp"/>
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_login_password"
-        android:layout_marginTop="30dp"
-        android:backgroundTint="?attr/colorSecondary"/>
+
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:layout_marginTop="64dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/input_login_password"
+                android:backgroundTint="?attr/colorSecondary"
+                android:layout_marginBottom="64dp"/>
+
+            <TextView
+                android:id="@+id/connection_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/btn_login"
+                android:layout_marginTop="32dp"
+                android:text="device has no connection"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                style="@style/Theme.HandyApp"
+                android:layout_marginBottom="8dp"/>
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+
+
+
 
 
     <TextView
@@ -65,10 +105,9 @@
         android:layout_height="wrap_content"
         android:text="New user ? Signup here"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="64dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/top_card"
         android:textColor="?attr/colorSecondary"/>
 
 
@@ -79,10 +118,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="invisible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

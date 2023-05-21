@@ -16,15 +16,9 @@ class ReminderNotificationActionReceiver : BroadcastReceiver() {
     lateinit var reminderNotesDao: ReminderNotesDao
 
 
-    @Inject
-    lateinit var systemService: SystemService
-
     override fun onReceive(context: Context, intent: Intent) {
 
         context.stopService(Intent(context, ShowReminderAlarmService::class.java))
-
-        systemService.stopVibrator()
-        systemService.stopRingtone()
 
         runBlocking {
 

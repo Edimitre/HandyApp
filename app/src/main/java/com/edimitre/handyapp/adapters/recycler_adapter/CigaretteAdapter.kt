@@ -15,7 +15,7 @@ import com.edimitre.handyapp.data.util.TimeUtils
 class CigaretteAdapter(private val onFileClickListener: OnCigarClickListener) :
     RecyclerView.Adapter<CigaretteAdapter.CigarViewHolder>() {
 
-    private var cigarList: List<Cigar> = ArrayList<Cigar>()
+    private var cigarList: List<Cigar> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CigarViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -55,15 +55,21 @@ class CigaretteAdapter(private val onFileClickListener: OnCigarClickListener) :
 
             cigarAlarmDateText.text = TimeUtils().getHourStringFromDateInMillis(cigar.alarmInMillis).replace("/", ":")
 
-            if (cigar.isWin == null){
-                isWinText.text = "N/A"
-            }else if(cigar.isWin == true){
+            when (cigar.isWin) {
+                null -> {
+                    isWinText.text = "N/A"
+                }
+                true -> {
 
-                isWinText.text = "WIN"
+                    isWinText.text = "WIN"
 
-            }else{
-                isWinText.text = "LOOSE"
+                }
+                else -> {
+                    isWinText.text = "LOSE"
+                }
             }
+
+            onCigarClickListener.onCigarClicked(cigar)
         }
     }
 

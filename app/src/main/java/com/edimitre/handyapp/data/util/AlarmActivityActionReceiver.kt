@@ -41,8 +41,6 @@ class AlarmActivityActionReceiver : BroadcastReceiver() {
             cigarDao.saveCigar(cigar!!)
 
 
-            systemService.notify("Handy app", "result saved")
-
 
             var gameTable = gameTableDao.getCigarGameTableByYearAndMonthOnCoroutine(
                 TimeUtils().getCurrentYear(),
@@ -75,6 +73,10 @@ class AlarmActivityActionReceiver : BroadcastReceiver() {
             }
             gameTableDao.saveCigarGameTable(gameTable)
         }
+
+//        systemService.notify("Handy app", "result saved")
+
+
     }
 
 }

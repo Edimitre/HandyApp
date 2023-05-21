@@ -1,21 +1,27 @@
 package com.edimitre.handyapp.fragment.reminder_and_notes
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.edimitre.handyapp.R
 import com.edimitre.handyapp.data.model.Reminder
 import com.edimitre.handyapp.data.util.TimeUtils
 import com.edimitre.handyapp.databinding.AddReminderFormBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
+
 
 @AndroidEntryPoint
 class AddReminderForm : BottomSheetDialogFragment() {
@@ -102,15 +108,26 @@ class AddReminderForm : BottomSheetDialogFragment() {
 
     private fun openDatePicker() {
 
-        val dateDialog = DatePickerDialog(requireContext())
+        val constraintsBuilderRange = CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now())
 
-        val timeNow = System.currentTimeMillis() - 1000
-        dateDialog.datePicker.minDate = timeNow
 
-        dateDialog.setOnDateSetListener { _, y, m, d ->
-            year = y
-            month = m
-            date = d
+        val dtPicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select Date")
+            .setTheme(R.style.MaterialCalendarTheme)
+            .setCalendarConstraints(constraintsBuilderRange.build())
+            .build()
+
+        dtPicker.addOnPositiveButtonClickListener {
+
+            val mDate = TimeUtils().getDateFromMillis(it)!!
+
+            val cal = Calendar.getInstance()
+            cal.time = mDate
+
+            year = cal[Calendar.YEAR]
+            month = cal[Calendar.MONTH]
+            date = cal[Calendar.DATE]
+
             showSelectedDate(
                 year!!,
                 month!!,
@@ -118,26 +135,69 @@ class AddReminderForm : BottomSheetDialogFragment() {
                 TimeUtils().getCurrentHour(),
                 TimeUtils().getCurrentMinute()
             )
+
             openTimePicker()
+            dtPicker.dismiss()
+
+
         }
-        dateDialog.show()
+        dtPicker.addOnNegativeButtonClickListener {
+            dtPicker.dismiss()
+        }
+
+        dtPicker.addOnDismissListener {
+
+
+        }
+        dtPicker.show(parentFragmentManager, "PICK_DATE")
+
 
     }
 
     private fun openTimePicker() {
 
 
-        val timePickerDialog = TimePickerDialog(
-            context, { _, h, m ->
-                hour = h
-                minutes = m
-                showSelectedDate(year!!, month!!, date!!, hour!!, minutes!!)
-            },
-            TimeUtils().getCurrentHour(), TimeUtils().getCurrentMinute(), true
-        )
+//        val timePickerDialog = TimePickerDialog(
+//            context, { _, h, m ->
+//                hour = h
+//                minutes = m
+//                showSelectedDate(year!!, month!!, date!!, hour!!, minutes!!)
+//            },
+//            TimeUtils().getCurrentHour(), TimeUtils().getCurrentMinute(), true
+//        )
 
 
-        timePickerDialog.show()
+        val timePickerDialog = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setTheme(R.style.Theme_MyTheme_TimePicker)
+            .setHour(TimeUtils().getCurrentHour())
+            .setMinute(TimeUtils().getCurrentMinute())
+            .build()
+
+        timePickerDialog.addOnPositiveButtonClickListener {
+
+            hour = timePickerDialog.hour
+            minutes = timePickerDialog.minute
+
+
+            timePickerDialog.dismiss()
+
+            showSelectedDate(
+                year!!,
+                month!!,
+                date!!,
+                hour!!,
+                minutes!!
+            )
+        }
+
+        timePickerDialog.addOnNegativeButtonClickListener {
+
+            timePickerDialog.dismiss()
+        }
+
+        timePickerDialog.show(parentFragmentManager, "PICK_TIME")
+
 
     }
 

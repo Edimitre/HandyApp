@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.edimitre.handyapp.HandyAppEnvironment
 import com.edimitre.handyapp.data.dao.AuthDao
 import com.edimitre.handyapp.data.model.firebase.AuthModel
+import com.edimitre.handyapp.data.util.SystemService
 import com.edimitre.handyapp.fragment.main_fragments.NavigationFragment
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val auth: FirebaseAuth,
     private val authDao: AuthDao,
+    private val systemService: SystemService
 ) : ViewModel() {
 
 
@@ -89,6 +91,7 @@ class MainViewModel @Inject constructor(
                 }
             }
 
+            setHasConnection(systemService.hasConnection())
             setDoingWork(false)
 
         }

@@ -10,13 +10,15 @@ import dagger.hilt.components.SingletonComponent
 object HandyAppEnvironment {
 
 
-    var TAG: String = "HandyApp"
-    var TITLE = "HandyApp"
-    var DATABASE_NAME = "HandyDB"
-    var NOTIFICATION_CHANNEL_ID = "HandyNotificationChannel"
-    var NOTIFICATION_NUMBER_ID = 1
-    var FILES_STORAGE_DIRECTORY = "HandyAppWorkStorage"
-    var MEME_STORAGE_DIRECTORY = "MemeTemplates"
-    var TEMP_STORAGE_DIRECTORY = "MemeTemplates"
+    val TAG: String = "HandyApp"
+    val TITLE = "HandyApp"
+    val DATABASE_NAME = "HandyDB"
+    val NOTIFICATION_CHANNEL_ID = "HandyAppNotificationChannel"
+    val NOTIFICATION_NUMBER_ID = 111
+    val NOTIFICATION_ALARM_CHANNEL_ID = "HandyAppNotificationAlarmChannel"
+    val NOTIFICATION_ALARM_NUMBER_ID = 222
+    val FILES_STORAGE_DIRECTORY = "HandyAppWorkStorage"
+    val MEME_STORAGE_DIRECTORY = "MemeTemplates"
+    val TEMP_STORAGE_DIRECTORY = "TempDirectory"
 
 }

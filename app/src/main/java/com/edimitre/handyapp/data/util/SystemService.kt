@@ -11,6 +11,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.os.VibrationEffect
@@ -56,14 +58,14 @@ class SystemService(private val context: Context) {
         context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    private var mediaPlayer: MediaPlayer = MediaPlayer()
+    private var mediaPlayer: MediaPlayer ? = MediaPlayer()
 
     fun createNotificationChannel() {
         // Create the NotificationChannel
 
         val mChannel = NotificationChannel(
             HandyAppEnvironment.NOTIFICATION_CHANNEL_ID,
-            HandyAppEnvironment.NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH
+            HandyAppEnvironment.NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_DEFAULT
         )
 
         mChannel.description = HandyAppEnvironment.NOTIFICATION_CHANNEL_ID
@@ -71,15 +73,30 @@ class SystemService(private val context: Context) {
         mChannel.enableLights(true)
         mChannel.lightColor = Color.RED
         mChannel.enableVibration(true)
-        mChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+        mChannel.vibrationPattern = longArrayOf(1L,2L,3L)
         // register in system
-        val notificationManager =
-            context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
+        val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(mChannel)
 
     }
 
+    fun createAlarmNotificationChannel() {
+        // Create the NotificationChannel
+
+        val mChannel = NotificationChannel(HandyAppEnvironment.NOTIFICATION_ALARM_CHANNEL_ID, HandyAppEnvironment.NOTIFICATION_ALARM_CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH)
+
+        mChannel.description = HandyAppEnvironment.NOTIFICATION_ALARM_CHANNEL_ID
+
+        mChannel.enableLights(true)
+        mChannel.lightColor = Color.RED
+        mChannel.enableVibration(true)
+        mChannel.vibrationPattern = longArrayOf(1L,2L,3L)
+        mChannel.setSound(null, null)
+        // register in system
+        val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(mChannel)
+
+    }
 
     fun setAlarm(alarmTime: Long) {
 
@@ -88,13 +105,12 @@ class SystemService(private val context: Context) {
         val pendingIntent =
             PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
         alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC,
+            AlarmManager.RTC_WAKEUP,
             alarmTime,
             pendingIntent
         )
 
     }
-
 
     fun setCigarAlarm(alarmTime: Long) {
 
@@ -102,7 +118,7 @@ class SystemService(private val context: Context) {
         val intent = Intent(context, CigarAlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, FLAG_IMMUTABLE)
         alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC,
+            AlarmManager.RTC_WAKEUP,
             alarmTime,
             pendingIntent
         )
@@ -111,12 +127,17 @@ class SystemService(private val context: Context) {
 
     fun cancelAllAlarms() {
 
-        val i = Intent(context, ReminderReceiver::class.java)
-
-        @SuppressLint("UnspecifiedImmutableFlag")
-        val pi = PendingIntent.getBroadcast(context, 0, i, FLAG_IMMUTABLE)
         val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarm.cancel(pi)
+
+        val cancelReminderIntent = Intent(context, ReminderReceiver::class.java)
+        @SuppressLint("UnspecifiedImmutableFlag")
+        val cancelReminderPI = PendingIntent.getBroadcast(context, 0, cancelReminderIntent, FLAG_IMMUTABLE)
+        alarm.cancel(cancelReminderPI)
+
+        val cancelCigarsAlarmsIntent = Intent(context, CigarAlarmReceiver::class.java)
+        @SuppressLint("UnspecifiedImmutableFlag")
+        val cancelCigarAlarmsPI = PendingIntent.getBroadcast(context, 0, cancelCigarsAlarmsIntent, FLAG_IMMUTABLE)
+        alarm.cancel(cancelCigarAlarmsPI)
     }
 
     fun cancelAllCigarAlarms() {
@@ -147,7 +168,7 @@ class SystemService(private val context: Context) {
         mBuilder.setContentIntent(pi)
         mBuilder.setContentTitle(title)
         mBuilder.setContentText(message)
-        mBuilder.priority = NotificationCompat.PRIORITY_HIGH
+        mBuilder.priority = NotificationCompat.PRIORITY_DEFAULT
         mBuilder.setAutoCancel(true)
 
         val notificationManager =
@@ -316,19 +337,6 @@ class SystemService(private val context: Context) {
 
     }
 
-    fun startReminderWorker() {
-
-        val reminderWork = OneTimeWorkRequest.Builder(ReminderWorker::class.java)
-            .addTag("reminder_work")
-            .build()
-
-
-        val workManager = WorkManager.getInstance(context)
-        workManager.enqueue(reminderWork)
-
-    }
-
-
     fun setNotification(text:String, progress:Int, onGoing:Boolean): Notification {
 
         val maxProgress = 100
@@ -350,8 +358,6 @@ class SystemService(private val context: Context) {
         return mBuilder.build()
     }
 
-
-
     fun startRingtone() {
 
         val uriSound = Uri.Builder()
@@ -361,7 +367,7 @@ class SystemService(private val context: Context) {
             .build()
 
 //        mediaPlayer = MediaPlayer()
-        mediaPlayer.apply {
+        mediaPlayer?.apply {
             reset()
             setAudioAttributes( // Here is the important part
                 AudioAttributes.Builder()
@@ -382,8 +388,9 @@ class SystemService(private val context: Context) {
 
     fun stopRingtone() {
         try {
-            mediaPlayer.stop()
-            mediaPlayer.release()
+            mediaPlayer?.stop()
+            mediaPlayer?.reset()
+            mediaPlayer?.release()
 
         } catch (e: Exception) {
 
@@ -409,6 +416,29 @@ class SystemService(private val context: Context) {
     fun stopVibrator() {
 
         vibrator.cancel()
+    }
+
+    // return status of device internet connection
+    fun hasConnection(): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+//                Log.e(HandyAppEnvironment.TAG, "Has cellular connection")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+//                Log.e(HandyAppEnvironment.TAG, "Has wifi connection")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+//                Log.e(HandyAppEnvironment.TAG, "Has ethernet connection")
+                return true
+            }
+        }
+
+        // todo this value needs to be some type of flow or live data
+        return false
     }
 
 

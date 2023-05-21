@@ -13,4 +13,10 @@
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style name="DialogAppTheme.ButtonColor.Night" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/black_gray</item>
+    </style>
+
 </resources>
