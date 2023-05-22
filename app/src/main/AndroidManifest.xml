@@ -104,7 +104,7 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".data.util.NotificationActionReceiver"
+            android:name=".data.util.CigarAlarmNotificationActionReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver

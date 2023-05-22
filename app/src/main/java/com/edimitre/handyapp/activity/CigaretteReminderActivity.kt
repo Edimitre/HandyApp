@@ -137,6 +137,8 @@ class CigaretteReminderActivity : AppCompatActivity(){
             if(it != 0L){
                 this.minutes = it
             }
+
+
         }
 
         _cigarViewModel.nrOfCigars.observe(this){
@@ -144,6 +146,22 @@ class CigaretteReminderActivity : AppCompatActivity(){
                 this.nrOfCigars = it
 
             }
+
+            setBottomAppBar(it)
+        }
+    }
+    
+    private fun setBottomAppBar(nrOfCigars:Int){
+
+        if(nrOfCigars != 0){
+
+            binding.bottomAppBar.visibility = View.VISIBLE
+            binding.btnAdd.visibility = View.VISIBLE
+        }else{
+
+            binding.bottomAppBar.visibility = View.INVISIBLE
+            binding.btnAdd.visibility = View.INVISIBLE
+
         }
     }
 

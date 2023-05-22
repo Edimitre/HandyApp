@@ -2,11 +2,14 @@ package com.edimitre.handyapp.fragment.smoking_fragment
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -16,6 +19,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.adapters.recycler_adapter.CigaretteAdapter
 import com.edimitre.handyapp.data.model.Cigar
 import com.edimitre.handyapp.data.util.SystemService
@@ -37,7 +41,7 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
     private lateinit var dropdown: Spinner
 
-    private val items = arrayOf("", "30m", "60m", "1h/30m", "2h", "2h/30m", "3h")
+    private val items = arrayOf("", "30m", "45m","60m", "1h/30m", "2h", "2h/30m", "3h")
 
     lateinit var adapter: ArrayAdapter<String>
 
@@ -63,7 +67,6 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
         loadSpinner()
 
-        setView()
 
         showAllCigars()
 
@@ -113,6 +116,9 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
             _cigarViewModel.deleteAllCigars()
             systemService.cancelAllCigarAlarms()
             myAdapter.notifyDataSetChanged()
+
+
+            restoreUserSelection()
         }
 
         binding.btnSetCigars.setOnClickListener {
@@ -123,10 +129,21 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
                numberOfCigars = binding.numberOfCigarsInput.text.toString().toInt()
                 _cigarViewModel.setNrOfCigars(numberOfCigars!!)
 
+
+                showUserSelection()
+
+                it.hideKeyboard()
+
+
             }
 
         }
 
+    }
+
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun initAdapterAndRecyclerView() {
@@ -184,9 +201,7 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
         _cigarViewModel.timeSelected.observe(viewLifecycleOwner){
 
 
-            binding.differenceText.text = "time difference : ${TimeUtils().getMinutesFromMillis(it)} min"
-
-
+            binding.timeText.text = "time difference : $it min"
 
         }
 
@@ -197,27 +212,21 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
         }
 
     }
-    private fun setView() {
 
-        _cigarViewModel.nrOfCigars.observe(viewLifecycleOwner){
+    private fun showUserSelection(){
 
+        binding.top.visibility = View.INVISIBLE
+        binding.clearCard.visibility = View.VISIBLE
+    }
 
+    private fun restoreUserSelection(){
 
-        }
+        _cigarViewModel.setNrOfCigars(0)
+        binding.timeDistanceSpinner.setSelection(0)
+        binding.numberOfCigarsInput.setText("")
 
-
-        _cigarViewModel.allCigars!!.observe(viewLifecycleOwner) {
-
-            if (it.isEmpty()){
-                binding.top.visibility = View.VISIBLE
-                binding.clearCard.visibility = View.INVISIBLE
-            }else{
-                binding.top.visibility = View.INVISIBLE
-                binding.clearCard.visibility = View.VISIBLE
-
-            }
-
-        }
+        binding.top.visibility = View.VISIBLE
+        binding.clearCard.visibility = View.INVISIBLE
     }
 
     private fun getMillisFromSelection(selection: String): Long? {
@@ -225,6 +234,9 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
 
             "30m" -> {
                 TimeUtils().getMillisFromMinutes(30)
+            }
+            "45m" -> {
+                TimeUtils().getMillisFromMinutes(45)
             }
             "60m" -> {
                 TimeUtils().getMillisFromMinutes(60)
@@ -249,7 +261,8 @@ class CigarsFragment : Fragment(), CigaretteAdapter.OnCigarClickListener {
     }
 
     override fun onCigarClicked(cigar: Cigar) {
-        TODO("Not yet implemented")
+
+        Log.e(TAG, "onCigarClicked: ${cigar.id}", )
     }
 
 }

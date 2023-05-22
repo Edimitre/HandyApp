@@ -23,6 +23,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.*
 import com.edimitre.handyapp.HandyAppEnvironment
+import com.edimitre.handyapp.HandyAppEnvironment.TAG
 import com.edimitre.handyapp.R
 import com.edimitre.handyapp.activity.MainActivity
 import com.edimitre.handyapp.data.model.firebase.BackUpDto
@@ -273,12 +274,14 @@ class SystemService(private val context: Context) {
 
         val sharedPrefUtil = SharedPrefUtil(context)
 
+
         sharedPrefUtil.setWorkFilesList(backUpDto.filesAsBytesList)
         startWorkFileWorker()
         backUpDto.filesAsBytesList = emptyList()
 
 
         sharedPrefUtil.setMemeTemplateList(backUpDto.memeTemplatesList)
+        Log.e(TAG, "on service : ${backUpDto.memeTemplatesList.size}", )
         startMemeTemplateWorker()
         backUpDto.memeTemplatesList = emptyList()
 

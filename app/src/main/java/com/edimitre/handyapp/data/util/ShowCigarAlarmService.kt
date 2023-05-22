@@ -77,7 +77,7 @@ class ShowCigarAlarmService : Service() {
             )
 
 
-            val isWinIntent = Intent(applicationContext, NotificationActionReceiver::class.java)
+            val isWinIntent = Intent(applicationContext, CigarAlarmNotificationActionReceiver::class.java)
             isWinIntent.putExtra("CIGAR_ID", cigar?.id)
             isWinIntent.putExtra("IS_WIN", true)
             val isWinClick = PendingIntent.getBroadcast(
@@ -86,7 +86,7 @@ class ShowCigarAlarmService : Service() {
             )
 
 
-            val isNotWinIntent = Intent(applicationContext, NotificationActionReceiver::class.java)
+            val isNotWinIntent = Intent(applicationContext, CigarAlarmNotificationActionReceiver::class.java)
             isWinIntent.putExtra("CIGAR_ID", cigar?.id)
             isWinIntent.putExtra("IS_WIN", false)
             val isNotWin = PendingIntent.getBroadcast(
@@ -120,6 +120,8 @@ class ShowCigarAlarmService : Service() {
         }
 
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()

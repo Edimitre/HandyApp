@@ -15,6 +15,8 @@ class ReminderNotificationActionReceiver : BroadcastReceiver() {
     @Inject
     lateinit var reminderNotesDao: ReminderNotesDao
 
+    @Inject
+    lateinit var systemService: SystemService
 
     override fun onReceive(context: Context, intent: Intent) {
 
@@ -26,6 +28,10 @@ class ReminderNotificationActionReceiver : BroadcastReceiver() {
             reminder?.isActive = false
 
             reminderNotesDao.saveReminder(reminder)
+
+            val nextReminder = reminderNotesDao.getFirstReminderOnCoroutine()
+
+            systemService.setAlarm(nextReminder!!.alarmTimeInMillis)
 
         }
     }

@@ -30,7 +30,15 @@ class ReminderActivityActionReceiver : BroadcastReceiver() {
 
             reminderNotesDao.saveReminder(reminder)
 
+
+
+            val nextReminder = reminderNotesDao.getFirstReminderOnCoroutine()
+
+            systemService.setAlarm(nextReminder!!.alarmTimeInMillis)
+
         }
     }
+
+
 
 }

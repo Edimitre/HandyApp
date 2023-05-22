@@ -72,7 +72,13 @@ class AlarmActivityActionReceiver : BroadcastReceiver() {
                 gameTable.isWinning = true
             }
             gameTableDao.saveCigarGameTable(gameTable)
+
+
+            val nextCigar = cigarDao.getFirstCigarOnCoroutine()
+            systemService.setCigarAlarm(nextCigar!!.alarmInMillis)
         }
+
+
 
 //        systemService.notify("Handy app", "result saved")
 

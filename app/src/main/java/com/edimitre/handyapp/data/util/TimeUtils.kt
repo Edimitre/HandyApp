@@ -121,6 +121,7 @@ class TimeUtils {
 
     fun getMinutesFromMillis(millis:Long): Long {
 
+
         return TimeUnit.MILLISECONDS.toMinutes(millis)
     }
 

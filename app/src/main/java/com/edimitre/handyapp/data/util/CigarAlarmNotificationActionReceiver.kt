@@ -11,7 +11,7 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NotificationActionReceiver : BroadcastReceiver() {
+class CigarAlarmNotificationActionReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var cigarDao: CigarDao
@@ -68,9 +68,12 @@ class NotificationActionReceiver : BroadcastReceiver() {
                 gameTable.isWinning = true
             }
             gameTableDao.saveCigarGameTable(gameTable)
+
+            val nextCigar = cigarDao.getFirstCigarOnCoroutine()
+            systemService.setCigarAlarm(nextCigar!!.alarmInMillis)
         }
 
-        systemService.notify("Handy app", "result saved")
+//        systemService.notify("Handy app", "result saved")
 
     }
 
